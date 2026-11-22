@@ -1,0 +1,646 @@
+{
+  "id": "DELD",
+  "code": "GAEST305",
+  "name": "Digital Electronics & Logic Design",
+  "credits": 4,
+  "modules": [
+    {
+      "num": 1,
+      "title": "Number Systems, Logic Gates & Verilog Basics",
+      "topics": [
+        "Digital Abstraction, Number Systems: Binary, Octal, Decimal, Hexadecimal",
+        "Base Conversions, Fixed-Point & Floating-Point Representation",
+        "Binary Arithmetic: 1's Complement & 2's Complement",
+        "Basic Logic Gates: AND, OR, NOT, NAND, NOR, XOR, XNOR",
+        "Universal Gates Realization: Realizing all gates using NAND/NOR",
+        "Digital DC Specifications: Logic Levels, Noise Margins, Driving Loads",
+        "Introduction to Verilog: HDL Abstraction, Modules, Data Types, Operators"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Binary Representation & Arithmetic",
+          "description": "Digital encoding of numerical values and hardware complement math",
+          "root": "Number Systems",
+          "branches": [
+            {
+              "node": "Bases & Conversions",
+              "children": [
+                "Binary (Base 2), Octal (Base 8), Decimal (Base 10), Hex (Base 16)",
+                "Fractional conversion: Repeated multiplication by base"
+              ]
+            },
+            {
+              "node": "Signed Arithmetic",
+              "children": [
+                "1's Complement: Bitwise inversion",
+                "2's Complement = 1's complement + 1",
+                "Range: -2^(N-1) to +2^(N-1) - 1",
+                "Subtraction: A - B = A + (2's comp of B)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Hardware Gates & HDL Description",
+          "description": "Physical electronic logic gates and hardware modeling in Verilog",
+          "root": "Logic & Verilog",
+          "branches": [
+            {
+              "node": "Logic Gates & Specs",
+              "children": [
+                "Universal Gates: NAND & NOR (can construct any Boolean circuit)",
+                "DC Electrical Specs: VOH, VOL, VIH, VIL",
+                "Noise Margins: High NMH = VOH - VIH, Low NML = VIL - VOL"
+              ]
+            },
+            {
+              "node": "Verilog Basics",
+              "children": [
+                "module ... endmodule construct",
+                "Data types: wire (combinational) vs reg (procedural)",
+                "Continuous assignment: assign out = a & b;"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Number Systems, Radix Conversions & Bit Grouping",
+          "summary": "Positional number systems (Binary, Octal, Decimal, Hexadecimal), exact conversion algorithms, and bit grouping.",
+          "key_points": [
+            "Positional Number Representation:\nA number in radix/base $r$ is expressed as $\\sum_{i=-m}^{n-1} d_i \\cdot r^i$.\n- Binary ($r=2$, digits $\\{0, 1\\}$)\n- Octal ($r=8$, digits $\\{0..7\\}$)\n- Decimal ($r=10$, digits $\\{0..9\\}$)\n- Hexadecimal ($r=16$, digits $\\{0..9, A..F\\}$ where $A=10, B=11, C=12, D=13, E=14, F=15$).",
+            "Radix Conversion Algorithms:\n1. Base $r$ to Decimal: Multiply each digit by its positional weight $r^i$ and sum.\n   - Hexadecimal to Decimal Example: $(F52.2B)_{16} = (15 \\times 16^2) + (5 \\times 16^1) + (2 \\times 16^0) + (2 \\times 16^{-1}) + (11 \\times 16^{-2}) = 3840 + 80 + 2 + 0.125 + 0.04297 = (3922.16796875)_{10}$.\n2. Decimal to Base $r$:\n   - Integer part: Successive division by $r$, collecting remainders from bottom to top (LSB to MSB).\n   - Fractional part: Successive multiplication by $r$, collecting integer overflows from top to bottom.\n3. Bit Grouping Method (Base 2 Powers: $2^3=8, 2^4=16$):\n   - Octal to Binary: Replace each octal digit with its exact 3-bit binary group (e.g. $745_8 \\to 111\\ 100\\ 101_2$).\n   - Binary to Hexadecimal: Group bits in clusters of 4 starting from binary point outwards; convert each group to hex symbol (e.g. $111100101_2 = 0001\\ 1110\\ 0101_2 = (1E5)_{16}$)."
+          ],
+          "code_or_formula": "(745)_8 -> Binary: 111 100 101 -> Hex: 0001 1110 0101 = (1E5)_16\nFractional conversion: Repeated multiplication by radix r",
+          "exam_tips": "KTU Part B 5-mark numerical staple: 'Convert octal 745 to hexadecimal, hex F52.2B to decimal, and decimal 75.925 to binary'."
+        },
+        {
+          "topic_title": "2. Signed Binary Arithmetic: 1's & 2's Complement, Overflow & Fixed/Floating Point",
+          "summary": "Sign-magnitude vs 2's complement, subtraction via addition, arithmetic overflow condition, Q-format, and IEEE 754.",
+          "key_points": [
+            "Signed Number Representations in $n$ bits:\n1. Signed Magnitude: MSB is sign bit (0 = positive, 1 = negative). Remaining $n-1$ bits store magnitude. Flaw: Two representations of zero ($+0$ and $-0$); complex arithmetic circuitry.\n2. 1's Complement: Negative number obtained by inverting all bits ($2^n - 1 - N$). Still has dual zeros ($+0$ and $-0$); requires end-around carry addition.\n3. 2's Complement (Standard in all modern processors):\n   - Negative number $-N$ obtained by taking 1's complement and adding 1: $N_{2's} = (\\overline{N}) + 1$.\n   - Range for $n$ bits: $[-2^{n-1}, +2^{n-1} - 1]$. For 8 bits: $[-128, +127]$.\n   - Unique zero representation: $00000000_2$.\n   - Subtraction $A - B$ is executed as $A + (-B)_{2's}$. Discard end-around carry!",
+            "Arithmetic Overflow Detection (KTU Core Concept):\n- Overflow occurs when an arithmetic operation on two valid numbers produces a result that exceeds the representable range.\n- Rules for 2's Complement Addition:\n  1. Adding two positive numbers yields a negative result (MSB = 1).\n  2. Adding two negative numbers yields a positive result (MSB = 0).\n  3. Adding numbers of opposite signs NEVER causes overflow.\n- Hardware Detection: $\\text{Overflow} = C_{in} \\oplus C_{out}$ (XOR of carry-in and carry-out of the MSB adder stage).",
+            "Fixed-Point & Floating-Point Number Systems:\n- Fixed-Point (Q-Format): Qm.n format where $m$ is integer bits, $n$ is fractional bits, plus 1 sign bit (total $m + n + 1$ bits).\n  * Example Q3.4 (8 bits total: 1 sign, 3 integer, 4 fractional):\n    - Largest positive: $0111.1111_2 = +(7 + 15/16) = +7.9375_{10}$.\n    - Smallest negative: $1000.0000_2 = -8.0_{10}$.\n    - Representing $+5.75_{10}$: $5_{10} = 101_2$, $0.75_{10} = .11_2 \\implies 0101.1100_{Q3.4}$.\n- Floating-Point (IEEE 754 Single Precision - 32 bits):\n  * 1 Sign bit ($S$), 8 Biased Exponent bits ($E$, bias = 127), 23 Mantissa/Fraction bits ($M$ with hidden leading 1):\n    $$V = (-1)^S \\times 1.M \\times 2^{E - 127}$$"
+          ],
+          "code_or_formula": "2's Complement: (~N) + 1\nRange: [-2^(n-1), 2^(n-1) - 1]\nOverflow = Carry_in(MSB) ^ Carry_out(MSB)\nIEEE 754: (-1)^S * (1.M) * 2^(E - 127)",
+          "exam_tips": "KTU Part A & Part B questions: 'Compute 64 - 100 using 8-bit two's complement and indicate overflow' and 'Calculate range of 8-bit signed fixed-point Q3.4 format'."
+        },
+        {
+          "topic_title": "3. Logic Gates, Universal Realizations & Electrical Noise Margins",
+          "summary": "Basic gates, universal NAND/NOR logic synthesis, DC specifications, and High/Low Noise Margin calculations.",
+          "key_points": [
+            "Logic Gates & Truth Tables:\n- Buffer, Inverter (NOT), AND, OR, XOR ($A \\oplus B = A\\bar{B} + \\bar{A}B$), XNOR ($A \\odot B = AB + \\bar{A}\\bar{B}$).",
+            "Universal Gates (NAND & NOR):\nAny Boolean function can be realized using solely NAND gates or solely NOR gates.\n- Realizing Inverter: Tie inputs together ($A \\text{ NAND } A = \\bar{A}$).\n- Realizing AND using NOR: Invert inputs via NOR, then apply to NOR: $\\overline{\\bar{A} + \\bar{B}} = A \\cdot B$.\n- Realizing OR using NAND: Invert inputs via NAND, then apply to NAND: $\\overline{\\bar{A} \\cdot \\bar{B}} = A + B$.",
+            "DC Specifications & Noise Margins (KTU Numerical Question):\nDigital gates operate within specified voltage ranges for High (Logic 1) and Low (Logic 0):\n- $V_{OH}$ (Output High): Minimum voltage gate outputs when producing Logic 1.\n- $V_{OL}$ (Output Low): Maximum voltage gate outputs when producing Logic 0.\n- $V_{IH}$ (Input High): Minimum input voltage recognized by gate as Logic 1.\n- $V_{IL}$ (Input Low): Maximum input voltage recognized by gate as Logic 0.\n- High Noise Margin ($NM_H$):\n  $$NM_H = V_{OH} - V_{IH}$$\n- Low Noise Margin ($NM_L$):\n  $$NM_L = V_{IL} - V_{OL}$$\n- Numerical Example (Model Paper): $V_{OH} = 4.5V, V_{OL} = 0.5V, V_{IH} = 3.0V, V_{IL} = 1.0V$:\n  * $NM_H = 4.5 - 3.0 = 1.5V$\n  * $NM_L = 1.0 - 0.5 = 0.5V$",
+            "Driving Loads & Fan-Out:\n- Fan-Out: Maximum number of standard logic gate inputs of the same family that a gate output can reliably drive without voltage degradation.\n- Driving LEDs: Active-Low (Cathode to gate output through current-limiting resistor, Anode to $V_{CC}$; gate sinks current $I_{OL}$) vs Active-High (Anode to gate output, gate sources current $I_{OH}$)."
+          ],
+          "code_or_formula": "High Noise Margin: NM_H = V_OH - V_IH\nLow Noise Margin: NM_L = V_IL - V_OL\nXOR: A ^ B = A*~B + ~A*B | XNOR: ~(A ^ B) = A*B + ~A*~B",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Determine Noise Margin High and Low for given DC parameters' and 'Realize Boolean expression using NOR gates alone'."
+        },
+        {
+          "topic_title": "4. Verilog HDL Fundamentals: Module Syntax, Data Types & Operators",
+          "summary": "Hardware Description Language abstraction, modern digital design flow, wire vs reg, bitwise/logical/reduction operators.",
+          "key_points": [
+            "Hardware Description Languages (HDL) & Digital Design Flow:\n- Modern digital IC design translates textual HDL models into physical silicon gates via: Specification $\\to$ RTL Coding (Verilog) $\\to$ Functional Simulation (Testbench) $\\to$ Logic Synthesis $\\to$ Place & Route $\\to$ Timing Analysis.",
+            "Basic Verilog Module Structure:\n```verilog\nmodule gate_level_circuit (input wire a, b, c, output wire f);\n    wire w1, w2;\n    and G1 (w1, a, b);\n    not G2 (w2, c);\n    or  G3 (f, w1, w2);\nendmodule\n```",
+            "Verilog Data Types:\n- `wire`: Represents a physical connecting wire. Cannot store state; continuously driven by gate output or `assign` statement.\n- `reg`: A data storage element that holds its value until next assignment (used inside procedural `always` blocks; does NOT necessarily imply a physical register/flip-flop!).",
+            "Verilog Operators:\n- Bitwise: `&` (AND), `|` (OR), `^` (XOR), `~` (NOT).\n- Logical: `&&`, `||`, `!` (evaluates to 1-bit true/false).\n- Reduction: `&A` (ANDs all bits of vector A into 1 bit), `|A`, `^A`.\n- Conditional: `assign out = sel ? in1 : in0;`."
+          ],
+          "code_or_formula": "Module: module Name (ports); ... endmodule\nContinuous assign: assign f = (a & b) | (~c);",
+          "exam_tips": "KTU Part A: 'Differentiate between wire and reg data types in Verilog' and 'Write a Verilog module for an XOR gate using gate primitives'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What is the 8-bit 2's complement representation of the decimal number -25?",
+          "options": [
+            "11100111",
+            "00011001",
+            "11100110",
+            "11110001"
+          ],
+          "ans": 0,
+          "explanation": "+25 = 00011001. 1's comp = 11100110. Add 1 -> 11100111."
+        },
+        {
+          "q": "What is the High-Level Noise Margin (NMH) formula for a logic gate?",
+          "options": [
+            "VOH - VIH",
+            "VIH - VOH",
+            "VIL - VOL",
+            "VOL - VIL"
+          ],
+          "ans": 0,
+          "explanation": "NMH = VOH(min) - VIH(min), measuring the tolerance between minimum output high and minimum recognized input high."
+        },
+        {
+          "q": "How many 2-input NAND gates are required to construct an XOR gate?",
+          "options": [
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "ans": 2,
+          "explanation": "An XOR gate A ^ B can be synthesized using exactly 4 two-input NAND gates."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Determine the Noise Margin High (NMH) and Noise Margin Low (NML) for a logic family with: V_OH = 4.5V, V_OL = 0.5V, V_IH = 3.0V, V_IL = 1.0V, V_DD = 5V. (KTU Model Paper, Part B - 4 Marks)",
+          "marks": 4,
+          "sol": "Noise Margin is the maximum spurious noise voltage that can be added to an input signal without causing an erroneous logic transition.\n1. High Noise Margin:\nNMH = V_OH - V_IH = 4.5V - 3.0V = 1.5V.\n2. Low Noise Margin:\nNML = V_IL - V_OL = 1.0V - 0.5V = 0.5V.\nConclusion: The circuit can tolerate up to 1.5V of noise on a High logic line and up to 0.5V of noise on a Low logic line.",
+          "type": "Part B (4 Marks)"
+        },
+        {
+          "q": "Perform base conversions: (i) Hexadecimal equivalent of octal 745 (ii) Decimal equivalent of hexadecimal F52.2B (iii) Binary equivalent of decimal 75.925. (KTU Model Paper, Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "(i) Octal 745 to Hexadecimal:\nConvert to binary (3-bit groups): 7 -> 111, 4 -> 100, 5 -> 101 => 111100101_2.\nRegroup into 4 bits from right: 0001 1110 0101_2 = (1E5)_16.\n(ii) Hex F52.2B to Decimal:\nF*16^2 + 5*16^1 + 2*16^0 + 2*16^-1 + 11*16^-2 = 15*256 + 80 + 2 + 2/16 + 11/256 = 3840 + 80 + 2 + 0.125 + 0.04297 = 3922.16796875_10.\n(iii) Decimal 75.925 to Binary:\nInteger: 75 / 2 = 37 (R1), 18 (R1), 9 (R0), 4 (R1), 2 (R0), 1 (R0), 0 (R1) => 1001011_2.\nFraction: 0.925 * 2 = 1.85 (1), 0.85 * 2 = 1.70 (1), 0.70 * 2 = 1.40 (1), 0.40 * 2 = 0.80 (0), 0.80 * 2 = 1.60 (1) => .11101_2.\nResult: (1001011.11101)_2.",
+          "type": "Part B (5 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Combinational Logic Design & K-Maps",
+      "topics": [
+        "Boolean Algebra: Operations, Axioms, Theorems (De Morgan's, Consensus, Duality)",
+        "Canonical SOP (Sum of Minterms) & Canonical POS (Product of Maxterms)",
+        "Logic Minimization: Algebraic Minimization",
+        "Karnaugh Map (K-Map): 3-Variable & 4-Variable Minimization",
+        "Don't Care Conditions (d) in K-Maps",
+        "Code Converters: Binary to Gray, Gray to Binary, BCD to Excess-3",
+        "Verilog Combinational Modeling: Continuous Assignment with Operators"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Boolean Algebra Foundations",
+          "description": "Mathematical axioms governing two-valued logic systems",
+          "root": "Boolean Theorems",
+          "branches": [
+            {
+              "node": "Fundamental Laws",
+              "children": [
+                "De Morgan's: (A+B)' = A'B', (AB)' = A'+B'",
+                "Consensus Theorem: AB + A'C + BC = AB + A'C",
+                "Involution: (A')' = A"
+              ]
+            },
+            {
+              "node": "Canonical Forms",
+              "children": [
+                "SOP: Sum of Products (Minterms m_i where output=1)",
+                "POS: Product of Sums (Maxterms M_i where output=0)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Visual Minimization & Conversion",
+          "description": "Optimal gate reduction and binary encoding translations",
+          "root": "Minimization & Codes",
+          "branches": [
+            {
+              "node": "Karnaugh Map (K-Map)",
+              "children": [
+                "Gray code ordering (00, 01, 11, 10)",
+                "Grouping powers of 2 (octets, quads, pairs)",
+                "Don't cares: Include as 1 only if enlarging a group",
+                "All-NAND / All-NOR realization"
+              ]
+            },
+            {
+              "node": "Code Converters",
+              "children": [
+                "Binary to Gray: G3=B3, G2=B3^B2, G1=B2^B1, G0=B1^B0",
+                "Gray to Binary: B3=G3, B2=B3^G2, B1=B2^G1, B0=B1^G0",
+                "BCD to Excess-3 (Add 0011)"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Boolean Algebra Theorems, Canonical Forms & Minterm/Maxterm Duality",
+          "summary": "Boolean axioms, De Morgan's laws, Consensus theorem, Sum of Products (SOP), Product of Sums (POS), and duality.",
+          "key_points": [
+            "Core Boolean Theorems & Axioms:\n1. Idempotent Law: $A + A = A, \\quad A \\cdot A = A$.\n2. Dominance / Null: $A + 1 = 1, \\quad A \\cdot 0 = 0$.\n3. Complementarity: $A + \\bar{A} = 1, \\quad A \\cdot \\bar{A} = 0$.\n4. Involution: $\\bar{\\bar{A}} = A$.\n5. De Morgan's Laws:\n   $$\\overline{A + B} = \\bar{A} \\cdot \\bar{B}, \\quad \\overline{A \\cdot B} = \\bar{A} + \\bar{B}$$\n6. Consensus Theorem:\n   $$AB + \\bar{A}C + BC = AB + \\bar{A}C$$\n   (Term $BC$ is redundant because if $B=1$ and $C=1$, expression evaluates to 1 regardless of $A$).",
+            "Canonical Forms: SOP vs POS:\n- Minterm ($m_i$): A product (AND) term containing every variable in true or complemented form that evaluates to 1 for exactly ONE input combination. Canonical SOP: $F = \\sum m(1, 3, 5, 7)$.\n- Maxterm ($M_i$): A sum (OR) term containing every variable that evaluates to 0 for exactly ONE input combination. Canonical POS: $F = \\prod M(0, 2, 4, 6)$.\n- Minterm-Maxterm Relationship: $m_i = \\overline{M_i}$. The maxterms of $F$ are the minterms of $\\bar{F}$."
+          ],
+          "code_or_formula": "De Morgan: ~(A + B) = ~A * ~B | ~(A * B) = ~A + ~B\nConsensus: AB + ~AC + BC = AB + ~AC",
+          "exam_tips": "KTU Part A: 'State and prove De Morgan's laws' and 'Explain the Consensus Theorem with proof'."
+        },
+        {
+          "topic_title": "2. Karnaugh Map (K-Map) Minimization (2, 3 & 4 Variables) & Don't Cares",
+          "summary": "Gray code adjacency, grouping rules (pairs, quads, octets), Prime Implicants, Essential Prime Implicants, and Don't Care conditions.",
+          "key_points": [
+            "K-Map Principles & Gray Code Adjacency:\n- A graphical representation of truth tables where adjacent cells differ by EXACTLY ONE BIT (Gray code order: $00, 01, 11, 10$).\n- Adjacent cells wrap around boundaries (toroidal adjacency: top row adjacent to bottom row; leftmost column adjacent to rightmost column).",
+            "Grouping Rules for Minimization:\n1. Groups of 1s (in SOP) must be powers of 2 ($1, 2, 4, 8, 16$).\n2. Pair (2 cells) eliminates 1 variable; Quad (4 cells) eliminates 2 variables; Octet (8 cells) eliminates 3 variables.\n3. Implicant Definitions:\n   - Prime Implicant (PI): A maximal rectangular group of 1s that cannot be combined into a larger group.\n   - Essential Prime Implicant (EPI): A prime implicant that covers at least one '1' that is NOT covered by any other prime implicant. ALL EPIs MUST BE INCLUDED in the final minimal expression!",
+            "Don't Care Conditions ($d$ or $X$):\n- Input combinations that can never occur in practice (e.g. invalid BCD codes $1010$ to $1111$) or whose outputs are irrelevant.\n- In K-maps, Don't Cares can be treated as 1 if they help form a larger group (reducing literals), or treated as 0 if they don't."
+          ],
+          "code_or_formula": "Gray Code Cell Order: 00, 01, 11, 10\nGroup Sizes: 2^k cells eliminate k variables\nMinimal SOP = All Essential Prime Implicants + minimal set of PIs covering remaining 1s",
+          "exam_tips": "KTU Part B 9-mark staple: 'Simplify Boolean function F(A, B, C, D) = sum m(0, 2, 5, 7, 8, 10, 15) + d(1, 3, 11) using 4-variable K-map. Identify all prime implicants and essential prime implicants'."
+        },
+        {
+          "topic_title": "3. Code Converters: Binary to Gray, Gray to Binary & BCD to Excess-3",
+          "summary": "Reflected binary Gray code properties, XOR conversion chains, logic schematics, and BCD to Excess-3 converter design.",
+          "key_points": [
+            "Gray Code (Reflected Binary Code) Properties:\n- An unweighted, non-arithmetic code in which two consecutive code words differ in strictly ONE bit position (Unit Distance Code).\n- Prevents spurious glitch transitions in mechanical encoders, angular position sensors, and asynchronous FIFO pointers.",
+            "Binary to Gray Code Conversion:\n- MSB remains unchanged: $G_n = B_n$.\n- Every other bit is XOR of current binary bit with preceding higher-order binary bit:\n  $$G_i = B_{i+1} \\oplus B_i$$\n  For 4-bit binary $B_3 B_2 B_1 B_0$:\n  $G_3 = B_3, \\quad G_2 = B_3 \\oplus B_2, \\quad G_1 = B_2 \\oplus B_1, \\quad G_0 = B_1 \\oplus B_0$.",
+            "Gray Code to Binary Conversion:\n- MSB remains unchanged: $B_n = G_n$.\n- Every subsequent binary bit is XOR of previous generated binary bit with current Gray bit:\n  $$B_i = B_{i+1} \\oplus G_i$$\n  $B_3 = G_3, \\quad B_2 = B_3 \\oplus G_2, \\quad B_1 = B_2 \\oplus G_1, \\quad B_0 = B_1 \\oplus G_0$.",
+            "Universal 3-bit Binary/Gray Converter with Mode Control $M$ (KTU Model Paper Question):\n- When $M = 0$: Binary to Gray. When $M = 1$: Gray to Binary.\n- Circuit uses controlled XOR gates configured with multiplexing logic.",
+            "BCD to Excess-3 Code Converter:\n- Excess-3 is an unweighted, self-complementing BCD code obtained by adding $0011_2$ ($3_{10}$) to standard BCD ($0..9$). Unused states: $10..15$ are Don't Cares."
+          ],
+          "code_or_formula": "Binary -> Gray: G_3 = B_3, G_2 = B_3 ^ B_2, G_1 = B_2 ^ B_1, G_0 = B_1 ^ B_0\nGray -> Binary: B_3 = G_3, B_2 = B_3 ^ G_2, B_1 = B_2 ^ G_1, B_0 = B_1 ^ G_0",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Design a 4-bit Binary to Gray code converter using logic gates' and 'Explain why Gray code is called a unit distance code'."
+        },
+        {
+          "topic_title": "4. Verilog Modeling of Combinational Logic: Continuous Assignments & Delays",
+          "summary": "Dataflow modeling via assign statements, logical/conditional operators, inertial propagation delays, and gate primitives.",
+          "key_points": [
+            "Continuous Assignment Syntax:\n- Keyword `assign` drives values continuously onto a `wire` whenever right-hand side signals change (Dataflow Modeling):\n  `assign out = a & b | ~c;`",
+            "Conditional Continuous Assignment (Multiplexer Model):\n- `assign f = sel ? in1 : in0;`\n- Nested conditional operator models multi-way multiplexers:\n  `assign out = (sel == 2'b00) ? d0 : (sel == 2'b01) ? d1 : (sel == 2'b10) ? d2 : d3;`",
+            "Continuous Assignment with Propagation Delay (`#`):\n- Simulates physical gate delay: `assign #5 sum = a ^ b;` (waits 5 time units after input changes before updating output `sum`)."
+          ],
+          "code_or_formula": "Continuous Assign: assign #delay net = expression;\nMUX: assign out = sel ? in1 : in0;",
+          "exam_tips": "KTU Part A: 'Write continuous assignment Verilog code for a 4:1 MUX using conditional operator'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which 4 cells form a corner quad on a 4-variable K-Map, simplifying to B'D'?",
+          "options": [
+            "0, 1, 2, 3",
+            "0, 4, 8, 12",
+            "0, 2, 8, 10",
+            "1, 3, 9, 11"
+          ],
+          "ans": 2,
+          "explanation": "Cells 0 (0000), 2 (0010), 8 (1000), and 10 (1010) are corner adjacent, simplifying to B'D'."
+        },
+        {
+          "q": "What is the Gray code equivalent of the 4-bit binary number 1011?",
+          "options": [
+            "1110",
+            "1101",
+            "1111",
+            "1001"
+          ],
+          "ans": 0,
+          "explanation": "G3 = B3 = 1. G2 = B3^B2 = 1^0 = 1. G1 = B2^B1 = 0^1 = 1. G0 = B1^B0 = 1^1 = 0. Gray code = 1110."
+        },
+        {
+          "q": "According to the Consensus Theorem, what is the simplification of AB + A'C + BC?",
+          "options": [
+            "AB + A'C",
+            "BC",
+            "AB + BC",
+            "A'C + BC"
+          ],
+          "ans": 0,
+          "explanation": "The term BC is the redundant consensus term and can be eliminated: AB + A'C + BC = AB + A'C."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Realize the Boolean expression F = A'BC + A'B' + BC using NOR gates alone. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "1. Algebraic Simplification:\nF = A'B' + BC(A' + 1) = A'B' + BC.\n2. Conversion to NOR Form using De Morgan's Law:\nDouble complement F: F = ~~F = ~[~(A'B' + BC)] = ~[(A + B) * (B' + C')].\nExpand or express directly in NOR form:\nF = ~[ ~(A + B)' + ~(B' + C')' ].\nLogic circuit: First level uses NOR gates to produce intermediate inverted sums, and second level combines them through a NOR gate to obtain F.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Design a 4-bit Binary to Gray code converter. (KTU Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "Truth Table mapping 4-bit binary B3 B2 B1 B0 to Gray code G3 G2 G1 G0:\nEquations:\nG3 = B3\nG2 = B3 ^ B2\nG1 = B2 ^ B1\nG0 = B1 ^ B0\nHardware Realization: Requires zero gates for G3 (direct connection) and three 2-input XOR gates for G2, G1, and G0.",
+          "type": "Part B (5 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "MSI Logic & Digital Building Blocks",
+      "topics": [
+        "MSI Decoders: 2-to-4 Decoder, 3-to-8 Decoder with Enable, 7-Segment Display Decoder",
+        "Encoders & Priority Encoders (4-to-2, 8-to-3)",
+        "Multiplexers (MUX): 2:1, 4:1, 8:1 MUX, Function Realization using MUX",
+        "Demultiplexers (DEMUX): 1-to-4, 1-to-8",
+        "Digital Building Blocks: Half Adder, Full Adder, Half Subtractor, Full Subtractor",
+        "Binary Comparators: 1-bit and 2-bit Magnitude Comparators",
+        "Structural Verilog: Gate-Level Primitives & Module Instantiation"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "MSI Routing & Decoding Circuits",
+          "description": "Multi-line data selectors and binary expansion networks",
+          "root": "MSI Logic",
+          "branches": [
+            {
+              "node": "Decoders & Encoders",
+              "children": [
+                "Decoders: n inputs -> 2^n outputs (e.g. 3-to-8 line)",
+                "Priority Encoders: Output corresponds to highest active input"
+              ]
+            },
+            {
+              "node": "Data Selectors",
+              "children": [
+                "Multiplexer (MUX): 2^n inputs, n select lines, 1 output",
+                "Universal logic generator: Realizes any logic function",
+                "Demultiplexer: 1 input routed to 2^n outputs"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Arithmetic Units & Structural HDL",
+          "description": "Fundamental digital adder/subtractor blocks and hierarchical Verilog",
+          "root": "Arithmetic & Verilog",
+          "branches": [
+            {
+              "node": "Adders & Subtractors",
+              "children": [
+                "Half Adder: Sum = A ^ B, Carry = A & B",
+                "Full Adder: 2 Half Adders + OR gate",
+                "Magnitude Comparator: A>B, A=B, A<B"
+              ]
+            },
+            {
+              "node": "Hierarchical Verilog",
+              "children": [
+                "Primitive gates: and, or, not, xor",
+                "Module instantiation: connecting child modules via wire ports"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Decoders, Encoders & Priority Encoders",
+          "summary": "n-to-2^n Decoders with active-low enable, BCD-to-7-segment decoders, standard Encoders, and 4:2 Priority Encoders.",
+          "key_points": [
+            "Decoders ($n$-to-$2^n$ Line Decoders):\n- Combinational circuit that decodes an $n$-bit binary input into one of $2^n$ unique output lines.\n- 3-to-8 Decoder with Enable ($E$): Outputs correspond to individual minterms $m_0$ to $m_7$. Active-low outputs: $Y_i = \\overline{m_i}$.\n- BCD to 7-Segment Decoder: Maps 4-bit BCD digit ($0..9$) to 7 LED display segments ($a, b, c, d, e, f, g$).",
+            "Encoders & Priority Encoders:\n- Standard Encoder ($2^n$-to-$n$): Performs inverse operation of decoder; converts 1-out-of-$2^n$ active inputs into an $n$-bit binary code. Flaw: If multiple inputs are simultaneously active, output is corrupted.\n- Priority Encoder: Resolves input conflicts by establishing a strict priority hierarchy (typically input with highest subscript has highest priority).\n- 4-to-2 Priority Encoder Truth Table (Inputs $D_3, D_2, D_1, D_0$, Outputs $A_1, A_0$, Valid $V$):\n  * $D_3=1 \\implies A_1=1, A_0=1, V=1$ (Don't care $D_2, D_1, D_0$)\n  * $D_3=0, D_2=1 \\implies A_1=1, A_0=0, V=1$\n  * $D_3=0, D_2=0, D_1=1 \\implies A_1=0, A_0=1, V=1$\n  * $D_3=0, D_2=0, D_1=0, D_0=1 \\implies A_1=0, A_0=0, V=1$\n  * All 0s $\\implies V=0$ (Invalid output)."
+          ],
+          "code_or_formula": "Decoder: n inputs -> 2^n minterm outputs\nPriority Encoder: Highest index input takes priority; Valid bit V indicates activity",
+          "exam_tips": "KTU Part A: 'Design a 4:2 priority encoder with truth table and K-map equations'. Part B: 'Realize a Full Subtractor using 3:8 decoder and NAND gates'."
+        },
+        {
+          "topic_title": "2. Multiplexers (MUX) & Demultiplexers (DEMUX): Design & Function Realization",
+          "summary": "2^n-to-1 MUX architecture, cascading MUXes, Demultiplexers, and universal Boolean function synthesis using MUXes.",
+          "key_points": [
+            "Multiplexer (MUX / Data Selector):\n- Selects binary information from one of $2^n$ input data lines ($I_0..I_{2^n-1}$) and directs it to a single output line $Y$ based on $n$ select lines ($S_{n-1}..S_0$):\n  $$Y = \\sum_{k=0}^{2^n - 1} m_k \\cdot I_k$$\n- Realizing 8:1 MUX using two 4:1 MUXes (KTU Question):\n  Connect select lines $S_1, S_0$ in parallel to both 4:1 MUXes. Use $S_2$ with NOT gate to enable upper 4:1 MUX when $S_2=0$ (handling inputs $I_0..I_3$) and lower 4:1 MUX when $S_2=1$ (handling inputs $I_4..I_7$). OR the outputs together.",
+            "Universal Boolean Function Realization using Multiplexers:\n- Any Boolean function of $n$ variables can be implemented directly using a $2^{n-1}$-to-1 MUX (with $n-1$ variables connected to select lines and remaining variable/constants applied to data inputs):\n  * Step 1: Connect $n-1$ variables to select inputs $S_{n-2}..S_0$.\n  * Step 2: Set up implementation table with rows for $0, \\bar{x}_n, x_n, 1$.\n  * Step 3: Circle minterms of function. Compare each column to assign $0, 1, x_n,$ or $\\bar{x}_n$ to data input $I_k$.",
+            "Demultiplexer (DEMUX / Data Distributor):\n- Routes a single input line $D$ to one of $2^n$ output lines based on $n$ select lines. Identical to a Decoder whose Enable input is used as data input $D$."
+          ],
+          "code_or_formula": "4:1 MUX Equation: Y = ~S1*~S0*I0 + ~S1*S0*I1 + S1*~S0*I2 + S1*S0*I3\nn-variable function -> Implement with 2^(n-1) to 1 MUX",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Realize Boolean function F(A, B, C, D) = sum m(1, 3, 4, 11, 12, 13, 14, 15) using an 8:1 MUX' and 'Design 8:1 MUX using two 4:1 MUXes'."
+        },
+        {
+          "topic_title": "3. Binary Adders, Subtractors, Ripple Carry & 4-Bit Adder/Subtractor",
+          "summary": "Half/Full Adders & Subtractors, logic expressions, Ripple Carry propagation delay, and parallel 2's complement Adder/Subtractor.",
+          "key_points": [
+            "Half Adder vs Full Adder:\n- Half Adder (Adds two 1-bit numbers $A, B$):\n  $$\\text{Sum } S = A \\oplus B, \\quad \\text{Carry } C = A \\cdot B$$\n- Full Adder (Adds three 1-bit inputs $A, B, C_{in}$):\n  $$S = A \\oplus B \\oplus C_{in}$$\n  $$C_{out} = AB + C_{in}(A \\oplus B) = AB + BC_{in} + AC_{in}$$\n- Realization of Full Adder using TWO Half Adders and ONE OR gate:\n  First HA generates $S_1 = A \\oplus B, C_1 = AB$. Second HA adds $S_1$ and $C_{in} \\implies S = S_1 \\oplus C_{in}, C_2 = S_1 \\cdot C_{in}$. Final carry $C_{out} = C_1 + C_2$.",
+            "Half Subtractor vs Full Subtractor:\n- Half Subtractor: $\\text{Difference } D = A \\oplus B, \\quad \\text{Borrow } B_{out} = \\bar{A}B$.\n- Full Subtractor: $D = A \\oplus B \\oplus B_{in}, \\quad B_{out} = \\bar{A}B + B_{in}(\\overline{A \\oplus B})$.",
+            "4-Bit Parallel Adder/Subtractor Circuit with Mode Control $M$:\n- Uses four Full Adders cascaded in Ripple Carry arrangement, with input $B_i$ passed through an XOR gate controlled by mode bit $M$ ($B_i \\oplus M$):\n  * When $M = 0$: $B_i \\oplus 0 = B_i$, and $C_{in} = 0$. Circuit performs standard Binary Addition ($A + B$).\n  * When $M = 1$: $B_i \\oplus 1 = \\bar{B}_i$, and $C_{in} = 1$. Circuit computes $A + \\bar{B} + 1 = A - B$ using 2's Complement Subtraction!"
+          ],
+          "code_or_formula": "Full Adder: S = A ^ B ^ Cin | Cout = AB + Cin*(A ^ B)\nMode M=0 -> Addition | Mode M=1 -> 2's Complement Subtraction",
+          "exam_tips": "KTU Part B 5/9-mark question: 'Draw and explain the working of a 4-bit parallel adder/subtractor circuit using 2's complement logic'."
+        },
+        {
+          "topic_title": "4. Magnitude Comparators & Structural Verilog Design Hierarchy",
+          "summary": "1-bit and 4-bit magnitude comparators (A>B, A=B, A<B), structural Verilog instantiation, gate primitives, and UDPs.",
+          "key_points": [
+            "Magnitude Comparator:\n- Compares two $n$-bit binary words $A$ and $B$, generating three mutually exclusive outputs: $A > B$, $A = B$, and $A < B$.\n- 1-Bit Comparator:\n  * $A = B$: $X = A \\odot B = AB + \\bar{A}\\bar{B}$ (XNOR gate).\n  * $A > B$: $G = A\\bar{B}$.\n  * $A < B$: $L = \\bar{A}B$.\n- 4-Bit Comparator (IC 7485):\n  Compares from MSB ($A_3, B_3$) down to LSB ($A_0, B_0$). If $A_3 \\ne B_3$, result is determined by $A_3$ vs $B_3$. Only if $A_3 = B_3$ are lower bits evaluated.",
+            "Structural Verilog Design Hierarchy:\n- Top-level modules instantiate lower-level submodules, connecting their ports via internal wires:\n```verilog\nmodule full_adder (input wire a, b, cin, output wire sum, cout);\n    wire s1, c1, c2;\n    half_adder ha1 (.a(a), .b(b), .sum(s1), .cout(c1));\n    half_adder ha2 (.a(s1), .b(cin), .sum(sum), .cout(c2));\n    or g1 (cout, c1, c2);\nendmodule\n```"
+          ],
+          "code_or_formula": "Comparator: A=B is XNOR(A, B) | A>B is A*~B | A<B is ~A*B",
+          "exam_tips": "KTU Part A: 'Write the Boolean equations for a 2-bit magnitude comparator' and 'Explain structural hierarchy in Verilog with an adder example'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "How many select lines are required for a 32-to-1 Multiplexer?",
+          "options": [
+            "4",
+            "5",
+            "6",
+            "16"
+          ],
+          "ans": 1,
+          "explanation": "2^n = 32 => n = 5 select lines."
+        },
+        {
+          "q": "A Full Adder can be constructed using:",
+          "options": [
+            "Two Half Adders and one OR gate",
+            "Two Half Adders and one AND gate",
+            "One Half Adder and two OR gates",
+            "Three Half Adders"
+          ],
+          "ans": 0,
+          "explanation": "Sum is obtained by cascading two XOR gates (from 2 HAs), and final carry is the OR of both individual carries."
+        },
+        {
+          "q": "What is the primary function of a Priority Encoder?",
+          "options": [
+            "To decode 7-segment display digits",
+            "To produce binary code of the highest-order active input line",
+            "To serialize parallel bits",
+            "To perform 2's complement inversion"
+          ],
+          "ans": 1,
+          "explanation": "A priority encoder guarantees that if multiple inputs are simultaneously asserted, the output reflects the highest-priority index."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Design and realize an 8:1 multiplexer using two 4:1 multiplexers. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Components: Two 4:1 MUXes (MUX0, MUX1), one NOT gate, and one 2-input OR gate.\nConnections:\n1. Connect select inputs S1, S0 in parallel to select lines of both MUX0 and MUX1.\n2. Connect inputs I0, I1, I2, I3 to data lines of MUX0.\n3. Connect inputs I4, I5, I6, I7 to data lines of MUX1.\n4. Connect MSB select line S2 through a NOT gate to Enable (E) of MUX0 (active when S2=0) and directly to Enable (E) of MUX1 (active when S2=1).\n5. Connect outputs of MUX0 and MUX1 to inputs of the OR gate to generate final output Y.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Realize a Full Subtractor circuit using a 3:8 decoder and external gates. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Full Subtractor Truth Table (Inputs A, B, Bin; Outputs Difference D, Borrow Bout):\n- Difference D = sum m(1, 2, 4, 7)\n- Borrow Bout = sum m(1, 2, 3, 7)\nImplementation using 3:8 Decoder with active-high outputs:\n1. Apply inputs A, B, Bin to decoder select inputs S2, S1, S0.\n2. Connect decoder outputs Y1, Y2, Y4, Y7 to a 4-input OR gate to produce Difference D.\n3. Connect decoder outputs Y1, Y2, Y3, Y7 to a 4-input OR gate to produce Borrow Bout.\n(If decoder has active-low outputs, use NAND gates instead of OR gates).",
+          "type": "Part A (3 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Sequential Logic Design & Flip-Flops",
+      "topics": [
+        "Sequential vs Combinational Logic: Memory, Clocks, Bistable Elements",
+        "Latches: SR Latch (NAND/NOR), Gated SR Latch",
+        "Flip-Flops: SR, JK, D, and T Flip-Flops (Truth Table, Excitation Table)",
+        "Race-Around Condition in JK Flip-Flop & Master-Slave JK Flip-Flop",
+        "Flip-Flop Conversion (e.g. SR to JK, JK to D, JK to T)",
+        "Shift Registers: SISO, SIPO, PISO, PIPO, Universal Shift Register",
+        "Counters: Asynchronous (Ripple) UP/DOWN, Synchronous 3-bit UP Counter"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Bistable Memory Elements",
+          "description": "Clock-synchronized feedback circuits storing 1 bit of state",
+          "root": "Latches & Flip-Flops",
+          "branches": [
+            {
+              "node": "Level vs Edge",
+              "children": [
+                "Latches (Level-sensitive, transparent)",
+                "Flip-Flops (Edge-triggered on clock transition)"
+              ]
+            },
+            {
+              "node": "Flip-Flop Family",
+              "children": [
+                "SR (Indeterminate at S=R=1)",
+                "JK (Toggle at J=K=1)",
+                "D (Data delay: Q_next = D)",
+                "T (Toggle: Q_next = T ^ Q)"
+              ]
+            },
+            {
+              "node": "Race Elimination",
+              "children": [
+                "Race-Around: tp > tg causes rapid uncontrolled toggling",
+                "Master-Slave JK: Cascaded dual-clock eliminates race"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Registers & Counting Chains",
+          "description": "Cascaded sequential systems for data shifting and clock division",
+          "root": "Registers & Counters",
+          "branches": [
+            {
+              "node": "Shift Registers",
+              "children": [
+                "SISO (Serial In Serial Out)",
+                "SIPO (Serial In Parallel Out)",
+                "PISO (Parallel In Serial Out)",
+                "PIPO (Parallel In Parallel Out)"
+              ]
+            },
+            {
+              "node": "Binary Counters",
+              "children": [
+                "Asynchronous / Ripple: Flip-flops clocked by previous output (accumulates delay)",
+                "Synchronous: All flip-flops clocked simultaneously by master clock"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Latches vs Flip-Flops, Race-Around Condition & Master-Slave JK Architecture",
+          "summary": "Level vs edge triggering, SR NAND/NOR latches, D and T flip-flops, JK race-around mechanism, and Master-Slave resolution.",
+          "key_points": [
+            "Latches vs Flip-Flops (KTU Core Comparison):\n- Latch: Level-sensitive storage element. Output responds continuously to inputs whenever Enable/Clock is active (transparent). Prone to timing glitches.\n- Flip-Flop: Edge-triggered storage device. Samples inputs and updates output strictly on clock transitions (rising 0->1 or falling 1->0 edge). Glitch-immune.",
+            "SR Latch Characteristics & Forbidden States:\n- NOR Latch: $S=1, R=0 \\implies Q=1$ (Set); $S=0, R=1 \\implies Q=0$ (Reset); $S=0, R=0$ (Hold). Invalid/Forbidden state: $S=1, R=1 \\implies Q=\\bar{Q}=0$.\n- NAND Latch: Active-low inputs $\\bar{S}, \\bar{R}$. Invalid state: $\\bar{S}=\\bar{R}=0$.",
+            "D & T Flip-Flops:\n- D Flip-Flop (Data / Delay): Eliminates invalid state by connecting $R = \\bar{S}$. Characteristic: $Q_{next} = D$.\n- T Flip-Flop (Toggle): Made from JK with $J=K=T$. If $T=0$, $Q_{next} = Q$; if $T=1$, $Q_{next} = \\bar{Q}$. Characteristic: $Q_{next} = T \\oplus Q$.",
+            "Race-Around Condition in JK Flip-Flop (KTU Repeated 3/5-Mark Question):\n- Occurs in level-triggered JK flip-flops when $J = K = 1$.\n- Mechanism: When clock pulse is HIGH ($t_p$) and $t_p > t_{pd}$ (propagation delay of logic gates), the output toggles from $0 \\to 1$. This new output feeds back to inputs while clock is STILL HIGH, causing the output to toggle repeatedly ($0 \\to 1 \\to 0 \\to 1 \\dots$) in an uncontrollable oscillation during the pulse duration!\n- Conditions for Race-Around: $J=K=1$, and Clock pulse width $t_p \\ge t_{pd}$.",
+            "Master-Slave JK Flip-Flop Solution:\n- Consists of two cascaded flip-flops: Master and Slave, driven by complementary clocks (Clock to Master, Inverted Clock to Slave).\n- Operation:\n  1. During Clock HIGH: Master is active and captures inputs $J, K$; Slave is disabled (clock is 0) and holds previous output.\n  2. During Clock LOW: Master is disabled; Slave becomes active and transfers Master's state to final outputs $Q, \\bar{Q}$.\n- Since Master and Slave are never active simultaneously, output changes can NEVER feed back during the same active clock period, completely eliminating the race-around condition!"
+          ],
+          "code_or_formula": "Race-Around Condition: Occurs when J=K=1 and clock pulse width tp > tpd\nJK Characteristic: Q_next = J*~Q + ~K*Q\nT Characteristic: Q_next = T ^ Q",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Explain the race-around condition in JK flip-flop and show how Master-Slave JK flip-flop eliminates it'."
+        },
+        {
+          "topic_title": "2. Flip-Flop Conversions, Characteristic Equations & Excitation Tables",
+          "summary": "Characteristic and excitation tables for SR, JK, D, and T flip-flops, and step-by-step flip-flop conversion procedures.",
+          "key_points": [
+            "Characteristic & Excitation Tables (KTU Mandatory Reference Table):\n| Flip-Flop | Characteristic Equation | Excitation Table ($Q \\to Q_{next}$) |\n|---|---|---|\n| **SR** | $Q_{next} = S + \\bar{R}Q$ (with $SR=0$) | $0 \\to 0: S=0, R=X$ ;  $0 \\to 1: S=1, R=0$ ;  $1 \\to 0: S=0, R=1$ ;  $1 \\to 1: S=X, R=0$ |\n| **JK** | $Q_{next} = J\\bar{Q} + \\bar{K}Q$ | $0 \\to 0: J=0, K=X$ ;  $0 \\to 1: J=1, K=X$ ;  $1 \\to 0: J=X, K=1$ ;  $1 \\to 1: J=X, K=0$ |\n| **D** | $Q_{next} = D$ | $0 \\to 0: D=0$ ;  $0 \\to 1: D=1$ ;  $1 \\to 0: D=0$ ;  $1 \\to 1: D=1$ |\n| **T** | $Q_{next} = T \\oplus Q$ | $0 \\to 0: T=0$ ;  $0 \\to 1: T=1$ ;  $1 \\to 0: T=1$ ;  $1 \\to 1: T=0$ |",
+            "General Flip-Flop Conversion Procedure:\n1. Identify Required FF and Available Actual FF.\n2. Write truth/characteristic table for Required FF.\n3. Append excitation inputs of the Available FF corresponding to transitions ($Q \\to Q_{next}$).\n4. Minimize Available FF inputs using K-maps with Required inputs and current state $Q$."
+          ],
+          "code_or_formula": "Excitation JK: 0->0: 0,X | 0->1: 1,X | 1->0: X,1 | 1->1: X,0\nExcitation T: Q ^ Q_next",
+          "exam_tips": "KTU Part A & Part B questions: 'Derive characteristic and excitation tables for JK flip-flop' and 'Convert a JK flip-flop to D flip-flop'."
+        },
+        {
+          "topic_title": "3. Asynchronous & Synchronous Counters: Design & Analysis",
+          "summary": "Ripple counter propagation delay, MOD-N counters, synchronous counter design steps, and 3-bit UP/DOWN counters.",
+          "key_points": [
+            "Asynchronous (Ripple) Counters:\n- Flip-flops are connected in a chain where output of one flip-flop acts as CLOCK input for the next flip-flop.\n- All flip-flops operate in Toggle mode ($T=1$ or $J=K=1$).\n- Flaw: Cumulative Propagation Delay ($t_{total} = N \\cdot t_{pd}$). Limits maximum operating frequency ($f_{max} < \\frac{1}{N \\cdot t_{pd}}$) and causes transient decoding glitches.\n- Designing MOD-5 Asynchronous Counter: Uses 3 flip-flops ($2^3 = 8 > 5$). Reset flip-flops when state reaches 5 ($101_2$): Feed $Q_2$ and $Q_0$ into a NAND gate connected to active-low Clear ($\\overline{CLR}$) inputs.",
+            "Synchronous Counters (High Speed):\n- Clock is applied SIMULTANEOUSLY in parallel to ALL flip-flops, so all state transitions occur at the exact same instant ($t_{total} = t_{pd}$).\n- Design Steps for Synchronous 3-Bit UP Counter using JK Flip-Flops:\n  1. State transition table: $000 \\to 001 \\to 010 \\dots \\to 111 \\to 000$.\n  2. Write excitation table for $J_2, K_2, J_1, K_1, J_0, K_0$.\n  3. K-map minimization:\n     - $J_0 = 1, \\quad K_0 = 1$ (FF0 toggles on every clock).\n     - $J_1 = Q_0, \\quad K_1 = Q_0$ (FF1 toggles when $Q_0 = 1$).\n     - $J_2 = Q_1 Q_0, \\quad K_2 = Q_1 Q_0$ (FF2 toggles when both $Q_1$ and $Q_0$ are 1)."
+          ],
+          "code_or_formula": "Synchronous 3-bit UP Counter: J0=K0=1 | J1=K1=Q0 | J2=K2=Q1*Q0\nMod-N Ripple Counter: Reset when count = N using NAND gate",
+          "exam_tips": "KTU Part B 9-mark staple: 'Design a Synchronous 3-bit UP counter using JK flip-flops. Draw state diagram, excitation table, K-maps, and final logic circuit'."
+        },
+        {
+          "topic_title": "4. Shift Registers, Ring Counters & Johnson Counters",
+          "summary": "SISO, SIPO, PISO, PIPO register architectures, Ring counter vs Johnson twisted ring counter states and decoding.",
+          "key_points": [
+            "Shift Register Architectures:\nCascaded chain of flip-flops sharing a common clock, shifting data one position per clock cycle:\n1. SISO (Serial-In, Serial-Out): Slowest ($N$ clock cycles to load, $N$ to read).\n2. SIPO (Serial-In, Parallel-Out): Serial input converted to simultaneous parallel bus.\n3. PISO (Parallel-In, Serial-Out): Uses combinational multiplexers to load parallel data, then shifts serially.\n4. PIPO (Parallel-In, Parallel-Out): High-speed data buffer (1 clock cycle load and read).",
+            "Ring Counter vs Johnson Counter (KTU Repeated Comparison):\n- Ring Counter:\n  * Output of last flip-flop is fed directly back to input of first: $D_0 = Q_{N-1}$.\n  * Initial state has a single circulating 1: $1000 \\to 0100 \\to 0010 \\to 0001 \\to 1000$.\n  * Number of distinct states for $N$ flip-flops: Exactly $N$ states.\n  * Decoding: Self-decoding (each state represented by high bit at single flip-flop).\n- Johnson (Twisted Ring / Moebius) Counter:\n  * Inverted output of last flip-flop is fed back to input of first: $D_0 = \\overline{Q_{N-1}}$.\n  * Sequence for 4 bits: $0000 \\to 1000 \\to 1100 \\to 1110 \\to 1111 \\to 0111 \\to 0011 \\to 0001 \\to 0000$.\n  * Number of distinct states for $N$ flip-flops: Exactly $2N$ states (twice as many as Ring Counter!).\n  * Decoding: Requires simple 2-input AND gates."
+          ],
+          "code_or_formula": "Ring Counter: N flip-flops -> N states\nJohnson Counter: N flip-flops -> 2N states (feedback D0 = ~Q_{N-1})",
+          "exam_tips": "KTU Part A 3-mark question: 'Compare Ring counter and Johnson counter with respect to number of states and feedback connection'."
+        },
+        {
+          "topic_title": "5. Finite State Machines (FSM): Mealy vs Moore & Sequential Verilog Modeling",
+          "summary": "Mealy vs Moore FSM models, state diagram, state transition table, procedural always blocks, and non-blocking assignments.",
+          "key_points": [
+            "Finite State Machine (FSM) Models (KTU Core Theory):\n- Moore Machine: The outputs depend SOLELY on the CURRENT STATE of the machine.\n  * Output is synchronized with clock; glitch-free; requires more states for complex behaviors.\n- Mealy Machine: The outputs depend on BOTH the CURRENT STATE and the CURRENT INPUTS.\n  * Responds immediately to input changes in current clock cycle; requires fewer states, but outputs may suffer from asynchronous glitches if inputs are noisy.",
+            "Verilog Procedural Modeling for Sequential Circuits:\n- Synchronous circuits are modeled inside procedural `always` blocks sensitive to clock edges:\n  `always @(posedge clk or posedge reset)`\n- CRITICAL RULE (Blocking vs Non-Blocking):\n  * Use Non-Blocking assignments (`<=`) for ALL sequential logic (registers, flip-flops, counters). Non-blocking statements evaluate all right-hand sides concurrently before updating left-hand sides, accurately modeling simultaneous physical hardware clock edges.\n  * Use Blocking assignments (`=`) for purely combinational logic.\n- Verilog Model for D Flip-Flop with Asynchronous Reset:\n```verilog\nmodule d_flip_flop (input wire clk, reset, d, output reg q);\n    always @(posedge clk or posedge reset) begin\n        if (reset) q <= 1'b0;\n        else       q <= d;\n    end\nendmodule\n```"
+          ],
+          "code_or_formula": "Moore FSM: Output = f(Current State)\nMealy FSM: Output = f(Current State, Inputs)\nSequential Verilog: always @(posedge clk) q <= d; // Non-blocking <=",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Distinguish between Mealy and Moore state machines with block diagrams' and 'Model a D flip-flop with reset in Verilog'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Under what conditions does the Race-Around condition occur in a JK flip-flop?",
+          "options": [
+            "J=0, K=0 and tp < tg",
+            "J=1, K=1 and clock pulse width tp > propagation delay tg",
+            "J=1, K=0 on falling clock edge",
+            "Clock frequency is 0 Hz"
+          ],
+          "ans": 1,
+          "explanation": "When J=K=1 and the clock remains high longer than the gate propagation delay, the output toggles repeatedly within one clock period."
+        },
+        {
+          "q": "What is the characteristic equation of a JK Flip-Flop?",
+          "options": [
+            "Q(next) = J Q + K Q'",
+            "Q(next) = J Q' + K' Q",
+            "Q(next) = J' Q + K Q'",
+            "Q(next) = J ^ K"
+          ],
+          "ans": 1,
+          "explanation": "Q(next) = J Q' + K' Q correctly reflects set (J=1), reset (K=1), no-change (J=K=0), and toggle (J=K=1)."
+        },
+        {
+          "q": "In a 3-bit synchronous binary UP counter using JK flip-flops, what is the input expression for J2 and K2 of the MSB flip-flop?",
+          "options": [
+            "1",
+            "Q0",
+            "Q0 * Q1",
+            "Q0 + Q1"
+          ],
+          "ans": 2,
+          "explanation": "The MSB toggles only when both lower bits Q0 and Q1 are 1, so J2 = K2 = Q0 * Q1."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Explain the race-around condition in JK flip-flop and describe how the Master-Slave JK flip-flop resolves it. (KTU Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "Race-Around Condition:\nIn a level-triggered JK flip-flop, when J = K = 1, the flip-flop operates in toggle mode (Q_next = Q'). If the clock pulse width tp is greater than the propagation delay tpd of the logic gates (tp > tpd), the output toggles. This altered output feeds back to inputs while clock is still high, toggling the output again and again uncontrollably during pulse duration tp.\nMaster-Slave Resolution:\nConsists of two cascaded flip-flops: Master (clocked by clk) and Slave (clocked by inverted clk~).\n1. When clk = 1: Master is active and latches inputs J, K. Slave is disabled (clk~ = 0) and holds output steady.\n2. When clk = 0: Master is disabled. Slave becomes active and transfers Master's internal state to outputs Q, Q'.\nBecause Master and Slave are never enabled at the same time, output changes can never loop back during the same active clock window, completely curing race-around.",
+          "type": "Part B (9 Marks)"
+        },
+        {
+          "q": "Design a Synchronous 3-bit UP Counter using JK Flip-Flops. (KTU Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "1. State sequence: 000 -> 001 -> 010 -> 011 -> 100 -> 101 -> 110 -> 111 -> 000.\n2. Using JK excitation table (0->0: 0,X; 0->1: 1,X; 1->0: X,1; 1->1: X,0):\n- FF0 transitions every clock: J0 = 1, K0 = 1.\n- FF1 transitions when Q0 = 1: J1 = Q0, K1 = Q0.\n- FF2 transitions when Q1 = 1 AND Q0 = 1: J2 = Q1 * Q0, K2 = Q1 * Q0.\n3. Logic Circuit: Three JK flip-flops sharing common clock. Tie J0, K0 to Logic 1. Connect Q0 to J1, K1. Connect AND(Q1, Q0) to J2, K2.",
+          "type": "Part B (9 Marks)"
+        }
+      ]
+    }
+  ]
+}

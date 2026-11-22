@@ -1,0 +1,13 @@
+{
+  "name": "ktu-s3-minimal-study-app",
+  "version": "1.0.0",
+  "description": "Minimalist Bauhaus study sprint web app for KTU B.Tech S3",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "build": "node build_data.js"
+  },
+  "keywords": ["ktu", "btech", "s3", "study", "minimalist"],
+  "author": "",
+  "license": "ISC"
+}

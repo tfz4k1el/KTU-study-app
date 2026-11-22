@@ -1,0 +1,1030 @@
+{
+  "id": "DSA",
+  "code": "PCCST303",
+  "name": "Data Structures & Algorithms",
+  "credits": 4,
+  "modules": [
+    {
+      "num": 1,
+      "title": "Basic Concepts of Data Structures, Complexity Analysis & Stacks / Queues",
+      "topics": [
+        "Data Structures: Definition, Data Abstraction, Primitive vs Non-Primitive",
+        "Linear vs Non-Linear, Static vs Dynamic Data Structures",
+        "Algorithms: Definition, 5 Mandatory Criteria (Input, Output, Definiteness, Finiteness, Effectiveness)",
+        "Performance Analysis: Space Complexity (Fixed C vs Variable Instance Sp(I))",
+        "Time Complexity: Step Count / Frequency Count Method",
+        "Asymptotic Notations: Big-O, Big-Omega, Big-Theta (Formal Definitions, Graphical Curves, Hierarchy)",
+        "Polynomial Representation using Arrays & Polynomial Addition Algorithm",
+        "Sparse Matrix: Concept, Disadvantages of 2D Array, 3-Tuple Representation",
+        "Sparse Matrix Transpose: Simple Transpose O(C*N) vs Fast Transpose O(C+N)",
+        "Stack ADT: LIFO, Primitive Operations (Push, Pop, Peek), Overflow & Underflow Conditions",
+        "Multi-Stacks: Implementation of Two Stacks in a Single Array",
+        "Applications of Stacks: Parenthesis Matching, Function Calls, Expression Handling",
+        "Infix, Prefix, Postfix Notations & Precedence/Associativity Rules",
+        "Infix to Postfix Conversion Algorithm & Full Tabular Step Trace",
+        "Postfix Expression Evaluation Algorithm using Operand Stack",
+        "Linear Queue ADT: FIFO, Operations, False Overflow Limitation",
+        "Circular Queue: Modulo Arithmetic, Queue Empty & Queue Full Conditions, Enqueue/Dequeue Algorithms",
+        "Double-Ended Queue (Deque): Input-Restricted & Output-Restricted Deques",
+        "Priority Queue: Concept, Representation, Higher Priority Service Rules"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Foundations & Complexity Analysis",
+          "description": "Mathematical rigor for quantifying execution time and memory growth",
+          "root": "Algorithms & Complexity",
+          "branches": [
+            {
+              "node": "Data Abstraction & ADT",
+              "children": [
+                "Separation of logical interface from physical storage",
+                "Primitive (int/float) vs Non-Primitive",
+                "Linear (Array/List) vs Non-Linear (Tree/Graph)",
+                "Static (Fixed array) vs Dynamic (Pointer linked)"
+              ]
+            },
+            {
+              "node": "Algorithm Properties",
+              "children": [
+                "Input (>=0), Output (>=1), Definiteness (Clear)",
+                "Finiteness (Terminates), Effectiveness (Feasible)"
+              ]
+            },
+            {
+              "node": "Space Complexity",
+              "children": [
+                "S(P) = C + Sp(I) [Fixed C + Variable Sp(I)]",
+                "Instruction space, data space, recursion call stack"
+              ]
+            },
+            {
+              "node": "Asymptotic Bounds",
+              "children": [
+                "Big-O: f(n) <= c*g(n) [Upper bound / Worst case]",
+                "Big-Omega: f(n) >= c*g(n) [Lower bound / Best case]",
+                "Big-Theta: c1*g(n) <= f(n) <= c2*g(n) [Tight bound]",
+                "Hierarchy: O(1) < O(log n) < O(n) < O(n log n) < O(n^2) < O(2^n) < O(n!)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Array-Based Compact Representations",
+          "description": "Structured storage optimizations when zeros or terms dominate",
+          "root": "Compact Array Storage",
+          "branches": [
+            {
+              "node": "Polynomial Arrays",
+              "children": [
+                "Term structure: struct Term { int coeff; int exp; }",
+                "Array sorted in descending order of exponents",
+                "Polynomial Addition: O(m + n) merge-like traversal comparing exponents"
+              ]
+            },
+            {
+              "node": "Sparse Matrix",
+              "children": [
+                "Definition: Majority of matrix elements are zero (>70%)",
+                "2D Array drawback: Heavy memory wastage & slow traversal",
+                "3-Tuple format: Array of size (k+1) x 3",
+                "Row 0: [Rows, Columns, Non-Zero Count]",
+                "Rows 1..k: [Row_Index, Col_Index, Value]"
+              ]
+            },
+            {
+              "node": "Sparse Transpose",
+              "children": [
+                "Simple Transpose: O(Columns * Non_Zeros)",
+                "Fast Transpose: O(Columns + Non_Zeros) via row_terms[] & starting_pos[]"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Linear ADTs: Stacks, Expressions & Queues",
+          "description": "Sequential LIFO and FIFO access containers and compiler parsing",
+          "root": "Linear Access ADTs",
+          "branches": [
+            {
+              "node": "Stack ADT (LIFO)",
+              "children": [
+                "Pointer: top initialized to -1",
+                "Push: Check top == MAX - 1 (Overflow), top++",
+                "Pop: Check top == -1 (Underflow), top--",
+                "Two Stacks in One Array: top1=-1 (right), top2=MAX (left), Full: top1 + 1 == top2",
+                "Applications: Recursion stack, parenthesis matching, undo/redo"
+              ]
+            },
+            {
+              "node": "Expression Processing",
+              "children": [
+                "Infix (A+B), Prefix (+AB), Postfix (AB+)",
+                "Precedence: ( ) > ^ (R-to-L) > * / % (L-to-R) > + - (L-to-R)",
+                "Infix to Postfix: Operator stack with precedence pop rule",
+                "Postfix Evaluation: Operand stack, pop op2 then op1, compute op1 OP op2"
+              ]
+            },
+            {
+              "node": "Queue ADT (FIFO)",
+              "children": [
+                "Pointers: front (deletion), rear (insertion)",
+                "Linear Queue limitation: False Overflow (cannot reuse free slots at front)",
+                "Circular Queue: Wraps pointers via modulo % MAX",
+                "Circular Empty: front == -1 && rear == -1",
+                "Circular Full: (rear + 1) % MAX == front",
+                "Deques: Input-Restricted (insert rear only) vs Output-Restricted (delete front only)",
+                "Priority Queue: Serves highest priority item first, breaks FIFO"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Data Structures, Abstraction & Algorithm Criteria",
+          "summary": "Core definitions, classification hierarchy, ADT principles, and the 5 mandatory algorithm criteria.",
+          "key_points": [
+            "Data vs Data Structure: Data is raw, unorganized facts. A Data Structure is a specialized format for organizing, storing, retrieving, and manipulating data efficiently in computer memory.",
+            "Classification Hierarchy:\n- Primitive Data Structures: Directly supported by machine instructions (e.g. int, float, char, pointer).\n- Non-Primitive Data Structures: Derived user-defined structures:\n  * Linear: Elements form a sequential sequence where every element has unique predecessor and successor (except ends). Examples: Arrays (static contiguous memory), Stacks, Queues, Linked Lists (dynamic pointer allocation).\n  * Non-Linear: Multilevel or hierarchical relationships without sequential order. Examples: Trees (hierarchical parent-child), Graphs (many-to-many networks).",
+            "Data Abstraction & Abstract Data Type (ADT):\n- Data Abstraction: Separating the logical properties of data and operations from their physical implementation details.\n- Abstract Data Type (ADT): A mathematical model of a data structure defined entirely by its behavior from the perspective of the user (set of possible values and set of valid operations), independent of implementation.",
+            "5 Mandatory Criteria of an Algorithm (Knuth):\n1. Input: Zero or more quantities externally supplied.\n2. Output: At least one quantity produced.\n3. Definiteness: Each instruction must be clear, unambiguous, and precise.\n4. Finiteness: For all input cases, the algorithm must terminate after a finite number of steps.\n5. Effectiveness: Every operation must be feasible and basic enough to be carried out on paper."
+          ],
+          "code_or_formula": "Common Operations: Traversing, Searching, Inserting, Deleting, Sorting, Merging",
+          "exam_tips": "KTU Part A 3-mark question: 'State any four characteristics/properties of an algorithm' or 'Differentiate between linear and non-linear data structures with examples'."
+        },
+        {
+          "topic_title": "2. Performance Analysis: Space Complexity, Time Complexity & Asymptotic Notations",
+          "summary": "Formal mathematical definitions of Big-O, Big-Omega, Big-Theta, step count method, and space complexity formulation.",
+          "key_points": [
+            "Space Complexity S(P): Total memory space required by an algorithm to execute to completion.\nFormula: S(P) = C + Sp(I)\n- C = Fixed Space: Instruction space, simple variables, constants, fixed-size structures.\n- Sp(I) = Variable Instance Space: Dynamically sized memory depending on instance characteristics I (size of arrays, dynamic heap allocations, and recursion stack frames).\nExample: Recursive Factorial fact(n) uses O(n) auxiliary stack space because n stack frames are created.",
+            "Time Complexity T(P): Total CPU time consumed by an algorithm.\nCalculated via the Step Count / Frequency Count Method:\nExample (Sum of Array Elements):\n- `sum = 0;` executes 1 time.\n- `for (i = 0; i < n; i++)` executes n + 1 times (checks condition n+1 times).\n- `sum += a[i];` executes n times.\n- `return sum;` executes 1 time.\nTotal step count = 1 + (n + 1) + n + 1 = 2n + 3 => O(n).",
+            "Asymptotic Notations (Formal KTU Definitions):\n1. Big-O Notation (O) - Asymptotic Upper Bound (Worst-Case):\nf(n) = O(g(n)) if and only if there exist positive constants c and n0 such that:\n0 <= f(n) <= c * g(n) for all n >= n0.\n2. Big-Omega Notation (Ω) - Asymptotic Lower Bound (Best-Case):\nf(n) = Ω(g(n)) if and only if there exist positive constants c and n0 such that:\n0 <= c * g(n) <= f(n) for all n >= n0.\n3. Big-Theta Notation (Θ) - Asymptotic Tight Bound (Exact Order):\nf(n) = Θ(g(n)) if and only if there exist positive constants c1, c2 and n0 such that:\n0 <= c1 * g(n) <= f(n) <= c2 * g(n) for all n >= n0.",
+            "Complexity Hierarchy: O(1) < O(log n) < O(n) < O(n log n) < O(n^2) < O(n^3) < O(2^n) < O(n!)."
+          ],
+          "code_or_formula": "Big-O: f(n) <= c * g(n)  |  Big-Omega: f(n) >= c * g(n)  |  Big-Theta: c1*g(n) <= f(n) <= c2*g(n)",
+          "exam_tips": "KTU Part A 3-mark question: Give the formal definition of Big-O, Big-Omega, and Big-Theta with graphical curves. Part B 9-mark: Derive step count for matrix multiplication."
+        },
+        {
+          "topic_title": "3. Compact Array Storage: Polynomial Addition & Sparse Matrix Transpose",
+          "summary": "Array of structures for polynomials, 3-tuple representation of sparse matrices, Simple Transpose vs Fast Transpose algorithms.",
+          "key_points": [
+            "Polynomial Representation using Arrays:\nA polynomial P(x) = a_n * x^e_n + ... + a_0 * x^e_0 is stored in an array of structures:\n`struct Term { int coeff; int exp; }; struct Term poly[MAX];`\nArray is ordered by exponents in strictly descending order.",
+            "Polynomial Addition Algorithm:\nUses two pointers i and j for poly1 and poly2.\n1. While (i < t1 && j < t2):\n   - If (poly1[i].exp == poly2[j].exp): sum = poly1[i].coeff + poly2[j].coeff. If sum != 0, append {sum, poly1[i].exp} to result. Advance i and j.\n   - If (poly1[i].exp > poly2[j].exp): append poly1[i] to result; advance i.\n   - If (poly1[i].exp < poly2[j].exp): append poly2[j] to result; advance j.\n2. Copy remaining elements from poly1 or poly2.\nTime Complexity: O(t1 + t2).",
+            "Sparse Matrix (3-Tuple Representation):\n- Definition: A matrix where non-zero elements are much fewer than zero elements (e.g. > 70% zeros).\n- Disadvantages of Standard 2D Array: Enormous memory wasted storing zeros; high computational overhead looping through zeros.\n- 3-Tuple Representation: Stored in a 2D array of size (k + 1) x 3, where k = non-zero count.\n  * Row 0: [Total_Rows, Total_Cols, Total_Non_Zeros]\n  * Rows 1 to k: [Row_Index, Col_Index, Non_Zero_Value]",
+            "Sparse Matrix Transpose Algorithms:\n1. Simple Transpose:\n   For each column c from 0 to cols-1, iterate through all non-zero elements; if col == c, store into transpose array swapping row and col.\n   Time Complexity: O(cols * non_zeros). Worst case: O(cols * rows * cols) = O(rows * cols^2).\n2. Fast Transpose Algorithm (O(cols + non_zeros)):\n   Step 1: Compute non-zero count for each column: `row_terms[col] = count`.\n   Step 2: Compute starting index for each row in transpose:\n   `starting_pos[0] = 1;`\n   `for (i = 1; i < cols; i++) starting_pos[i] = starting_pos[i-1] + row_terms[i-1];`\n   Step 3: Move elements directly to their final positions in single pass:\n   `for (i = 1; i <= non_zeros; i++) {`\n   `   col = orig[i].col; dest = starting_pos[col];`\n   `   trans[dest].row = orig[i].col; trans[dest].col = orig[i].row; trans[dest].val = orig[i].val;`\n   `   starting_pos[col]++;`\n   `}`"
+          ],
+          "code_or_formula": "Fast Transpose Time: O(cols + non_zeros)  |  Simple Transpose: O(cols * non_zeros)",
+          "exam_tips": "KTU Part B 9-mark guaranteed classic: Explain Fast Transpose algorithm of a sparse matrix and trace it for a given 5x5 sparse matrix."
+        },
+        {
+          "topic_title": "4. Stack ADT, Multi-Stacks (Two Stacks in One Array) & Applications",
+          "summary": "LIFO operations, overflow/underflow boundary rules, two stacks in a single array implementation, and applications.",
+          "key_points": [
+            "Stack ADT: Linear data structure adhering to LIFO (Last In First Out) discipline. All insertions and deletions take place at a single end called TOP.",
+            "Pointer convention: `top = -1` indicates empty stack.",
+            "Core Stack Operations:\n- Push: `if (top == MAX - 1) { print('Stack Overflow'); } else { top++; stack[top] = item; }`\n- Pop: `if (top == -1) { print('Stack Underflow'); } else { item = stack[top]; top--; return item; }`\n- Peek: `if (top == -1) error; else return stack[top];`",
+            "Two Stacks in a Single Array (Multi-Stacks):\nTo share memory between two stacks without fixed partition waste:\n- Stack 1 begins at index 0 and grows upwards (`top1` initialized to -1).\n- Stack 2 begins at index MAX-1 and grows downwards (`top2` initialized to MAX).\n- Push1: `if (top1 + 1 == top2) Stack Full; else stack[++top1] = item;`\n- Push2: `if (top1 + 1 == top2) Stack Full; else stack[--top2] = item;`\n- Pop1: `if (top1 == -1) Underflow; else return stack[top1--];`\n- Pop2: `if (top2 == MAX) Underflow; else return stack[top2++];`\n- Stack Full condition: `top1 + 1 == top2` (no memory wasted until entire array fills).",
+            "Applications of Stacks:\n1. Function Call Management & Recursion: Activation records and return addresses stored on runtime call stack.\n2. Expression Evaluation & Syntax Parsing: Infix to Postfix/Prefix conversion; evaluating postfix expressions.\n3. Delimiter / Parenthesis Matching: Verifying balanced `( )`, `{ }`, `[ ]`.\n4. Backtracking Algorithms: Maze solving, N-Queens problem, Graph DFS traversal.\n5. Undo/Redo Mechanisms in text editors."
+          ],
+          "code_or_formula": "Stack Overflow: top == MAX - 1  |  Two Stacks Full: top1 + 1 == top2",
+          "exam_tips": "KTU Part B question: 'Explain how two stacks can be implemented efficiently in a single array of size N. Write C functions for push and pop on both stacks.'"
+        },
+        {
+          "topic_title": "5. Expression Conversion & Evaluation: Infix, Prefix, Postfix Algorithms",
+          "summary": "Precedence rules, Infix to Postfix conversion algorithm, full tabular traces, and postfix expression evaluation.",
+          "key_points": [
+            "Notations:\n- Infix: Operator placed between operands: `A + B` (requires parenthesis/precedence to disambiguate).\n- Prefix (Polish Notation): Operator placed before operands: `+ A B`.\n- Postfix (Reverse Polish Notation): Operator placed after operands: `A B +` (parenthesis-free, executed by computers).",
+            "Operator Precedence & Associativity:\n1. Parentheses `( )` - Evaluated first.\n2. Exponentiation `^` - Precedence 3, Associativity: Right-to-Left (e.g. `2^3^2 = 2^(3^2) = 512`).\n3. Multiplication `*`, Division `/`, Modulo `%` - Precedence 2, Associativity: Left-to-Right.\n4. Addition `+`, Subtraction `-` - Precedence 1, Associativity: Left-to-Right.",
+            "Infix to Postfix Algorithm:\n1. Push `(` onto Stack, and add `)` to the end of infix expression Q.\n2. Scan Q from left to right.\n3. If operand: add directly to Postfix string P.\n4. If `(`: push onto Stack.\n5. If operator `op`:\n   While `precedence(stack[top]) >= precedence(op)` (if op is `^`, while strictly greater):\n   pop from stack and append to P.\n   Push `op` onto stack.\n6. If `)`: repeatedly pop from stack and append to P until a matching `(` is popped. Pop and discard `(`.\n7. Repeat until Stack is empty.",
+            "KTU Exam Step Trace 1: `Q = A + ( B * C - ( D / E ^ F ) * G ) * H`\nResult: `A B C * D E F ^ / G * - H * +`",
+            "KTU Exam Step Trace 2: `Q = ( ( A + B ) * C - ( D - E ) ) ^ ( F + G )`\nResult: `A B + C * D E - - F G + ^`",
+            "Postfix Evaluation Algorithm:\n1. Scan postfix expression P from left to right.\n2. If token is operand: push onto operand stack.\n3. If token is operator `OP`: pop top two operands `op2 = pop()`, `op1 = pop()`. Compute `res = op1 OP op2`. Push `res` onto stack.\n4. When expression ends, final result is on top of stack.\nTrace for `P = 6 2 + 4 2 1 * - /`:\n- Scan 6, 2 -> Stack: [6, 2]\n- Scan + -> pop 2, 6 -> 6 + 2 = 8 -> Stack: [8]\n- Scan 4, 2, 1 -> Stack: [8, 4, 2, 1]\n- Scan * -> pop 1, 2 -> 2 * 1 = 2 -> Stack: [8, 4, 2]\n- Scan - -> pop 2, 4 -> 4 - 2 = 2 -> Stack: [8, 2]\n- Scan / -> pop 2, 8 -> 8 / 2 = 4 -> Stack: [4]\nResult = 4."
+          ],
+          "code_or_formula": "Precedence: ^ (R-to-L) > * / % (L-to-R) > + - (L-to-R)  |  Eval: op1 OP op2",
+          "exam_tips": "A 9-mark question is 100% guaranteed on either Infix to Postfix tabular trace or Postfix Evaluation. Show all columns: Symbol, Stack, Output."
+        },
+        {
+          "topic_title": "6. Queue ADT, Circular Queue, Deque & Priority Queue",
+          "summary": "FIFO structure, false overflow, circular modulo arithmetic, boundary checks, deques, and priority queues.",
+          "key_points": [
+            "Linear Queue ADT: FIFO (First In First Out) list. Insertion takes place at REAR, deletion takes place at FRONT.\n- Initialization: `front = rear = -1`.\n- Empty Condition: `front == -1 || front > rear`.\n- Full Condition: `rear == MAX - 1`.\n- False Overflow: Once elements are dequeued, `front` moves forward, leaving unused empty slots at the beginning. Even if empty slots exist, no new elements can be enqueued if `rear == MAX - 1`.",
+            "Circular Queue:\n- Solves false overflow by connecting the last position `MAX - 1` back to index 0 using modulo arithmetic `% MAX`.\n- Circular Empty: `front == -1 && rear == -1`.\n- Circular Full: `(rear + 1) % MAX == front`.\n- Enqueue Algorithm:\n  `if ((rear + 1) % MAX == front) print('Queue Full / Overflow');`\n  `else { if (front == -1) front = rear = 0; else rear = (rear + 1) % MAX; queue[rear] = item; }`\n- Dequeue Algorithm:\n  `if (front == -1) print('Queue Empty / Underflow');`\n  `else { item = queue[front]; if (front == rear) front = rear = -1; else front = (front + 1) % MAX; return item; }`",
+            "Double-Ended Queue (Deque):\nA linear list where insertions and deletions can be performed at BOTH ends (front and rear).\n- Four Operations: `insertRear()`, `deleteFront()`, `insertFront()`, `deleteRear()`.\n- Types of Deques:\n  1. Input-Restricted Deque: Insertion is allowed only at ONE end (rear); deletion is allowed at BOTH ends (front and rear).\n  2. Output-Restricted Deque: Deletion is allowed only at ONE end (front); insertion is allowed at BOTH ends (front and rear).",
+            "Priority Queue:\nA queue where each element is associated with a priority.\n- Elements are served in order of priority: an element with higher priority is dequeued before an element with lower priority, regardless of insertion order.\n- If elements have equal priority, they are served on a first-come, first-served (FIFO) basis."
+          ],
+          "code_or_formula": "Circular Full: (rear + 1) % MAX == front  |  Circular Empty: front == -1 && rear == -1",
+          "exam_tips": "KTU Part A 3-mark question: 'Why is circular queue preferred over linear queue? State the condition for full queue.' Part B 9-mark: 'Write C algorithms for enqueue and dequeue in a circular queue.'"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What is the condition for Queue Full in a Circular Queue of size N using front and rear pointers?",
+          "options": [
+            "(rear + 1) % N == front",
+            "rear == N - 1",
+            "front == (rear + 1)",
+            "(front + 1) % N == rear"
+          ],
+          "ans": 0,
+          "explanation": "In a circular queue, modulo arithmetic wraps around the array. When (rear + 1) % N equals front, the next slot is already occupied, indicating Queue Full."
+        },
+        {
+          "q": "In a single array of size N holding two stacks (Stack 1 from 0 up, Stack 2 from N-1 down), what is the condition indicating the array is completely full?",
+          "options": [
+            "top1 == N/2 && top2 == N/2",
+            "top1 + 1 == top2",
+            "top1 == top2",
+            "top1 + top2 == N"
+          ],
+          "ans": 1,
+          "explanation": "Stack 1 grows rightwards (top1++) and Stack 2 grows leftwards (top2--). They collide when top1 + 1 == top2, meaning no free slots remain."
+        },
+        {
+          "q": "What is the time complexity of the Fast Transpose algorithm for a sparse matrix with C columns and N non-zero elements?",
+          "options": [
+            "O(C * N)",
+            "O(C + N)",
+            "O(N log N)",
+            "O(R * C)"
+          ],
+          "ans": 1,
+          "explanation": "Fast Transpose precomputes column frequencies and starting row positions, placing elements into their final positions in O(C + N) linear time."
+        },
+        {
+          "q": "Which operator among the following has Right-to-Left associativity when evaluating or converting expressions?",
+          "options": [
+            "Addition (+)",
+            "Multiplication (*)",
+            "Exponentiation (^)",
+            "Division (/)"
+          ],
+          "ans": 2,
+          "explanation": "Exponentiation (^) is right-associative: A ^ B ^ C is evaluated as A ^ (B ^ C)."
+        },
+        {
+          "q": "In a Deque, if insertion is permitted at only one end (rear) while deletion is permitted at both ends (front and rear), the structure is called:",
+          "options": [
+            "Output-Restricted Deque",
+            "Input-Restricted Deque",
+            "Circular Deque",
+            "Priority Deque"
+          ],
+          "ans": 1,
+          "explanation": "An Input-Restricted Deque restricts insertion to one end while permitting deletions at both ends."
+        }
+      ],
+      "pyqs": [
+        {
+          "type": "Part A (3 Marks)",
+          "q": "Define Big-O, Big-Omega, and Big-Theta notations with their formal mathematical expressions and graphical representations.",
+          "sol": "1. Big-O (O) - Asymptotic Upper Bound:\nf(n) = O(g(n)) if and only if there exist positive constants c and n0 such that:\n0 <= f(n) <= c * g(n) for all n >= n0.\nRepresents worst-case growth rate.\n\n2. Big-Omega (Ω) - Asymptotic Lower Bound:\nf(n) = Ω(g(n)) if and only if there exist positive constants c and n0 such that:\n0 <= c * g(n) <= f(n) for all n >= n0.\nRepresents best-case lower limit.\n\n3. Big-Theta (Θ) - Asymptotic Tight Bound:\nf(n) = Θ(g(n)) if and only if there exist positive constants c1, c2, and n0 such that:\n0 <= c1 * g(n) <= f(n) <= c2 * g(n) for all n >= n0.\nRepresents the exact order of growth.",
+          "marks": 3
+        },
+        {
+          "type": "Part A (3 Marks)",
+          "q": "Why is a Circular Queue preferred over a Linear Queue? State the conditions for Queue Full and Queue Empty in a Circular Queue.",
+          "sol": "1. Advantage over Linear Queue:\nIn a linear queue, when elements are deleted from FRONT, the vacated slots cannot be reused because REAR reaches MAX - 1 (False Overflow). A Circular Queue wraps pointers around using modulo arithmetic `% MAX`, eliminating memory wastage.\n\n2. Boundary Conditions:\n- Queue Empty: `front == -1 && rear == -1`\n- Queue Full: `(rear + 1) % MAX == front`.",
+          "marks": 3
+        },
+        {
+          "type": "Part A (3 Marks)",
+          "q": "What is a Sparse Matrix? Explain its 3-Tuple representation with an example.",
+          "sol": "A Sparse Matrix is a matrix where the vast majority of elements are zeros (e.g. > 70% zeros).\nIn a 3-Tuple representation, it is stored in a (k + 1) x 3 table (k = non-zero count):\n- Row 0 stores matrix dimensions: [Total Rows, Total Cols, Total Non-Zeros].\n- Rows 1 to k store: [Row Index, Column Index, Non-Zero Value].\nExample:\nOriginal 3x3 Matrix:\n[ 0, 0, 5 ]\n[ 7, 0, 0 ]\n[ 0, 0, 0 ]\n3-Tuple:\n[ 3, 3, 2 ] (Rows=3, Cols=3, Non-Zeros=2)\n[ 0, 2, 5 ]\n[ 1, 0, 7 ]",
+          "marks": 3
+        },
+        {
+          "type": "Part B (9 Marks)",
+          "q": "Convert the infix expression Q = ( ( A + B ) * C - ( D - E ) ) ^ ( F + G ) into a postfix expression using a stack trace table showing Symbol Scanned, Stack Content, and Postfix Expression.",
+          "sol": "Initial Step: Push '(' onto Stack, append ')' to end of Q.\nQ = ( ( A + B ) * C - ( D - E ) ) ^ ( F + G ) )\n\nStep-by-Step Tabular Trace:\nSymbol | Stack Content      | Postfix String P\n-------------------------------------------------------------\nStart  | (                  | (empty)\n(      | ( (                | (empty)\n(      | ( ( (              | (empty)\nA      | ( ( (              | A\n+      | ( ( ( +            | A\nB      | ( ( ( +            | A B\n)      | ( (                | A B +\n*      | ( ( *              | A B +\nC      | ( ( *              | A B + C\n-      | ( ( -              | A B + C *\n(      | ( ( - (            | A B + C *\nD      | ( ( - (            | A B + C * D\n-      | ( ( - ( -          | A B + C * D\nE      | ( ( - ( -          | A B + C * D E\n)      | ( ( -              | A B + C * D E -\n)      | (                  | A B + C * D E - -\n^      | ( ^                | A B + C * D E - -\n(      | ( ^ (              | A B + C * D E - -\nF      | ( ^ (              | A B + C * D E - - F\n+      | ( ^ ( +            | A B + C * D E - - F\nG      | ( ^ ( +            | A B + C * D E - - F G\n)      | ( ^                | A B + C * D E - - F G +\n)      | (empty)            | A B + C * D E - - F G + ^\n\nFINAL POSTFIX EXPRESSION: A B + C * D E - - F G + ^",
+          "marks": 9
+        },
+        {
+          "type": "Part B (9 Marks)",
+          "q": "Explain how two stacks can be implemented efficiently in a single array of size MAX. Write C algorithms for push and pop on both stacks.",
+          "sol": "1. Working Principle:\n- Allocate a single 1D array `arr[MAX]`.\n- Stack 1 starts from the left boundary (`index 0`) and grows towards the right. Pointer `top1` is initialized to `-1`.\n- Stack 2 starts from the right boundary (`index MAX - 1`) and grows towards the left. Pointer `top2` is initialized to `MAX`.\n- Stack Full condition: `top1 + 1 == top2`. This guarantees that neither stack reports overflow as long as any free element remains in the array.\n\n2. C Functions:\n```c\n#define MAX 100\nint arr[MAX];\nint top1 = -1, top2 = MAX;\n\n// Push into Stack 1\nvoid push1(int val) {\n    if (top1 + 1 == top2) {\n        printf(\"Stack Overflow! Array is full.\\n\");\n        return;\n    }\n    top1++;\n    arr[top1] = val;\n}\n\n// Push into Stack 2\nvoid push2(int val) {\n    if (top1 + 1 == top2) {\n        printf(\"Stack Overflow! Array is full.\\n\");\n        return;\n    }\n    top2--;\n    arr[top2] = val;\n}\n\n// Pop from Stack 1\nint pop1() {\n    if (top1 == -1) {\n        printf(\"Stack 1 Underflow!\\n\");\n        return -1;\n    }\n    int val = arr[top1];\n    top1--;\n    return val;\n}\n\n// Pop from Stack 2\nint pop2() {\n    if (top2 == MAX) {\n        printf(\"Stack 2 Underflow!\\n\");\n        return -1;\n    }\n    int val = arr[top2];\n    top2++;\n    return val;\n}\n```",
+          "marks": 9
+        },
+        {
+          "type": "Part B (9 Marks)",
+          "q": "Explain the Fast Transpose algorithm for a Sparse Matrix. Analyze its time complexity and compare it with the Simple Transpose algorithm.",
+          "sol": "1. Purpose: Transpose a sparse matrix of size M x N with K non-zero terms in O(N + K) time instead of O(N * K).\n\n2. Algorithm Steps:\nStep 1: Initialize an array `row_terms[cols]` to 0.\nStep 2: Scan the 3-tuple array of the original matrix and count the frequency of elements in each column:\n        `for (i = 1; i <= K; i++) row_terms[orig[i].col]++;`\nStep 3: Determine the starting position of each row in the transposed matrix:\n        `starting_pos[0] = 1;`\n        `for (i = 1; i < cols; i++) starting_pos[i] = starting_pos[i - 1] + row_terms[i - 1];`\nStep 4: Move each non-zero element directly into its calculated destination in a single pass:\n        `for (i = 1; i <= K; i++) {`\n        `    int col = orig[i].col;`\n        `    int dest = starting_pos[col];`\n        `    trans[dest].row = orig[i].col;`\n        `    trans[dest].col = orig[i].row;`\n        `    trans[dest].val = orig[i].val;`\n        `    starting_pos[col]++;`\n        `}`\n\n3. Complexity Analysis:\n- Step 1 & 2: O(cols + K)\n- Step 3: O(cols)\n- Step 4: O(K)\nTotal Time Complexity: O(cols + K).\nComparison with Simple Transpose:\n- Simple Transpose loops cols times over K terms: O(cols * K). If K ≈ rows * cols, time is O(rows * cols^2).\n- Fast Transpose runs in strictly linear time O(cols + K) at the cost of O(cols) auxiliary memory for row_terms and starting_pos.",
+          "marks": 9
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Linked Lists, Dynamic ADTs & Memory Management",
+      "topics": [
+        "Linked List: Definition, Node Structure, Pointer Operations, Dynamic vs Static Representation",
+        "Singly Linked List (SLL): Traversal, Searching, Word Occurrence Count",
+        "SLL Insertion Algorithms: At Beginning (Head), At End (Tail), After a Given Key/Node",
+        "SLL Deletion Algorithms: From Beginning (Head), From End (Tail), By Key / Arbitrary Value",
+        "Reversing a Singly Linked List (3-Pointer Algorithm: prev, curr, next)",
+        "Dynamic Stack using Linked List: Push (Insert at Head), Pop (Delete from Head)",
+        "Dynamic Queue using Linked List: Enqueue (Insert at Tail), Dequeue (Delete from Head)",
+        "Polynomial Representation & Addition using Linked List: Node Structure & Full Addition Algorithm",
+        "Doubly Linked List (DLL): Node Structure (prev, data, next), Insertion & Deletion Algorithms",
+        "Circular Linked List (CLL): Concept, Advantages & Disadvantages, Single Pointer (LAST) Representation, Operations",
+        "Comparison Table: Singly vs Doubly vs Circular Linked List",
+        "Memory Management: Memory Bank, Pool of Free Storage, AVAIL List, Fixed-Block vs Variable-Block Storage",
+        "Storage Allocation Strategies: First-Fit, Best-Fit, Worst-Fit, Next-Fit (Definitions, Mechanisms & Trace)",
+        "Internal vs External Fragmentation: Causes, Comparison & Mitigation",
+        "Garbage Collection: Root Set, Mark-and-Sweep, Copying Collection, Generational GC",
+        "Memory Compaction: Mark-Compact Algorithm, Relocation & Pointer Updating"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Linked Linear Data Structures",
+          "description": "Dynamic node allocation connected via pointers overcoming contiguous array limitations",
+          "root": "Linked List Architectures",
+          "branches": [
+            {
+              "node": "Singly Linked List (SLL)",
+              "children": [
+                "Node structure: [data, next/link]",
+                "Insert: Head O(1), Tail O(n), After Key O(n)",
+                "Delete: Head O(1), Tail O(n), Value O(n)",
+                "Reverse: 3 pointers (prev, curr, next) in O(n)"
+              ]
+            },
+            {
+              "node": "Doubly Linked List (DLL)",
+              "children": [
+                "Node structure: [prev/llink, data, next/rlink]",
+                "Bidirectional traversal (forward & backward)",
+                "O(1) deletion given target node pointer",
+                "Overhead: Extra pointer storage per node"
+              ]
+            },
+            {
+              "node": "Circular Linked List (CLL)",
+              "children": [
+                "Last node points back to head (no NULL traps)",
+                "Optimized with single LAST pointer (head is last->next)",
+                "Full accessibility of any node from any start",
+                "O(1) concatenation and circular queues"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Dynamic ADTs & Polynomial Arithmetic",
+          "description": "Implementing abstract containers and algebraic polynomials using linked lists",
+          "root": "Dynamic ADTs & Applications",
+          "branches": [
+            {
+              "node": "Dynamic Stack & Queue",
+              "children": [
+                "Stack: Push & Pop at Head in O(1) time (no fixed overflow)",
+                "Queue: Enqueue at Tail in O(1), Dequeue at Head in O(1) (front & rear pointers)"
+              ]
+            },
+            {
+              "node": "Polynomial Addition",
+              "children": [
+                "Node structure: struct PolyNode { int coeff; int exp; struct PolyNode *next; }",
+                "Nodes ordered by exponents descending",
+                "Two-pointer merge-like addition in O(m + n) time"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Memory Allocation & Storage Strategies",
+          "description": "Dynamic heap memory management, free storage pools, and allocation policies",
+          "root": "Memory Allocation",
+          "branches": [
+            {
+              "node": "Storage Pools",
+              "children": [
+                "Memory bank & AVAIL free list",
+                "Fixed-block storage (Simple, fast, internal fragmentation)",
+                "Variable-block storage (Flexible, external fragmentation)"
+              ]
+            },
+            {
+              "node": "Allocation Policies",
+              "children": [
+                "First-Fit: Allocates first adequate hole (O(n), fast, front fragments)",
+                "Best-Fit: Allocates smallest adequate hole (preserves large holes, tiny fragments)",
+                "Worst-Fit: Allocates largest hole (leaves usable leftover block, burns large holes)",
+                "Next-Fit: Resumes search from last allocated position"
+              ]
+            },
+            {
+              "node": "Fragmentation Types",
+              "children": [
+                "Internal: Unused allocated memory inside assigned partition",
+                "External: Total free memory >= request, but non-contiguous"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Automatic Reclamation & Compaction",
+          "description": "Techniques for recovering unreachable memory and eliminating external fragmentation",
+          "root": "Garbage Collection & Compaction",
+          "branches": [
+            {
+              "node": "Garbage Collection (GC)",
+              "children": [
+                "Root Set: Global variables, stack frame references, CPU registers",
+                "Mark-and-Sweep: Mark reachable objects, sweep unreachable blocks to AVAIL",
+                "Copying Collection: Stop-and-copy between From-Space and To-Space",
+                "Generational GC: Segregate objects by age (Young vs Tenured)"
+              ]
+            },
+            {
+              "node": "Memory Compaction",
+              "children": [
+                "Mark-Compact: Shifts all live objects to one contiguous end of memory",
+                "Consolidates scattered free holes into one large continuous block",
+                "Eliminates external fragmentation at cost of updating all object references"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Singly Linked List (SLL): Architecture, Traversal & Core Operations",
+          "summary": "Dynamic linear chain of nodes containing data and link pointer. Traversal, search, and exact C algorithms for insertion and deletion.",
+          "key_points": [
+            "Singly Linked List (SLL) Definition: A linear collection of data elements called nodes, where each node is divided into two parts: a DATA field (stores actual value) and a LINK/NEXT field (stores memory address of the succeeding node in the sequence). The list begins with a pointer called HEAD. The last node's link field points to NULL, indicating the end of the list.",
+            "Node Definition & Allocation in C:\n```c\nstruct Node {\n    int data;\n    struct Node *next;\n};\n// Allocation of new node:\nstruct Node* newNode = (struct Node*)malloc(sizeof(struct Node));\nnewNode->data = item;\nnewNode->next = NULL;\n```",
+            "Traversal Algorithm (O(n)):\nSet `ptr = head`. While `ptr != NULL`, process `ptr->data` and advance `ptr = ptr->next`.",
+            "Word / Value Occurrence Count Algorithm (KTU Model Question):\nTraverse the list with integer counter `count = 0`. While `ptr != NULL`, if `ptr->data == targetWord`, increment `count++`. Advance `ptr = ptr->next`. Return `count`.",
+            "Insertion Operations:\n1. Insertion at Beginning (Head) - O(1):\n   `newNode->next = head; head = newNode;`\n2. Insertion at End (Tail) - O(n):\n   If `head == NULL`, `head = newNode`. Else, traverse to last node (`while(ptr->next != NULL) ptr = ptr->next;`), then link `ptr->next = newNode;`.\n3. Insertion After a Given Key Node - O(n):\n   Traverse list to locate node where `ptr->data == key`. Link: `newNode->next = ptr->next; ptr->next = newNode;`",
+            "Deletion Operations:\n1. Deletion from Beginning (Head) - O(1):\n   `if (head == NULL) Underflow; temp = head; head = head->next; free(temp);`\n2. Deletion from End (Tail) - O(n):\n   Traverse with two pointers `prev` and `curr` until `curr->next == NULL`. Link: `prev->next = NULL; free(curr);` (Handle single-node list: `if (head->next == NULL) { free(head); head = NULL; }`).\n3. Deletion by Value / Specific Key - O(n):\n   Locate target node with `prev` and `curr`. Link: `prev->next = curr->next; free(curr);`",
+            "Reversal of Singly Linked List (3-Pointer In-Place Algorithm - O(n) Time, O(1) Space):\nUses three pointers `prev = NULL`, `curr = head`, `next = NULL`:\n```c\nstruct Node* reverseList(struct Node* head) {\n    struct Node *prev = NULL, *curr = head, *next = NULL;\n    while (curr != NULL) {\n        next = curr->next; // Store next node\n        curr->next = prev; // Reverse pointer\n        prev = curr;       // Advance prev\n        curr = next;       // Advance curr\n    }\n    return prev; // New head of reversed list\n}\n```"
+          ],
+          "code_or_formula": "Insert at Head: newNode->next = head; head = newNode; (O(1))\nDelete at Head: temp = head; head = head->next; free(temp); (O(1))",
+          "exam_tips": "KTU Part A 3-mark question: 'Compare insertion at head and tail in SLL and DLL' or 'Write an algorithm to count the number of occurrences of a word in a linked list'."
+        },
+        {
+          "topic_title": "2. Stacks & Queues using Linked Lists (Dynamic ADTs)",
+          "summary": "Implementation of Stack and Queue using Singly Linked List. O(1) push/pop at head, O(1) enqueue at tail and dequeue at head.",
+          "key_points": [
+            "Why Linked Representation over Arrays? Arrays require pre-determining maximum size, causing either memory wastage or fixed capacity overflow. A linked implementation grows and shrinks dynamically at runtime, consuming memory strictly on demand.",
+            "Stack using Linked List (Dynamic Stack):\n- Top of Stack is maintained at the HEAD of the singly linked list.\n- Push Operation (O(1)):\n  Allocates new node `temp`. `temp->data = val; temp->next = top; top = temp;`\n  (Overflow occurs ONLY if system heap memory is exhausted).\n- Pop Operation (O(1)):\n  `if (top == NULL) Underflow; temp = top; val = top->data; top = top->next; free(temp); return val;`\n- Peek Operation (O(1)):\n  `if (top == NULL) error; else return top->data;`",
+            "Queue using Linked List (Dynamic Queue):\n- Maintained using two pointers: `front` (points to head of list) and `rear` (points to tail of list).\n- Enqueue Operation (Insert at Tail - O(1)):\n  Allocates new node `temp`. `temp->data = val; temp->next = NULL;`\n  `if (rear == NULL) { front = rear = temp; } else { rear->next = temp; rear = temp; }`\n- Dequeue Operation (Delete from Head - O(1)):\n  `if (front == NULL) Underflow; temp = front; val = front->data; front = front->next; if (front == NULL) rear = NULL; free(temp); return val;`"
+          ],
+          "code_or_formula": "Dynamic Stack: Push/Pop at HEAD in O(1)\nDynamic Queue: Enqueue at REAR in O(1), Dequeue at FRONT in O(1)",
+          "exam_tips": "KTU Part B question: 'Explain how stack and queue can be implemented using linked lists. Write C functions for push, pop, enqueue, and dequeue.'"
+        },
+        {
+          "topic_title": "3. Polynomial Representation & Addition using Linked List",
+          "summary": "Representing polynomials with [coeff, exp, next] nodes sorted descending, and parallel merge-like addition algorithm with complete worked trace.",
+          "key_points": [
+            "Node Representation:\nEach term in a polynomial P(x) = a_n * x^e_n + ... + a_0 * x^e_0 is stored in a linked list node containing coefficient, exponent, and next pointer:\n```c\nstruct PolyNode {\n    int coeff;\n    int exp;\n    struct PolyNode *next;\n};\n```\nNodes are maintained in strictly descending order of exponents.",
+            "Polynomial Addition Algorithm (Two-Pointer Merge Approach - O(m + n)):\nLet `p1` and `p2` point to the heads of polynomials P1 and P2, and `polySum` be the result list.\n1. While `p1 != NULL && p2 != NULL`:\n   - Case 1 (`p1->exp == p2->exp`):\n     `sum = p1->coeff + p2->coeff;`\n     If `sum != 0`, append node `{sum, p1->exp}` to `polySum`.\n     Advance both `p1 = p1->next; p2 = p2->next;`\n   - Case 2 (`p1->exp > p2->exp`):\n     Append node `{p1->coeff, p1->exp}` to `polySum`.\n     Advance `p1 = p1->next;`\n   - Case 3 (`p1->exp < p2->exp`):\n     Append node `{p2->coeff, p2->exp}` to `polySum`.\n     Advance `p2 = p2->next;`\n2. If `p1 != NULL`, append all remaining terms of `p1` to `polySum`.\n3. If `p2 != NULL`, append all remaining terms of `p2` to `polySum`.\n4. Return `polySum`.",
+            "Complete Worked Example from KTU Model Exam:\nAdd P1 = 2x^3 + 5x^2 - 4x + 5 and P2 = 4x^3 + 2x^2 + 3x - 6:\n- Term 1: p1 has (2, 3), p2 has (4, 3) -> Exponents equal (3) -> Coeffs: 2 + 4 = 6 -> Term: (6, 3).\n- Term 2: p1 has (5, 2), p2 has (2, 2) -> Exponents equal (2) -> Coeffs: 5 + 2 = 7 -> Term: (7, 2).\n- Term 3: p1 has (-4, 1), p2 has (3, 1) -> Exponents equal (1) -> Coeffs: -4 + 3 = -1 -> Term: (-1, 1).\n- Term 4: p1 has (5, 0), p2 has (-6, 0) -> Exponents equal (0) -> Coeffs: 5 + (-6) = -1 -> Term: (-1, 0).\nFinal Result: 6x^3 + 7x^2 - x - 1."
+          ],
+          "code_or_formula": "struct PolyNode { int coeff; int exp; struct PolyNode *next; };\nTime Complexity: O(m + n)",
+          "exam_tips": "A guaranteed 5-mark or 9-mark KTU question: 'Write a C program/algorithm using linked lists to add two polynomials' with a worked numerical."
+        },
+        {
+          "topic_title": "4. Doubly Linked List (DLL) & Circular Linked List (CLL)",
+          "summary": "Bidirectional DLL operations, circular pointer structures, the single-pointer LAST convention, and comprehensive comparison tables.",
+          "key_points": [
+            "Doubly Linked List (DLL):\n- Node Structure: Each node contains three fields: `LLINK` (`prev`), `DATA`, and `RLINK` (`next`).\n  ```c\n  struct DNode {\n      struct DNode *prev;\n      int data;\n      struct DNode *next;\n  };\n  ```\n- Advantage: Allows bidirectional traversal (forward and backward). Deletion of a given node pointer takes O(1) time without traversing from head.\n- DLL Insertion at Beginning: `newNode->next = head; newNode->prev = NULL; if (head != NULL) head->prev = newNode; head = newNode;`\n- DLL Deletion of Given Node `ptr`: `if (ptr->prev != NULL) ptr->prev->next = ptr->next; else head = ptr->next; if (ptr->next != NULL) ptr->next->prev = ptr->prev; free(ptr);`",
+            "Circular Linked List (CLL):\n- Structure: The link field of the last node points back to the first node (head) instead of NULL.\n- Single Pointer `LAST` Optimization: By maintaining only a pointer `LAST` pointing to the tail node:\n  * Tail node is accessed directly as `LAST` in O(1).\n  * Head node is accessed directly as `LAST->next` in O(1).\n  * Enables O(1) insertions at both beginning and end!\n- Advantages:\n  1. Full Node Accessibility: Every node is accessible from any arbitrary starting node by traversing forward.\n  2. Elimination of NULL Link Hazards: Avoids runtime NULL pointer dereference bugs.\n  3. Easy List Operations: Two circular lists can be concatenated in O(1) time by swapping their last->next pointers.\n- Disadvantages:\n  * Infinite Loop Danger: If the loop termination condition (`while (ptr != head)`) is not handled properly, traversal loops forever.",
+            "Comparison Table (Singly vs Doubly vs Circular Linked List):\n| Feature | Singly Linked List (SLL) | Doubly Linked List (DLL) | Circular Linked List (CLL) |\n|---|---|---|---|\n| Fields per Node | 2 (Data, Next) | 3 (Prev, Data, Next) | 2 (Data, Next) |\n| Traversal | Forward only | Bidirectional (Forward & Backward) | Forward continuous (Circular) |\n| Memory Overhead | Low (1 pointer/node) | High (2 pointers/node) | Low (1 pointer/node) |\n| Last Node Link | NULL | NULL | Points to Head |\n| Node Deletion | O(n) (needs traversal for predecessor) | O(1) (given node pointer) | O(n) (needs traversal for predecessor) |\n| Best Use Cases | Simple sequential pipelines | Browser history, text editor undo/redo | Round-robin CPU scheduling, turn-based games |"
+          ],
+          "code_or_formula": "DLL Node: struct DNode { struct DNode *prev, *next; int data; };\nCLL Head: head = last->next (when using single LAST pointer)",
+          "exam_tips": "KTU Part A 3-mark staple: 'Compare Singly Linked List and Doubly Linked List' or 'State the advantages and disadvantages of Circular Linked List'."
+        },
+        {
+          "topic_title": "5. Memory Management & Storage Allocation Strategies (First-Fit, Best-Fit, Worst-Fit)",
+          "summary": "Free storage pools, AVAIL lists, dynamic storage allocation algorithms, fragmentation analysis, and step-by-step memory allocation trace.",
+          "key_points": [
+            "Memory Bank & Pool of Free Storage: The operating system's heap memory is maintained as a collection of non-contiguous free memory blocks linked via pointers, called the Free Pool or AVAIL list.",
+            "Fixed-Block vs Variable-Block Storage:\n- Fixed-Block Storage: Memory divided into equal, predetermined block sizes. Allocation is instantaneous O(1), but suffers from Internal Fragmentation if requested data is smaller than block size.\n- Variable-Block Storage: Blocks are dynamically partitioned according to the exact size requested by processes. Eliminates internal fragmentation, but causes External Fragmentation as blocks are allocated and freed over time.",
+            "Storage Allocation Strategies:\n1. First-Fit Allocation:\n   - Scans the free list from the beginning and allocates the first hole that is large enough (`size >= request`).\n   - Pros: Fastest search O(n), minimal CPU overhead.\n   - Cons: Leaves small, fragmented holes at the beginning of the list; splits large holes unnecessarily.\n2. Best-Fit Allocation:\n   - Searches the entire free list to locate the hole that is smallest in size yet adequate (`min(size - request) >= 0`).\n   - Pros: Preserves large holes for future massive allocation requests.\n   - Cons: Slower (must search entire list); generates tiny, unusable external fragments.\n3. Worst-Fit Allocation:\n   - Searches the entire free list to find the largest available hole (`max(size) >= request`).\n   - Pros: The remaining partition after allocation is as large as possible, which may be useful for subsequent allocations.\n   - Cons: Must scan entire list; quickly breaks down large contiguous blocks.\n4. Next-Fit Allocation:\n   - A variation of First-Fit that resumes scanning from where the last allocation occurred rather than restarting from the beginning. Spreads allocations evenly.",
+            "Internal vs External Fragmentation:\n- Internal Fragmentation: Occurs when allocated memory block is larger than the requested size. The wasted space resides INSIDE the allocated partition (common in fixed partitioning and paging).\n- External Fragmentation: Occurs when total free memory across the heap is sufficient to satisfy a request, but the free storage is divided into small, non-contiguous blocks, preventing allocation (common in variable partitioning and dynamic heaps).",
+            "Step-by-Step KTU Allocation Trace Example:\nGiven Free Memory Holes in order: [100 KB, 500 KB, 200 KB, 300 KB, 600 KB]\nIncoming Process Requests: P1 (212 KB), P2 (417 KB), P3 (112 KB), P4 (426 KB)\n- First-Fit:\n  * P1 (212 KB) -> fits in 500 KB hole (leaving 288 KB).\n  * P2 (417 KB) -> fits in 600 KB hole (leaving 183 KB).\n  * P3 (112 KB) -> fits in 288 KB hole (leaving 176 KB).\n  * P4 (426 KB) -> CANNOT BE ALLOCATED! (Largest remaining hole is 300 KB, even though total free memory exceeds 426 KB! External fragmentation).\n- Best-Fit:\n  * P1 (212 KB) -> fits in 300 KB hole (leaving 88 KB).\n  * P2 (417 KB) -> fits in 500 KB hole (leaving 83 KB).\n  * P3 (112 KB) -> fits in 200 KB hole (leaving 88 KB).\n  * P4 (426 KB) -> fits in 600 KB hole (leaving 174 KB). All processes successfully allocated!"
+          ],
+          "code_or_formula": "First-Fit: First hole >= Request\nBest-Fit: min(hole - Request) >= 0\nWorst-Fit: max(hole) >= Request",
+          "exam_tips": "A guaranteed KTU Part B 9-mark problem: Compare First-Fit, Best-Fit, and Worst-Fit allocation strategies and trace their behavior for given process requests and memory holes."
+        },
+        {
+          "topic_title": "6. Garbage Collection (Mark-and-Sweep) & Memory Compaction",
+          "summary": "Automatic memory reclamation, the root reachability graph, Mark-and-Sweep phases, and compaction to eliminate external fragmentation.",
+          "key_points": [
+            "Why Automatic Memory Management? In manual memory allocation (C/C++), failing to free heap memory leads to Memory Leaks, while freeing memory prematurely causes Dangling Pointers. Garbage Collection automatically tracks and recovers unused heap memory.",
+            "Root Set & Reachability:\n- Roots: Pointers directly accessible to the program without traversing the heap (global variables, local stack variables, CPU registers).\n- Live Object: An object is live/reachable if there exists a directed path of pointer references leading to it starting from any root.\n- Garbage (Dead Object): An object residing on the heap that cannot be reached from any root.",
+            "Mark-and-Sweep Garbage Collection Algorithm:\nOperates in two distinct phases:\n1. Mark Phase (Tracing):\n   - Traverses the heap object graph starting from all root pointers (using DFS or BFS).\n   - For every reachable object visited, sets its internal `mark_bit = 1`.\n2. Sweep Phase (Reclaiming):\n   - Scans the entire heap sequentially from beginning to end.\n   - If `object->mark_bit == 0`: the object is unreachable garbage; its memory block is reclaimed and linked to the `AVAIL` free storage list.\n   - If `object->mark_bit == 1`: the object is reachable; reset `object->mark_bit = 0` in preparation for the next collection cycle.\n- Drawback of Mark-and-Sweep: Leaves surviving live objects in place, creating high External Fragmentation across the heap.",
+            "Alternative Garbage Collection Algorithms:\n- Copying Collection (Stop-and-Copy): Divides heap into two equal halves (From-Space and To-Space). Live objects are copied contiguously into To-Space, leaving zero fragmentation.\n- Generational GC: Divides heap into generations (Young vs Tenured) based on the observation that most objects die young. Young generation is collected frequently with low latency.",
+            "Memory Compaction (Mark-Compact Algorithm):\n- Definition: The process of relocating all live, surviving objects to one contiguous end of the memory heap, coalescing all scattered free holes into a single continuous block of free memory.\n- Solves: Completely eliminates External Fragmentation.\n- Tradeoff & Cost: High CPU processing overhead because all references and pointers pointing to relocated objects throughout the program must be recalculated and updated to their new physical addresses."
+          ],
+          "code_or_formula": "Mark Phase: Traverse roots -> set mark_bit = 1\nSweep Phase: If mark_bit == 0, free to AVAIL; else mark_bit = 0\nCompaction: Relocate live objects to contiguous block, update references",
+          "exam_tips": "KTU Part A 3-mark question: 'What is memory compaction? Why is it needed?' Part B 9-mark: 'Explain Mark-and-Sweep algorithm for garbage collection with neat diagrams.'"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What is the time complexity to insert a new node at the beginning of a Singly Linked List of N nodes?",
+          "options": [
+            "O(1)",
+            "O(log N)",
+            "O(N)",
+            "O(N^2)"
+          ],
+          "ans": 0,
+          "explanation": "Inserting at head only requires creating the node, setting newNode->next = head, and updating head = newNode, executing in strict O(1) constant time."
+        },
+        {
+          "q": "Which memory allocation strategy searches the entire free list to allocate the hole that fits closest in size to the requested block?",
+          "options": [
+            "First-Fit",
+            "Best-Fit",
+            "Worst-Fit",
+            "Next-Fit"
+          ],
+          "ans": 1,
+          "explanation": "Best-Fit evaluates all available holes to allocate the one with the smallest adequate size, minimizing immediate wasted space within the allocated block."
+        },
+        {
+          "q": "In a Circular Linked List maintained with a single pointer 'LAST' pointing to the tail node, how is the first (head) node accessed in O(1) time?",
+          "options": [
+            "last->prev",
+            "last->next",
+            "head->next",
+            "last + 1"
+          ],
+          "ans": 1,
+          "explanation": "Because the circular list wraps around, the next pointer of the last node points directly back to the first node (head = last->next)."
+        },
+        {
+          "q": "In a Doubly Linked List, what is the time complexity to delete a node when given a direct pointer to that node?",
+          "options": [
+            "O(N)",
+            "O(1)",
+            "O(log N)",
+            "O(N^2)"
+          ],
+          "ans": 1,
+          "explanation": "Because each node in a DLL contains pointers to both its predecessor (prev) and successor (next), it can unlink itself in O(1) time without traversing from head."
+        },
+        {
+          "q": "What is the primary purpose of Memory Compaction following garbage collection?",
+          "options": [
+            "To resolve internal fragmentation",
+            "To relocate live objects into a contiguous block and eliminate external fragmentation",
+            "To compile C code to native machine code",
+            "To convert singly linked lists into doubly linked lists"
+          ],
+          "ans": 1,
+          "explanation": "Compaction moves surviving live objects together to one end of memory, merging all scattered free holes into one continuous block to resolve external fragmentation."
+        }
+      ],
+      "pyqs": [
+        {
+          "type": "Part A (3 Marks)",
+          "q": "Compare the insertion at head and tail in Singly Linked List and Doubly Linked List.",
+          "sol": "1. Insertion at Head:\n   - SLL: `newNode->next = head; head = newNode;` -> Time Complexity: O(1).\n   - DLL: `newNode->next = head; if (head) head->prev = newNode; head = newNode;` -> Time Complexity: O(1).\n2. Insertion at Tail:\n   - SLL (with head pointer only): Requires traversing the entire list from head to tail to locate the last node -> Time Complexity: O(n).\n   - DLL (with tail pointer): Directly links `tail->next = newNode; newNode->prev = tail; tail = newNode;` -> Time Complexity: O(1).",
+          "marks": 3
+        },
+        {
+          "type": "Part A (3 Marks)",
+          "q": "Write an algorithm to count the number of occurrences of a word in a singly linked list (each node contains only one word).",
+          "sol": "Algorithm: CountOccurrences(head, targetWord)\n1. Initialize pointer `ptr = head` and counter `count = 0`.\n2. While (`ptr != NULL`) do:\n   a. If (`strcmp(ptr->word, targetWord) == 0`):\n      `count = count + 1`\n   b. `ptr = ptr->next`\n3. Return `count`.",
+          "marks": 3
+        },
+        {
+          "type": "Part A (3 Marks)",
+          "q": "Differentiate between First-Fit and Best-Fit memory allocation strategies with an example.",
+          "sol": "1. First-Fit: Scans the free memory list from the beginning and allocates the first hole that is large enough. Fast execution O(N), but can leave small fragments at the front.\n2. Best-Fit: Searches the entire free list to find the hole closest in size to the requested block (smallest adequate hole). Minimizes immediate block waste, but creates tiny unusable external fragments.\nExample:\nFree Holes: [100 KB, 500 KB, 200 KB]. Request: 150 KB.\n- First-Fit allocates 500 KB hole (leaving 350 KB leftover).\n- Best-Fit allocates 200 KB hole (leaving 50 KB leftover).",
+          "marks": 3
+        },
+        {
+          "type": "Part A (3 Marks)",
+          "q": "Compare a Singly Linked List and Doubly Linked List in terms of structure, traversal, and memory overhead.",
+          "sol": "| Feature | Singly Linked List (SLL) | Doubly Linked List (DLL) |\n|---|---|---|\n| Node Structure | 2 fields: Data, Next | 3 fields: Prev, Data, Next |\n| Traversal | Unidirectional (forward only) | Bidirectional (forward and backward) |\n| Memory Overhead | Low (1 pointer per node) | High (2 pointers per node) |\n| Node Deletion | O(n) (requires traversal to find predecessor) | O(1) (given pointer to target node) |",
+          "marks": 3
+        },
+        {
+          "type": "Part B (9 Marks)",
+          "q": "Write a complete algorithm using linked lists to add two polynomials P1 = 2x^3 + 5x^2 - 4x + 5 and P2 = 4x^3 + 2x^2 + 3x - 6. Show the step-by-step addition process and resulting linked list.",
+          "sol": "1. Linked List Node Representation:\nEach node contains: `[coeff, exp, next]`.\nP1 is represented as: `[2, 3] -> [5, 2] -> [-4, 1] -> [5, 0] -> NULL`\nP2 is represented as: `[4, 3] -> [2, 2] -> [3, 1] -> [-6, 0] -> NULL`\n\n2. Algorithm:\n- Initialize pointers `p1 = head1`, `p2 = head2`, and `res = NULL`.\n- While `p1 != NULL && p2 != NULL`:\n  * If `p1->exp == p2->exp`: sum = p1->coeff + p2->coeff. If sum != 0, create result node with (sum, p1->exp). Advance both p1 and p2.\n  * If `p1->exp > p2->exp`: create result node with (p1->coeff, p1->exp). Advance p1.\n  * If `p1->exp < p2->exp`: create result node with (p2->coeff, p2->exp). Advance p2.\n- Copy remaining terms from non-empty list.\n\n3. Step-by-Step Addition Trace:\n- Step 1: p1 has (2, 3), p2 has (4, 3). Exp 3 == 3 -> Sum coeffs: 2 + 4 = 6. Term: `6x^3`. Advance p1, p2.\n- Step 2: p1 has (5, 2), p2 has (2, 2). Exp 2 == 2 -> Sum coeffs: 5 + 2 = 7. Term: `7x^2`. Advance p1, p2.\n- Step 3: p1 has (-4, 1), p2 has (3, 1). Exp 1 == 1 -> Sum coeffs: -4 + 3 = -1. Term: `-1x`. Advance p1, p2.\n- Step 4: p1 has (5, 0), p2 has (-6, 0). Exp 0 == 0 -> Sum coeffs: 5 + (-6) = -1. Term: `-1`. Advance p1, p2.\nBoth p1 and p2 reach NULL.\n\nFinal Resultant Polynomial Linked List:\n`[6, 3] -> [7, 2] -> [-1, 1] -> [-1, 0] -> NULL`\nAlgebraic Output: `6x^3 + 7x^2 - x - 1`.",
+          "marks": 9
+        },
+        {
+          "type": "Part B (9 Marks)",
+          "q": "Write C algorithms for: (i) Inserting a node at the beginning and end of a Singly Linked List (ii) Deleting an arbitrary node by value from a Doubly Linked List (iii) Reversing a Singly Linked List.",
+          "sol": "```c\n// (i) SLL Insert Beginning & End\nvoid insertBeginning(struct Node** head, int val) {\n    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = val;\n    newNode->next = *head;\n    *head = newNode;\n}\nvoid insertEnd(struct Node** head, int val) {\n    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = val; newNode->next = NULL;\n    if (*head == NULL) { *head = newNode; return; }\n    struct Node* temp = *head;\n    while (temp->next != NULL) temp = temp->next;\n    temp->next = newNode;\n}\n\n// (ii) DLL Delete by Value\nvoid deleteNodeDLL(struct DNode** head, int key) {\n    struct DNode* curr = *head;\n    while (curr != NULL && curr->data != key) curr = curr->next;\n    if (curr == NULL) return; // Key not found\n    if (curr->prev != NULL) curr->prev->next = curr->next;\n    else *head = curr->next;\n    if (curr->next != NULL) curr->next->prev = curr->prev;\n    free(curr);\n}\n\n// (iii) SLL Reverse (3-Pointer)\nstruct Node* reverseSLL(struct Node* head) {\n    struct Node *prev = NULL, *curr = head, *next = NULL;\n    while (curr != NULL) {\n        next = curr->next;\n        curr->next = prev;\n        prev = curr;\n        curr = next;\n    }\n    return prev;\n}\n```",
+          "marks": 9
+        },
+        {
+          "type": "Part B (9 Marks)",
+          "q": "Explain First-Fit, Best-Fit, and Worst-Fit memory allocation strategies. Given free memory holes of 100 KB, 500 KB, 200 KB, 300 KB, and 600 KB (in order), trace how memory requests of 212 KB, 417 KB, 112 KB, and 426 KB are serviced by each strategy.",
+          "sol": "1. Strategy Definitions:\n- First-Fit: Allocates the first free hole that is large enough (O(n) fast scan).\n- Best-Fit: Searches the entire list to allocate the smallest adequate hole (minimizes immediate wasted partition).\n- Worst-Fit: Searches the entire list to allocate the largest available hole (leaves maximum leftover hole).\n\n2. Trace with Initial Holes: [100 KB, 500 KB, 200 KB, 300 KB, 600 KB]\n\n(A) First-Fit:\n- P1 (212 KB): Allocated in 500 KB hole -> leaves 288 KB hole. Holes: [100, 288, 200, 300, 600]\n- P2 (417 KB): Allocated in 600 KB hole -> leaves 183 KB hole. Holes: [100, 288, 200, 300, 183]\n- P3 (112 KB): Allocated in 288 KB hole -> leaves 176 KB hole. Holes: [100, 176, 200, 300, 183]\n- P4 (426 KB): Cannot be allocated! (Largest hole is 300 KB). Total free memory is 959 KB, but external fragmentation blocks P4.\n\n(B) Best-Fit:\n- P1 (212 KB): Best hole is 300 KB (waste 88 KB). Holes: [100, 500, 200, 88, 600]\n- P2 (417 KB): Best hole is 500 KB (waste 83 KB). Holes: [100, 83, 200, 88, 600]\n- P3 (112 KB): Best hole is 200 KB (waste 88 KB). Holes: [100, 83, 88, 88, 600]\n- P4 (426 KB): Best hole is 600 KB (waste 174 KB). Holes: [100, 83, 88, 88, 174]\nResult: ALL processes successfully allocated under Best-Fit!\n\n(C) Worst-Fit:\n- P1 (212 KB): Allocated in 600 KB hole -> leaves 388 KB. Holes: [100, 500, 200, 300, 388]\n- P2 (417 KB): Allocated in 500 KB hole -> leaves 83 KB. Holes: [100, 83, 200, 300, 388]\n- P3 (112 KB): Allocated in 388 KB hole -> leaves 276 KB. Holes: [100, 83, 200, 300, 276]\n- P4 (426 KB): Cannot be allocated! (Largest remaining hole is 300 KB).",
+          "marks": 9
+        },
+        {
+          "type": "Part B (9 Marks)",
+          "q": "Explain the Mark-and-Sweep garbage collection algorithm with a neat diagram. Describe why memory compaction is performed after garbage collection.",
+          "sol": "1. Mark-and-Sweep Algorithm:\n- Mark Phase:\n  * Begins at all Root references (global pointers, active call stack frames, CPU registers).\n  * Traverses the heap object graph using depth-first or breadth-first search.\n  * Sets the mark bit to 1 (`mark_bit = 1`) on every visited reachable object.\n- Sweep Phase:\n  * Scans the entire heap linearly from start to finish.\n  * For every object encountered:\n    - If `mark_bit == 0`: Object is unreachable garbage. The allocator reclaims its memory and adds it to the AVAIL free list.\n    - If `mark_bit == 1`: Object is reachable. Reset `mark_bit = 0` for the next cycle.\n\n2. Need for Memory Compaction:\n- After the Sweep phase, live surviving objects remain in their original scattered memory locations, separated by free holes.\n- This causes severe External Fragmentation: free memory is broken into many small, non-contiguous blocks. A large memory allocation request will fail even if total free heap space is sufficient.\n- Memory Compaction relocates all surviving live objects to one contiguous end of the heap, consolidating all free space into one large contiguous block.\n- Compaction updates all pointers and references throughout the program to match the objects' new physical memory addresses.",
+          "marks": 9
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Trees & Graphs",
+      "topics": [
+        "Trees: Terminology, Representation, Properties of Binary Trees",
+        "Binary Tree Traversals: Inorder, Preorder, Postorder, Level-Order",
+        "Expression Trees: Construction & Evaluation",
+        "Binary Search Trees (BST): Properties, Search, Insert, Delete",
+        "Binary Heaps: Min-Heap, Max-Heap, Heapify, Priority Queue",
+        "Graphs: Terminology, Adjacency Matrix & Adjacency List",
+        "Graph Traversals: Breadth First Search (BFS) & Depth First Search (DFS)",
+        "Applications of Graphs: Single Source Shortest Path (Dijkstra's Algorithm)"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Hierarchical Tree Structures",
+          "description": "Non-linear hierarchical data structures and search trees",
+          "root": "Trees",
+          "branches": [
+            {
+              "node": "Binary Trees",
+              "children": [
+                "Traversals: Inorder (L-Root-R), Pre (Root-L-R), Post (L-R-Root)",
+                "Properties: Max 2^(i-1) nodes at level i",
+                "Expression Trees (Leaves=operands, internal=operators)"
+              ]
+            },
+            {
+              "node": "Search & Priority Trees",
+              "children": [
+                "Binary Search Tree (BST: Left < Root < Right)",
+                "Binary Heap: Complete BT with heap order (Max/Min)",
+                "Build-Heap: Bottom-up O(N) complexity"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Network Graph Structures",
+          "description": "Vertices and edges representing interconnected network topologies",
+          "root": "Graphs",
+          "branches": [
+            {
+              "node": "Representations",
+              "children": [
+                "Adjacency Matrix: O(V^2) space, fast edge lookup",
+                "Adjacency List: O(V+E) space, optimal for sparse graphs"
+              ]
+            },
+            {
+              "node": "Traversals & Paths",
+              "children": [
+                "Breadth First Search (Queue, level-order, shortest unweighted)",
+                "Depth First Search (Stack/Recursion, deep exploration)",
+                "Dijkstra's Algorithm (Greedy, single source shortest path, O(E log V))"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Tree Fundamentals, Binary Tree Architecture & Mathematical Properties",
+          "summary": "Core tree terminology, sequential vs linked representations, and fundamental mathematical properties of binary trees.",
+          "key_points": [
+            "Tree Terminology:\n- Root: The topmost node without any incoming edge (in-degree = 0).\n- Degree of a Node: Number of subtrees/children connected to it. Degree of Tree: Maximum degree of any node in the tree.\n- Leaf / Terminal Node: A node with degree 0 (no children).\n- Level: Root is at Level 0 (or Level 1 in some conventions). Depth of Node: Number of edges from root to the node. Height of Node: Number of edges on the longest downward path to a leaf. Height of Tree: Height of the root node.\n- Forest: A collection of disjoint trees formed by deleting the root node.",
+            "Binary Tree (BT) Definition:\nA finite hierarchical collection of nodes where each node has at most two children, specifically referred to as the left child and right child.",
+            "5 Standard Types of Binary Trees:\n1. Full / Strict Binary Tree: Every node has either 0 or exactly 2 children (no node has degree 1).\n2. Complete Binary Tree: All levels are completely filled except possibly the last level, and in the last level, all nodes are as far left as possible (essential foundation for Binary Heaps).\n3. Perfect Binary Tree: All internal nodes have 2 children and all leaf nodes are strictly at the exact same level (total nodes $n = 2^{h+1}-1$).\n4. Balanced Binary Tree (AVL): For every node, $|height(left) - height(right)| \\le 1$.\n5. Degenerate / Skewed Binary Tree: Every internal node has exactly one child, behaving identically to a Singly Linked List with $O(n)$ access time.",
+            "Crucial Mathematical Properties (KTU Repeated Derivations):\n1. Maximum nodes at level $i$ (root at level 0) $= 2^i$.\n2. Maximum nodes in a binary tree of height $h$ $= \\sum_{i=0}^{h} 2^i = 2^{h+1} - 1$.\n3. Minimum height of a binary tree with $n$ nodes: $h_{min} = \\lceil \\log_2(n+1) \\rceil - 1$.\n4. Leaf vs Degree-2 Relation (KTU Theorem): For any non-empty binary tree, if $n_0$ is the number of leaf nodes and $n_2$ is the number of nodes of degree 2, then:\n   $$n_0 = n_2 + 1$$\n   *Proof:* Let $n$ be total vertices, $e$ total edges. Every edge points to a child, so $e = n - 1$. Also, summing incoming edges from node degrees: $e = 0 \\cdot n_0 + 1 \\cdot n_1 + 2 \\cdot n_2 = n_1 + 2n_2$. Equating: $n - 1 = n_1 + 2n_2$. Substituting $n = n_0 + n_1 + n_2$, we get $(n_0 + n_1 + n_2) - 1 = n_1 + 2n_2 \\implies n_0 - 1 = n_2 \\implies n_0 = n_2 + 1$.",
+            "Binary Tree Representations:\n1. Sequential (Array) Representation (1-Indexed):\n   - Root at index 1.\n   - Left child of node at index $i$ is at $2i$.\n   - Right child of node at index $i$ is at $2i + 1$.\n   - Parent of node at index $i$ is at $\\lfloor i/2 \\rfloor$.\n   - Pros: Direct $O(1)$ index calculation; ideal for Complete Binary Trees / Heaps. Cons: Extreme memory waste for skewed trees ($O(2^h)$ space for $h$ nodes).\n2. Linked Representation (Doubly/Dynamic):\n   Each node has two link pointers: `struct Node { int data; struct Node *left; struct Node *right; };`"
+          ],
+          "code_or_formula": "Leaf Node Theorem: n_0 = n_2 + 1\nArray Indexing (1-based): Left(i) = 2*i, Right(i) = 2*i + 1, Parent(i) = floor(i/2)",
+          "exam_tips": "KTU Part A 3-mark question: 'Prove that in any binary tree the number of leaf nodes is one more than the number of nodes of degree 2' or 'Given a sequential array representation, draw the corresponding binary tree'."
+        },
+        {
+          "topic_title": "2. Binary Tree Traversals, Recursive vs Non-Recursive Algorithms & Expression Trees",
+          "summary": "Inorder, Preorder, Postorder, and Level-Order traversals, tree reconstruction, and Expression Tree construction and evaluation.",
+          "key_points": [
+            "Depth-First Tree Traversals:\n1. Inorder (LNR): Traverse Left subtree $\\to$ Visit Root Node $\\to$ Traverse Right subtree. (Yields strictly ascending sorted order when applied to a BST).\n2. Preorder (NLR): Visit Root Node $\\to$ Traverse Left subtree $\\to$ Traverse Right subtree. (Used to clone a tree or generate Polish Prefix notation).\n3. Postorder (LRN): Traverse Left subtree $\\to$ Traverse Right subtree $\\to$ Visit Root Node. (Used in bottom-up destruction/garbage collection and Postfix Reverse Polish evaluation).",
+            "Non-Recursive (Iterative) Inorder Traversal using Stack:\n```c\nvoid iterativeInorder(struct Node *root) {\n    struct Node *stack[100];\n    int top = -1;\n    struct Node *curr = root;\n    while (curr != NULL || top != -1) {\n        while (curr != NULL) {\n            stack[++top] = curr; // Push along left spine\n            curr = curr->left;\n        }\n        curr = stack[top--]; // Pop\n        printf(\"%d \", curr->data);\n        curr = curr->right;\n    }\n}\n```",
+            "Breadth-First (Level-Order) Traversal using Queue:\nTraverses nodes level-by-level from top to bottom, left to right. Initialize a FIFO Queue with `root`. While queue is not empty: dequeue node `u`, print `u->data`, enqueue `u->left` if non-null, enqueue `u->right` if non-null. Time: $O(n)$, Space: $O(w)$ where $w$ is the maximum width of the tree.",
+            "Reconstructing a Unique Binary Tree:\n- To construct a unique binary tree, two traversal sequences are mandatory, ONE OF WHICH MUST BE INORDER.\n- Preorder + Inorder OR Postorder + Inorder gives a unique binary tree.\n- Preorder + Postorder CANNOT guarantee a unique tree (ambiguity arises with single-child nodes).\n- Rebuilding Steps (Preorder + Inorder): The first element of Preorder is always the Root. Locate this root in Inorder sequence; elements to its left form the Left Subtree, elements to its right form the Right Subtree. Recurse for subtrees.",
+            "Expression Trees:\n- A binary tree representation of an arithmetic expression where internal nodes are operators (+, -, *, /, ^) and leaf nodes are operands (variables or numbers).\n- Constructing from Postfix Expression using Stack of Node pointers: Scan postfix expression left to right. If operand, create node and push pointer to stack. If operator, create operator node, pop top two nodes (first popped = right child, second popped = left child), link them to operator node, and push operator node back onto stack.\n- Evaluating Expression Tree: Postorder traversal evaluating subtrees recursively:\n  `eval(T) = eval(T->left) [OP] eval(T->right)`."
+          ],
+          "code_or_formula": "Inorder: L-N-R | Preorder: N-L-R | Postorder: L-R-N\nExpression Tree: Leaves = Operands, Internal Nodes = Operators",
+          "exam_tips": "KTU Part B 9-mark staple: 'Construct a binary tree from given Inorder and Preorder traversals' or 'Construct an expression tree for (a + b * c / d) + ((e * f + g) * h)'."
+        },
+        {
+          "topic_title": "3. Binary Search Trees (BST): Properties, Search, Insertion & Deletion Cases",
+          "summary": "BST invariant, recursive and iterative search, node insertion, and the three distinct node deletion algorithms.",
+          "key_points": [
+            "BST Definition & Ordering Invariant:\nA binary tree is a Binary Search Tree (BST) if for every node $X$:\n- All keys in the left subtree of $X$ are strictly less than $X->data$.\n- All keys in the right subtree of $X$ are strictly greater than $X->data$.\n- Both left and right subtrees must themselves be valid BSTs.",
+            "BST Search & Insertion Algorithms:\n- Search: Compare target with `root->data`. If equal, found. If `target < root->data`, recurse left; else recurse right. Time: $O(h)$ where $h$ is tree height ($O(\\log n)$ for balanced, $O(n)$ for skewed).\n- Insertion:\n```c\nstruct Node* insertBST(struct Node* root, int key) {\n    if (root == NULL) {\n        struct Node* n = (struct Node*)malloc(sizeof(struct Node));\n        n->data = key; n->left = n->right = NULL;\n        return n;\n    }\n    if (key < root->data) root->left = insertBST(root->left, key);\n    else if (key > root->data) root->right = insertBST(root->right, key);\n    return root;\n}\n```",
+            "BST Deletion Algorithm (3 Critical Cases - KTU Repeated Question):\n1. Case 1 (Leaf Node - 0 Children): Simply unlink the node from its parent and `free()` memory.\n2. Case 2 (Single Child): Bypass the node by linking its parent directly to its only child, then `free()` the target node.\n3. Case 3 (Two Children): The node cannot be directly removed without breaking tree connectivity. We must find either its Inorder Successor (smallest value in its right subtree: go right once, then left all the way) or Inorder Predecessor (largest value in left subtree). Copy the successor's data into the target node, then recursively delete the Inorder Successor from the right subtree (which is guaranteed to have at most one child).\n```c\nstruct Node* deleteBST(struct Node* root, int key) {\n    if (root == NULL) return root;\n    if (key < root->data) root->left = deleteBST(root->left, key);\n    else if (key > root->data) root->right = deleteBST(root->right, key);\n    else {\n        if (root->left == NULL) { struct Node* temp = root->right; free(root); return temp; }\n        else if (root->right == NULL) { struct Node* temp = root->left; free(root); return temp; }\n        struct Node* succ = root->right;\n        while (succ->left != NULL) succ = succ->left; // Find Inorder Successor\n        root->data = succ->data;\n        root->right = deleteBST(root->right, succ->data);\n    }\n    return root;\n}\n```"
+          ],
+          "code_or_formula": "BST Invariant: Left < Root < Right\nTwo-Child Deletion: Replace with Inorder Successor (min of right subtree)",
+          "exam_tips": "KTU Part B question: 'Construct a BST for keys [52, 35, 11, 7, 10, 90, 21, 16], find height, and demonstrate deletion of node with two children'."
+        },
+        {
+          "topic_title": "4. Binary Heaps, Max/Min Heap Operations & Priority Queue Implementation",
+          "summary": "Complete binary tree property, array mapping, Heapify, Build-Heap derivation, and Priority Queue ADT.",
+          "key_points": [
+            "Binary Heap Definition:\nA Binary Heap is a Complete Binary Tree that satisfies the Heap-Order property:\n- Max-Heap: The key stored at any node is greater than or equal to the keys of its children. Root holds the maximum element ($A[\\text{parent}(i)] \\ge A[i]$).\n- Min-Heap: The key stored at any node is less than or equal to the keys of its children. Root holds the minimum element ($A[\\text{parent}(i)] \\le A[i]$).",
+            "Array Storage of Binary Heap (0-Indexed):\n- Root at `A[0]`.\n- Left child of `i` is at `2*i + 1`.\n- Right child of `i` is at `2*i + 2`.\n- Parent of `i` is at `floor((i - 1) / 2)`.\n- All leaf nodes reside in index range `floor(n / 2)` to `n - 1`.",
+            "Core Heap Operations:\n1. Insertion ($O(\\log n)$): Append new element at the very end of the array (preserving Complete Binary Tree shape), then perform `heapifyUp` (sift-up) by swapping with its parent until heap order is restored.\n2. Extract-Max / Delete-Root ($O(\\log n)$): Save `A[0]`, overwrite root with the last element `A[n-1]`, decrement heap size, and invoke `heapifyDown` (sift-down) on root to restore heap property.",
+            "Heapify-Down (Max-Heapify) Algorithm:\n```c\nvoid maxHeapify(int arr[], int n, int i) {\n    int largest = i;\n    int left = 2 * i + 1;\n    int right = 2 * i + 2;\n    if (left < n && arr[left] > arr[largest]) largest = left;\n    if (right < n && arr[right] > arr[largest]) largest = right;\n    if (largest != i) {\n        int temp = arr[i]; arr[i] = arr[largest]; arr[largest] = temp;\n        maxHeapify(arr, n, largest);\n    }\n}\n```",
+            "Build-Heap Algorithm ($O(n)$ Linear Time Derivation):\n- Non-leaf nodes are from index $\\lfloor n/2 \\rfloor - 1$ down to 0.\n- Iterate backwards: `for (int i = n/2 - 1; i >= 0; i--) maxHeapify(arr, n, i);`\n- Proof of $O(n)$: Number of nodes at height $h$ is $\\lceil n / 2^{h+1} \\rceil$. Cost of heapify at height $h$ is $O(h)$. Total cost $= \\sum_{h=0}^{\\lfloor \\log n \\rfloor} \\frac{n}{2^{h+1}} O(h) = \\frac{n}{2} \\sum_{h=0}^{\\infty} \\frac{h}{2^h} = \\frac{n}{2} (2) = O(n)$.",
+            "Priority Queue ADT using Binary Heap:\n- Implements operations `insert(item, priority)` and `extractMax() / extractMin()` in guaranteed $O(\\log n)$ time.\n- Outperforms Unsorted Array (Insert $O(1)$, Extract $O(n)$) and Sorted Array (Insert $O(n)$, Extract $O(1)$)."
+          ],
+          "code_or_formula": "Build Heap Time Complexity: O(n) (Linear)\nInsert / Extract-Max: O(log n)\nParent(i) = (i - 1)/2 | Left = 2i + 1 | Right = 2i + 2",
+          "exam_tips": "KTU Part A: 'Differentiate between Max Heap and Min Heap with diagrams'. KTU Part B: 'Explain the build heap operation on an unsorted array and prove its O(n) complexity'."
+        },
+        {
+          "topic_title": "5. Graph Theory, Storage Architectures & Traversals (BFS & DFS)",
+          "summary": "Graph representations (Adjacency Matrix vs List) and step-by-step Depth-First and Breadth-First traversal algorithms.",
+          "key_points": [
+            "Graph Terminology & Representation:\n- Graph $G = (V, E)$ consists of set of Vertices $V$ and set of Edges $E$.\n- Directed Graph (Digraph) vs Undirected Graph. Degree in undirected graph: number of incident edges. In digraph: In-degree (incoming) and Out-degree (outgoing). Handshaking Lemma: $\\sum_{v \\in V} \\text{deg}(v) = 2|E|$.",
+            "Storage Architectures Comparison:\n1. Adjacency Matrix: $V \\times V$ 2D matrix where $M[i][j] = 1$ if edge exists, else 0 (or edge weight for weighted graphs). Space: $\\Theta(V^2)$. Edge lookup time: $O(1)$. Drawback: Wastes immense memory for sparse graphs ($|E| \\ll |V|^2$).\n2. Adjacency List: Array of linked lists of size $V$, where `adj[i]` contains a linked list of all neighbors of vertex $i$. Space: $O(V + E)$ for digraphs, $O(V + 2E)$ for undirected graphs. Ideal for sparse graphs.\n3. Adjacency Multilist: Uses edge-oriented multi-pointer nodes to represent multiple incidences simultaneously.",
+            "Breadth-First Search (BFS):\n- Explores the graph layer by layer, visiting all distance-1 neighbors first, then distance-2 neighbors, etc.\n- Data Structure: FIFO Queue + Boolean `visited[]` array.\n- BFS Algorithm: Mark start vertex $S$ as visited, enqueue $S$. While queue not empty: dequeue vertex $u$, print $u$; for every unvisited neighbor $v$ of $u$, mark $v$ as visited and enqueue $v$.\n- Time Complexity: $O(V + E)$ using Adjacency List; $O(V^2)$ with Adjacency Matrix. Space: $O(V)$.\n- Key Applications: Shortest path in unweighted graphs, finding connected components, bipartiteness testing.",
+            "Depth-First Search (DFS):\n- Explores deeply along each branch before backtracking.\n- Data Structure: Explicit/Call Stack + `visited[]` array.\n- Recursive DFS Algorithm:\n```c\nvoid DFS(int u) {\n    visited[u] = true;\n    printf(\"%d \", u);\n    for (struct Node* p = adj[u]; p != NULL; p = p->next) {\n        int v = p->dest;\n        if (!visited[v]) DFS(v);\n    }\n}\n```\n- Time Complexity: $O(V + E)$ with Adjacency List; $O(V^2)$ with Adjacency Matrix. Space: $O(V)$ (recursion stack recursion depth).\n- Key Applications: Cycle detection, topological sorting in DAGs, finding strongly connected components (Kosaraju/Tarjan)."
+          ],
+          "code_or_formula": "BFS uses FIFO Queue -> O(V + E) (Level-order / Shortest unweighted path)\nDFS uses LIFO Stack -> O(V + E) (Deep exploration / Cycle detection)",
+          "exam_tips": "KTU Part B 9-mark staple: 'Explain BFS and DFS algorithms with an example graph, giving tracing of stack/queue and final traversal orders'."
+        },
+        {
+          "topic_title": "6. Single-Source Shortest Path: Dijkstra's Algorithm",
+          "summary": "Greedy shortest path determination on weighted graphs with non-negative edges, relaxation property, and complexity.",
+          "key_points": [
+            "Problem Statement:\nGiven a directed or undirected weighted graph $G = (V, E)$ with non-negative edge weights ($w(u, v) \\ge 0$) and a designated source vertex $S$, compute the shortest path distance from $S$ to all other vertices in $V$.",
+            "Greedy Principle & Edge Relaxation:\n- Invariant: Maintain an array `dist[]` initialized to $\\infty$, with `dist[S] = 0`, and a boolean set `visited[]` of vertices whose shortest distance has been permanently finalized.\n- Relaxation Condition: For directed edge $(u, v)$ with weight $w(u, v)$:\n  $$\\text{if } dist[u] + w(u, v) < dist[v] \\implies dist[v] = dist[u] + w(u, v)$$\n  Also update predecessor `parent[v] = u` to reconstruct the path.",
+            "Step-by-Step Dijkstra Algorithm:\n1. Initialize `dist[v] = INF` for all $v \\in V$, `dist[S] = 0`, `visited[v] = false`.\n2. Loop $|V| - 1$ times:\n   a. Choose unvisited vertex $u$ with minimum `dist[u]` (`Extract-Min`).\n   b. Mark $u$ as visited (`visited[u] = true`).\n   c. For every unvisited neighbor $v$ of $u$, relax edge $(u, v)$:\n      `if (dist[u] + weight(u, v) < dist[v]) dist[v] = dist[u] + weight(u, v);`",
+            "Complexity Analysis:\n- Array Implementation: Finding min vertex takes $O(V)$, done $V$ times $\\to O(V^2)$. Total relaxation across all edges is $O(E)$. Overall Time: $O(V^2)$ (optimal for dense graphs where $E \\approx V^2$).\n- Min-Heap / Priority Queue Implementation: Extract-Min takes $O(\\log V)$ ($V$ times $\\to O(V \\log V)$). Decrease-Key relaxation takes $O(\\log V)$ ($E$ times $\\to O(E \\log V)$). Total Time: $O((V + E) \\log V)$ (optimal for sparse graphs).",
+            "Critical Limitation (KTU Viva / 3-Mark Question):\nDijkstra's algorithm FAILS when negative edge weights are present because the greedy assumption that the distance to the visited vertex cannot be reduced further is violated. In such graphs, the Bellman-Ford algorithm ($O(V \\cdot E)$) must be used."
+          ],
+          "code_or_formula": "Relaxation Formula: if (dist[u] + w(u,v) < dist[v]) dist[v] = dist[u] + w(u,v)\nTime Complexity: O(V^2) (Array) | O((V + E) log V) (Min-Heap)",
+          "exam_tips": "KTU Part B staple: 'Solve single-source shortest path for given weighted directed graph using Dijkstra algorithm, showing tabular iterations'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What is the time complexity of building a Binary Heap of N elements from an arbitrary array?",
+          "options": [
+            "O(N log N)",
+            "O(N)",
+            "O(log N)",
+            "O(N^2)"
+          ],
+          "ans": 1,
+          "explanation": "Bottom-up heapification sums the height of all nodes, mathematically converging to O(N)."
+        },
+        {
+          "q": "Which traversal of a Binary Search Tree (BST) produces keys in ascending sorted order?",
+          "options": [
+            "Preorder",
+            "Inorder",
+            "Postorder",
+            "Level-order"
+          ],
+          "ans": 1,
+          "explanation": "Inorder traversal visits Left subtree (smaller), Root, then Right subtree (larger), yielding sorted output."
+        },
+        {
+          "q": "Which data structure is fundamentally used to implement Breadth First Search (BFS)?",
+          "options": [
+            "Stack",
+            "Queue",
+            "Priority Queue",
+            "Hash Table"
+          ],
+          "ans": 1,
+          "explanation": "BFS explores vertices level by level, maintaining FIFO order using a Queue."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Draw the binary tree whose sequential representation is given below: [Index 1..15]: 1:A, 2:B, 3:C, 4:-, 5:D, 6:E, 7:-, 8:-, 9:-, 10:-, 11:-, 12:F, 13:G, 14:-, 15:- (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Using 1-based indexing rules: Root is at index 1 (A).\n- Left child of A is at index 2 (B); Right child of A is at index 3 (C).\n- Children of B (index 2): Left at index 4 (empty '-'); Right at index 5 (D).\n- Children of C (index 3): Left at index 6 (E); Right at index 7 (empty '-').\n- Children of D (index 5): Left at index 10 (empty '-'); Right at index 11 (empty '-').\n- Children of E (index 6): Left at index 12 (F); Right at index 13 (G).\nResulting Tree:\n        A\n       / \\\n      B   C\n       \\  /\n        D E\n         / \\\n        F   G",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Construct an expression tree for the expression: (a + b * c / d) + ((e * f + g) * h) (KTU Model Paper, Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "1. Convert expression into postfix or parse hierarchically by operator precedence.\nSubexpression 1: `(a + b * c / d)` -> Postfix: `a b c * d / +`\nSubexpression 2: `((e * f + g) * h)` -> Postfix: `e f * g + h *`\nFull expression root is the central `+` operator connecting Subexpression 1 and Subexpression 2.\n2. Tree Structure:\nRoot: `+`\nLeft Subtree of Root: `+`\n  - Left Child: `a`\n  - Right Child: `/`\n      - Left Child: `*` (with children `b` and `c`)\n      - Right Child: `d`\nRight Subtree of Root: `*`\n  - Left Child: `+`\n      - Left Child: `*` (with children `e` and `f`)\n      - Right Child: `g`\n  - Right Child: `h`",
+          "type": "Part B (5 Marks)"
+        },
+        {
+          "q": "Construct a Binary Search Tree (BST) for the keys: [52, 35, 11, 7, 10, 90, 21, 16]. What is the height of the created tree? (KTU Model Paper, Part B - 4 Marks)",
+          "marks": 4,
+          "sol": "Step-by-step insertion following BST invariant (Left < Node < Right):\n1. Insert 52: Root = 52\n2. Insert 35: 35 < 52 -> Left child of 52\n3. Insert 11: 11 < 52, 11 < 35 -> Left child of 35\n4. Insert 7: 7 < 52, 7 < 35, 7 < 11 -> Left child of 11\n5. Insert 10: 10 < 52, 10 < 35, 10 < 11, 10 > 7 -> Right child of 7\n6. Insert 90: 90 > 52 -> Right child of 52\n7. Insert 21: 21 < 52, 21 < 35, 21 > 11 -> Right child of 11\n8. Insert 16: 16 < 52, 16 < 35, 16 > 11, 16 < 21 -> Left child of 21\n\nTree Structure:\n          52\n        /    \\\n      35      90\n     /\n    11\n   /  \\\n  7    21\n   \\   /\n   10 16\nHeight of Tree (edges on longest path from root to leaf 10 or 16): Level 0 (52) -> Level 1 (35) -> Level 2 (11) -> Level 3 (7 or 21) -> Level 4 (10 or 16).\nHeight = 4 edges.",
+          "type": "Part B (4 Marks)"
+        },
+        {
+          "q": "Explain Breadth-First Search (BFS) and trace its execution on a given graph using a queue. (KTU Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "BFS Algorithm:\n1. Initialize FIFO Queue Q and boolean array visited[] = {false}.\n2. Enqueue start vertex S, set visited[S] = true.\n3. While Q is not empty:\n   a. Dequeue front vertex u.\n   b. Print/process u.\n   c. For each adjacent vertex v of u: if visited[v] == false, set visited[v] = true and enqueue v.\nTime Complexity: O(V + E) with Adjacency List. Space Complexity: O(V). BFS guarantees finding shortest paths in unweighted graphs.",
+          "type": "Part B (5 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Sorting, Searching & Hashing",
+      "topics": [
+        "Internal vs External Sorting",
+        "Sorting Algorithms: Selection Sort, Insertion Sort, Quick Sort, Merge Sort, Heap Sort, Radix Sort",
+        "Time & Space Complexity Comparison of Sorting Algorithms",
+        "Searching Techniques: Linear Search, Binary Search",
+        "Hashing: Direct Addressing, Hash Functions (Mid-Square, Division, Folding, Digit Analysis)",
+        "Collision Resolution in Hashing: Open Addressing (Linear Probing, Quadratic Probing, Double Hashing)",
+        "Separate Chaining (Open Hashing)"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Sorting Paradigms",
+          "description": "Comparison-based and distribution-based ordering algorithms",
+          "root": "Sorting",
+          "branches": [
+            {
+              "node": "Divide & Conquer",
+              "children": [
+                "Quick Sort (Pivot partition, Avg O(N log N), Worst O(N^2))",
+                "Merge Sort (Divide, Conquor, Merge, O(N log N) all cases, Stable)"
+              ]
+            },
+            {
+              "node": "Heap & Linear Sort",
+              "children": [
+                "Heap Sort (In-place, O(N log N) worst case, Unstable)",
+                "Radix Sort (Non-comparison, O(d*(N+b)), uses counting sort)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Searching & Hash Tables",
+          "description": "Fast key retrieval mechanisms and collision management",
+          "root": "Searching & Hashing",
+          "branches": [
+            {
+              "node": "Searching",
+              "children": [
+                "Linear Search: O(N) unsorted",
+                "Binary Search: O(log N) strictly sorted array"
+              ]
+            },
+            {
+              "node": "Hash Functions",
+              "children": [
+                "Division: h(k) = k % m",
+                "Mid-Square: Square k and extract middle digits",
+                "Folding: Partition key digits and add"
+              ]
+            },
+            {
+              "node": "Collision Resolution",
+              "children": [
+                "Closed Hashing (Linear Probing: (h(k)+i)%m, Quadratic, Double Hash)",
+                "Open Hashing (Separate Chaining: linked list at each slot)"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Elementary Comparison Sorts: Selection Sort & Insertion Sort",
+          "summary": "Mechanics, step-by-step algorithms, in-place behavior, stability, and full complexity analysis of Selection and Insertion Sorts.",
+          "key_points": [
+            "Selection Sort Working Principle:\n- Divides array into two subarrays: sorted (left) and unsorted (right).\n- In each iteration $i$, scans the unsorted subarray $A[i \\dots n-1]$ to locate the index of the minimum element, and swaps it with $A[i]$.\n- In-place ($O(1)$ auxiliary space), Unstable (can change relative order of duplicate keys).\n- Time Complexity: Always $\\Theta(n^2)$ across Best, Average, and Worst cases because comparisons are unconditionally $\\sum_{i=1}^{n-1} (n - i) = \\frac{n(n-1)}{2}$. However, number of swaps is minimal: exactly $O(n)$ swaps (useful when memory write operations are extremely costly).",
+            "Insertion Sort Working Principle:\n- Operates like a card player organizing cards in hand. Considers $A[0]$ already sorted. For each index $i = 1$ to $n-1$, picks key $X = A[i]$ and shifts all elements in sorted subarray $A[0 \\dots i-1]$ that are strictly greater than $X$ one position to the right, then inserts $X$ into the vacated position.\n- In-place ($O(1)$ space), Highly Stable (equal elements never bypass each other).\n- Time Complexity:\n  * Best Case (Already Sorted): $O(n)$ with only $n-1$ comparisons and 0 shifts.\n  * Worst Case (Reverse Sorted): $\\Theta(n^2)$ comparisons and $\\Theta(n^2)$ shifts.\n  * Average Case: $\\Theta(n^2)$. Highly efficient for tiny datasets ($n < 20$) and nearly sorted arrays.",
+            "Algorithm Comparison Table:\n| Property | Selection Sort | Insertion Sort |\n|---|---|---|\n| Best Time | $O(n^2)$ | $O(n)$ |\n| Worst Time | $O(n^2)$ | $O(n^2)$ |\n| Space | $O(1)$ | $O(1)$ |\n| Stability | Unstable | Stable |\n| Number of Swaps | $O(n)$ | $O(n^2)$ shifts |"
+          ],
+          "code_or_formula": "Selection Sort: Total Comparisons = n(n-1)/2 across all cases | Swaps = O(n)\nInsertion Sort: Best = O(n) | Worst = O(n^2) | Stable & In-place",
+          "exam_tips": "KTU Part A: 'Differentiate between Selection Sort and Insertion Sort with respect to stability and best-case time complexity'."
+        },
+        {
+          "topic_title": "2. Divide-and-Conquer Sorting: Quick Sort (Partition Schemes & Recurrence)",
+          "summary": "Pivot selection, Lomuto vs Hoare partitioning, recursive analysis, worst-case mitigation, and average-case derivation.",
+          "key_points": [
+            "Quick Sort Divide-and-Conquer Architecture:\n1. Divide: Rearrange array $A[p \\dots r]$ around a pivot element $x$ into two subarrays $A[p \\dots q-1]$ (all $\\le x$) and $A[q+1 \\dots r]$ (all $\\ge x$).\n2. Conquer: Recursively sort the two subarrays.\n3. Combine: Trivial (array is sorted in-place).",
+            "Partitioning Mechanisms (Lomuto vs Hoare):\n- Lomuto Partition (Easier, chosen pivot = last element `A[r]`):\n```c\nint partition(int A[], int p, int r) {\n    int pivot = A[r], i = p - 1;\n    for (int j = p; j < r; j++) {\n        if (A[j] <= pivot) {\n            i++;\n            int t = A[i]; A[i] = A[j]; A[j] = t;\n        }\n    }\n    int t = A[i + 1]; A[i + 1] = A[r]; A[r] = t;\n    return i + 1;\n}\n```\n- Hoare Partition (Original, two pointers inwards from ends): Employs fewer swaps on average (~3x fewer than Lomuto).",
+            "Time & Space Complexity Derivation:\n- Best Case: Pivot consistently splits array into equal halves of size $n/2$:\n  $$T(n) = 2T(n/2) + \\Theta(n) \\implies T(n) = \\Theta(n \\log n)$$\n- Worst Case: Occurs when array is already sorted or reverse sorted, and first/last element is picked as pivot. One partition has size 0 and the other $n - 1$:\n  $$T(n) = T(n-1) + T(0) + \\Theta(n) = \\sum_{i=1}^n i = \\Theta(n^2)$$\n- Average Case: $\\Theta(n \\log n)$. Space Complexity: $O(\\log n)$ stack depth for balanced recursion, $O(n)$ stack depth in worst case.",
+            "Mitigating Worst Case in Practice:\n- Randomized QuickSort: Select a random pivot element uniformly from the subarray.\n- Median-of-Three: Choose pivot as median of {first, middle, last} elements."
+          ],
+          "code_or_formula": "Best/Avg Time: O(n log n) | Worst Time: O(n^2) (Already sorted / Skewed pivot)\nRecurrence (Best): T(n) = 2T(n/2) + O(n) -> O(n log n)",
+          "exam_tips": "KTU Part B staple: 'Explain Quick Sort algorithm with partitioning trace on [8, 4, 7, 3, 10], and analyze its best and worst case time complexity with recurrence relations'."
+        },
+        {
+          "topic_title": "3. Merge Sort & Heap Sort: Algorithms, Recurrence & In-Place Analysis",
+          "summary": "Merge Sort 2-way merge, Heap Sort build-and-extract phases, stability, and comparison of $O(n \\log n)$ sorting algorithms.",
+          "key_points": [
+            "Merge Sort Architecture:\n- Divide: Split array at midpoint $m = \\lfloor (l + r)/2 \\rfloor$.\n- Conquer: Recursively sort left half $A[l \\dots m]$ and right half $A[m+1 \\dots r]$.\n- Combine: Merge the two sorted halves into a single sorted subarray using auxiliary storage.",
+            "2-Way Merge Algorithm (C Implementation):\n```c\nvoid merge(int arr[], int l, int m, int r) {\n    int n1 = m - l + 1, n2 = r - m;\n    int L[n1], R[n2];\n    for (int i = 0; i < n1; i++) L[i] = arr[l + i];\n    for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];\n    int i = 0, j = 0, k = l;\n    while (i < n1 && j < n2) {\n        if (L[i] <= R[j]) arr[k++] = L[i++];\n        else arr[k++] = R[j++];\n    }\n    while (i < n1) arr[k++] = L[i++];\n    while (j < n2) arr[k++] = R[j++];\n}\n```\n- Complexity: Time is strictly $\\Theta(n \\log n)$ in Best, Worst, and Average cases ($T(n) = 2T(n/2) + O(n)$). Space is $\\Theta(n)$ auxiliary memory (not in-place). It is Stable.",
+            "Heap Sort Mechanism (In-Place $O(n \\log n)$):\n1. Build Max-Heap from input array $A[0 \\dots n-1]$ in $O(n)$ time.\n2. Iteration Phase: For $i = n - 1$ down to 1:\n   - Swap root $A[0]$ (maximum element) with $A[i]$.\n   - Decrement heap size by 1 (placing max in its permanent sorted location).\n   - Invoke `maxHeapify(A, i, 0)` on the root to restore max-heap property.\n- Complexity: Time is $O(n \\log n)$ for all cases. Space is $O(1)$ auxiliary (in-place). Unstable sort.",
+            "Merge Sort vs Quick Sort vs Heap Sort Comparison:\n- Merge Sort: Always $O(n \\log n)$, Stable, requires $O(n)$ extra memory (ideal for Linked Lists and External Sorting).\n- Quick Sort: $O(n \\log n)$ average, in-place, cache-friendly, but $O(n^2)$ worst case.\n- Heap Sort: Guaranteed $O(n \\log n)$, in-place $O(1)$ space, but poor cache locality and unstable."
+          ],
+          "code_or_formula": "Merge Sort: T(n) = 2T(n/2) + O(n) -> O(n log n) Always | Auxiliary Space = O(n) | Stable\nHeap Sort: BuildHeap O(n) + n*Heapify O(log n) = O(n log n) | Space = O(1) | Unstable",
+          "exam_tips": "KTU Part A: 'Compare Merge Sort and Heap Sort in terms of auxiliary memory and stability'. KTU Part B: 'Trace Heap Sort on given array, showing initial build heap and each extraction step'."
+        },
+        {
+          "topic_title": "4. Non-Comparative Sorting (Radix Sort) & Searching Techniques (Linear vs Binary)",
+          "summary": "Radix Sort digit-by-digit sorting with Counting Sort subroutine, plus Linear vs Binary Search algorithms and complexities.",
+          "key_points": [
+            "Radix Sort (Non-Comparative Sorting):\n- Rather than comparing elements directly, Radix Sort sorts elements digit by digit, from Least Significant Digit (LSD) to Most Significant Digit (MSD).\n- Requirement: The intermediate digit-level sorting algorithm MUST BE STABLE. Counting Sort ($O(n + k)$) is standardly used.\n- Step-by-Step Mechanism for base $k = 10$:\n  1. Find maximum number in array to know number of digits $d$.\n  2. For exponent $\\text{exp} = 1, 10, 100, \\dots$ while $\\text{max}/\\text{exp} > 0$:\n     Execute Counting Sort based on the digit at position `(arr[i] / exp) % 10`.\n- Time Complexity: $\\Theta(d \\cdot (n + k))$ where $d$ is number of digits, $n$ number of elements, $k$ radix (range of digit values, e.g. 10). If $d$ is constant, Radix Sort achieves Linear Time $O(n)$!\n- Space Complexity: $O(n + k)$ auxiliary buffer.",
+            "Linear Search vs Binary Search:\n- Linear Search (Sequential Scan): Compares target with every element sequentially from index 0 to $n-1$. Suitable for unsorted arrays and linked lists. Best: $O(1)$, Worst/Average: $O(n)$.\n- Binary Search (Divide and Conquer on Sorted Array):\n  * Repeatedly compares target with middle element $m = \\lfloor (low + high)/2 \\rfloor$.\n  * If `target == A[m]`, return index $m$.\n  * If `target < A[m]`, search left half: `high = m - 1`.\n  * If `target > A[m]`, search right half: `low = m + 1`.\n  * Recurrence: $T(n) = T(n/2) + O(1) \\implies T(n) = O(\\log n)$.\n  * Space: $O(1)$ iterative, $O(\\log n)$ recursive stack."
+          ],
+          "code_or_formula": "Radix Sort Time: O(d * (n + k)) (Linear when d is fixed)\nBinary Search: T(n) = T(n/2) + O(1) -> O(log n) (Array must be sorted)",
+          "exam_tips": "KTU Part A: 'State the condition under which Radix Sort achieves O(n) performance' and 'Write iterative Binary Search in C'."
+        },
+        {
+          "topic_title": "5. Hashing Foundations, Hash Table Architecture & Hash Functions",
+          "summary": "Direct address tables vs hash tables, properties of ideal hash functions, and Mid-Square, Division, Folding, and Digit Analysis.",
+          "key_points": [
+            "Direct Address Table vs Hash Table:\n- Direct Address Table: Uses raw key $k$ directly as array index `T[k]`. Requires $O(1)$ time, but infeasible when key universe $U$ is enormous (e.g. 10-digit phone numbers require 10 GB memory for just a few hundred records).\n- Hash Table: Reduces array size to $m$ by mapping keys into index range $[0, m-1]$ via a mathematical Hash Function: $h(k): U \\to \\{0, 1, \\dots, m - 1\\}$.",
+            "Desirable Properties of a Hash Function:\n1. Fast and easy to compute in $O(1)$ time.\n2. Minimizes collisions by distributing keys uniformly across the range (Simple Uniform Hashing).\n3. Uses all bits/digits of the key.",
+            "4 Standard Hash Functions (KTU Repeated Question):\n1. Division Method: $h(k) = k \\bmod m$.\n   - Table size $m$ should be a prime number not too close to a power of 2 or 10, to maximize spread across all bits.\n2. Mid-Square Method:\n   - Step 1: Compute $k^2$.\n   - Step 2: Extract the middle $r$ digits of $k^2$ as the hash address.\n   - Table size $m = 10^r$ (or $2^r$). Advantage: Middle digits depend on almost every digit of the original key.\n3. Folding Method:\n   - The key is partitioned into several equal-sized chunks (matching table index digits).\n   - Shift Folding: Parts are added directly: e.g. Key = 12345678, split into 123, 456, 78 $\\to 123 + 456 + 78 = 657$.\n   - Boundary Folding: Outer reverse parts are folded over boundaries like an accordion before adding.\n4. Digit Analysis Method:\n   - Keys are known in advance. Statistical frequency analysis is performed on each digit position across all keys.\n   - Positions with skewed/biased distributions are deleted, and positions displaying the most uniform distribution are selected and concatenated to form the hash index."
+          ],
+          "code_or_formula": "Division: h(k) = k mod m (m is prime)\nMid-Square: Square key, take middle r digits (m = 10^r)\nFolding: Split key into chunks, sum chunks mod m",
+          "exam_tips": "KTU Part A 3-mark staple: 'Explain Mid-Square and Folding methods of hashing with examples' or 'What are the properties of a good hash function?'."
+        },
+        {
+          "topic_title": "6. Collision Resolution Strategies: Open Addressing vs Separate Chaining",
+          "summary": "Collisions, Linear Probing, Quadratic Probing, Double Hashing, Primary/Secondary clustering, and Separate Chaining.",
+          "key_points": [
+            "Collision Definition & The Pigeonhole Principle:\nA collision occurs when two distinct keys hash to the identical slot in the hash table: $h(k_1) = h(k_2)$ where $k_1 \\ne k_2$. Since $|U| > m$, collisions are mathematically unavoidable.",
+            "Open Addressing (Closed Hashing - all items stored directly inside the table array):\n1. Linear Probing: $h(k, i) = (h'(k) + i) \\bmod m$ for probe number $i = 0, 1, \\dots, m-1$.\n   - Sequential scan to next available slot.\n   - Flaw: Primary Clustering - contiguous occupied blocks of slots grow longer and longer, degrading average search/insert time from $O(1)$ towards $O(n)$.\n2. Quadratic Probing: $h(k, i) = (h'(k) + c_1 i + c_2 i^2) \\bmod m$.\n   - Eliminates primary clustering by probing quadratically spaced slots ($1, 4, 9, \\dots$).\n   - Flaw: Secondary Clustering - keys with the identical initial hash $h'(k)$ trace the exact same probe sequence.\n3. Double Hashing: $h(k, i) = (h_1(k) + i \\cdot h_2(k)) \\bmod m$.\n   - Employs two independent hash functions. $h_2(k)$ must be relatively prime to $m$ (and $h_2(k) \\ne 0$). Completely eliminates both primary and secondary clustering.",
+            "Separate Chaining (Open Hashing):\n- The hash table is an array of linked list heads. Each slot `T[i]` points to a linked list of all records mapped to index $i$.\n- Load Factor $\\alpha = n / m$ (ratio of keys to slots). In chaining, $\\alpha$ can exceed 1.\n- Search time: Unsuccessful search $= O(1 + \\alpha)$, Successful search $= O(1 + \\alpha/2)$.\n- Advantages: Deletion is a simple linked list node unlink (avoids 'tombstone/deleted' markers required in open addressing). Table never overflows.",
+            "Step-by-Step KTU Numerical Example (Model Paper Question):\nTable size $m = 8$, keys: $\\{73, 54, 15, 48, 89, 66, 37, 18\\}$, $h(k) = k \\bmod 8$:\n- $73 \\bmod 8 = 1 \\to T[1] = 73$\n- $54 \\bmod 8 = 6 \\to T[6] = 54$\n- $15 \\bmod 8 = 7 \\to T[7] = 15$\n- $48 \\bmod 8 = 0 \\to T[0] = 48$\n- $89 \\bmod 8 = 1$ (Collision at 1!):\n  * In Linear Probing: check $T[2]$ (empty) $\\to T[2] = 89$.\n  * In Chaining: append 89 to linked list at $T[1] \\to 73 \\to 89$."
+          ],
+          "code_or_formula": "Linear Probing: h(k, i) = (h'(k) + i) mod m (Primary clustering)\nQuadratic Probing: h(k, i) = (h'(k) + c1*i + c2*i^2) mod m (Secondary clustering)\nDouble Hashing: h(k, i) = (h1(k) + i * h2(k)) mod m\nSeparate Chaining: Array of Linked Lists | Load factor alpha = n/m",
+          "exam_tips": "KTU Part A & Part B questions: 'Differentiate between open addressing and chaining', 'Explain primary and secondary clustering', and numerical question inserting keys into hash table with linear probing."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which sorting algorithm guarantees O(N log N) time complexity in all cases but requires O(N) auxiliary memory?",
+          "options": [
+            "Quick Sort",
+            "Merge Sort",
+            "Heap Sort",
+            "Insertion Sort"
+          ],
+          "ans": 1,
+          "explanation": "Merge Sort always splits array evenly (guaranteeing O(N log N)), but requires O(N) extra array memory during merge."
+        },
+        {
+          "q": "What phenomenon occurs in Linear Probing where long runs of occupied slots build up, degrading performance?",
+          "options": [
+            "Secondary Clustering",
+            "Primary Clustering",
+            "Thrashing",
+            "Starvation"
+          ],
+          "ans": 1,
+          "explanation": "Linear probing checks adjacent slots sequentially, causing blocks of occupied slots to grow into large primary clusters."
+        },
+        {
+          "q": "Under what condition does Quick Sort exhibit its worst-case O(N^2) time complexity?",
+          "options": [
+            "Input is completely random",
+            "Array is already sorted and first element is chosen as pivot",
+            "Pivot is always chosen as median",
+            "All elements are negative"
+          ],
+          "ans": 1,
+          "explanation": "When array is sorted and edge element is chosen as pivot, each partition splits into sizes 0 and N-1, leading to O(N^2)."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Let the size of a hash table is 8. Index varies from 0 to 7. Keys: 73, 54, 15, 48, 89, 66, 37, 18. Show how keys are distributed using modulo division hashing with linear probing. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Hash function: h(k) = k mod 8. Table size m = 8.\n1. k = 73: 73 mod 8 = 1. Slot 1 is empty -> T[1] = 73.\n2. k = 54: 54 mod 8 = 6. Slot 6 is empty -> T[6] = 54.\n3. k = 15: 15 mod 8 = 7. Slot 7 is empty -> T[7] = 15.\n4. k = 48: 48 mod 8 = 0. Slot 0 is empty -> T[0] = 48.\n5. k = 89: 89 mod 8 = 1. Collision at slot 1! Probe (1+1)%8 = 2. Slot 2 is empty -> T[2] = 89.\n6. k = 66: 66 mod 8 = 2. Collision at slot 2! Probe (2+1)%8 = 3. Slot 3 is empty -> T[3] = 66.\n7. k = 37: 37 mod 8 = 5. Slot 5 is empty -> T[5] = 37.\n8. k = 18: 18 mod 8 = 2. Collision at 2! Probe 3 (occupied), Probe 4 (empty) -> T[4] = 18.\nFinal Table State:\nIndex 0: 48 | Index 1: 73 | Index 2: 89 | Index 3: 66 | Index 4: 18 | Index 5: 37 | Index 6: 54 | Index 7: 15",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Apply Quick Sort algorithm (using the last element as pivot) to sort: [8, 4, 7, 3, 10]. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Input array: [8, 4, 7, 3, 10], low = 0, high = 4. Pivot = A[4] = 10.\n1. Lomuto partition: Scan elements j = 0 to 3. Since all elements (8, 4, 7, 3) are <= 10, i advances to 3. Swap A[i+1] with A[high]: A[4] with A[4] (no change). Pivot 10 is at correct final position index 4.\n2. Recurse on left subarray: [8, 4, 7, 3], low = 0, high = 3. Pivot = A[3] = 3.\n   - j = 0: A[0]=8 > 3 (no swap).\n   - j = 1: A[1]=4 > 3 (no swap).\n   - j = 2: A[2]=7 > 3 (no swap).\n   - End of loop: swap A[i+1] (A[0]=8) with pivot A[3]=3 -> Array becomes: [3, 4, 7, 8]. Pivot 3 is at index 0.\n3. Recurse on right subarray: [4, 7, 8], Pivot = 8.\n   - Elements 4, 7 are <= 8. Pivot 8 stays at index 3.\n4. Recurse on [4, 7], Pivot = 7. Element 4 <= 7. Array sorted!\nFinal Sorted Array: [3, 4, 7, 8, 10]",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Explain open hashing (separate chaining) to insert keys: {12, 42, 22, 52, 32} into a hash table with 5 buckets (0 to 4) using division method. (KTU Model Paper, Part B - 4 Marks)",
+          "marks": 4,
+          "sol": "Table size m = 5. Hash function h(k) = k mod 5.\nSeparate chaining maintains a linked list at each index 0..4:\n1. k = 12: 12 mod 5 = 2 -> Insert 12 into chain at Bucket 2.\n2. k = 42: 42 mod 5 = 2 -> Collision! Append 42 into chain at Bucket 2.\n3. k = 22: 22 mod 5 = 2 -> Collision! Append 22 into chain at Bucket 2.\n4. k = 52: 52 mod 5 = 2 -> Collision! Append 52 into chain at Bucket 2.\n5. k = 32: 32 mod 5 = 2 -> Collision! Append 32 into chain at Bucket 2.\nBucket Structure:\nBucket 0: NULL\nBucket 1: NULL\nBucket 2: [12] -> [42] -> [22] -> [52] -> [32] -> NULL\nBucket 3: NULL\nBucket 4: NULL\nAnalysis: All keys ended in bucket 2 due to common remainder 2. While separate chaining handles an arbitrary number of collisions without overflow, lookup degrades to O(n) when all keys cluster in one chain.",
+          "type": "Part B (4 Marks)"
+        },
+        {
+          "q": "Compare Quick Sort, Merge Sort, and Heap Sort with respect to Best Case, Worst Case, Average Case time complexity, space complexity, and stability. (KTU Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "| Algorithm | Best Time | Average Time | Worst Time | Auxiliary Space | Stable? |\n|---|---|---|---|---|---|\n| Quick Sort | O(n log n) | O(n log n) | O(n^2) (skewed) | O(log n) stack | No |\n| Merge Sort | O(n log n) | O(n log n) | O(n log n) | O(n) array | Yes |\n| Heap Sort | O(n log n) | O(n log n) | O(n log n) | O(1) in-place | No |\n- Merge sort is preferred when stability is mandatory or sorting linked lists.\n- Heap sort is preferred when memory is strictly limited ($O(1)$) and guaranteed $O(n \\log n)$ time is needed.",
+          "type": "Part B (5 Marks)"
+        }
+      ]
+    }
+  ]
+}

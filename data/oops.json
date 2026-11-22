@@ -1,0 +1,670 @@
+{
+  "id": "OOPs",
+  "code": "PBCST304",
+  "name": "Object Oriented Programming (Java)",
+  "credits": 4,
+  "modules": [
+    {
+      "num": 1,
+      "title": "Java Fundamentals & Core OOP Concepts",
+      "topics": [
+        "Structure of a Simple Java Program, JDK vs JRE vs JVM",
+        "JVM Architecture: ClassLoader, Memory (Heap, Stack, Method Area), JIT",
+        "Primitive Data Types, Wrapper Classes, Autoboxing & Unboxing",
+        "Arrays, Strings & Vector Class",
+        "Operators, Precedence & Control Statements",
+        "Classes & Objects, Method Declaration, Constructors & Overloading",
+        "The 'this' Keyword, Access Modifiers (private, default, protected, public)"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Java Runtime & Architecture",
+          "description": "Virtual machine execution ecosystem ensuring cross-platform portability",
+          "root": "Java Environment",
+          "branches": [
+            {
+              "node": "Platform Tools",
+              "children": [
+                "JDK: Java Development Kit (javac, tools)",
+                "JRE: Runtime Environment (JVM + Core Libraries)"
+              ]
+            },
+            {
+              "node": "JVM Internals",
+              "children": [
+                "ClassLoader: Loads .class bytecode into memory",
+                "Memory: Method Area (class info), Heap (objects), Stack (frames)",
+                "Execution: Bytecode interpreter & JIT (Just-In-Time) compiler"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Object-Oriented Encapsulation",
+          "description": "Constructing object blueprints with state and access boundaries",
+          "root": "Classes & State",
+          "branches": [
+            {
+              "node": "Object Lifecycle",
+              "children": [
+                "Classes: Templates defining state (fields) & behavior (methods)",
+                "Constructors: Object initialization (Default vs Parameterized)",
+                "'this' keyword: Disambiguates instance fields from method parameters"
+              ]
+            },
+            {
+              "node": "Type System & Visibility",
+              "children": [
+                "Autoboxing: Automatic primitive <-> Wrapper object conversion",
+                "Access Modifiers: private -> default (package) -> protected -> public"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Java Platform Architecture: JVM, JRE, JDK & Memory Areas",
+          "summary": "Bytecode portability, ClassLoader subsystem, JVM runtime data areas, JIT compilation, and Garbage Collection.",
+          "key_points": [
+            "Write Once, Run Anywhere (WORA) Philosophy:\n- Java source code (`.java`) is compiled by `javac` into an intermediate architectural-neutral binary representation called Java Bytecode (`.class`).\n- Bytecode is executed by the Java Virtual Machine (JVM), making Java completely platform-independent at the binary level while the JVM itself is platform-specific.",
+            "JDK vs JRE vs JVM:\n- JDK (Java Development Kit): Complete software development environment containing JRE + Development tools (`javac`, `javadoc`, `jar`, debugger).\n- JRE (Java Runtime Environment): Provides runtime libraries (rt.jar / modules) + JVM required to execute Java bytecode.\n- JVM (Java Virtual Machine): Abstract computing machine that loads, verifies, and executes bytecode.",
+            "JVM Architecture & Runtime Data Areas (KTU Diagram Question):\n1. ClassLoader Subsystem: Loading (Bootstrap, Extension/Platform, Application ClassLoaders), Linking (Verification, Preparation, Resolution), and Initialization.\n2. Method Area (Metaspace): Stores class-level data, runtime constant pool, static variables, field/method bytecodes (shared across all threads).\n3. Heap Memory: Stores all instantiated objects and instance variables. Divided into Young Generation (Eden, S0, S1) and Old/Tenured Generation. Garbage collector manages this area (shared across all threads).\n4. JVM Stack Memory: Per-thread memory. Every method invocation pushes a new Stack Frame containing Local Variables Array, Operand Stack, and Frame Data. Popped upon method return.\n5. PC (Program Counter) Registers: Stores address of current JVM instruction being executed for that thread.\n6. Native Method Stack: Handles execution of native C/C++ libraries via JNI (Java Native Interface).\n7. Execution Engine: Interprets bytecode or compiles hot loops into native machine code via Just-In-Time (JIT) Compiler; includes the Garbage Collector (GC)."
+          ],
+          "code_or_formula": "Compile: javac Test.java -> Test.class (Bytecode)\nExecute: java Test -> JVM interprets/JIT compiles to Native Machine Code",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Explain JVM architecture with a neat diagram and describe its runtime memory areas'."
+        },
+        {
+          "topic_title": "2. Java Language Fundamentals: Primitive Types, Wrappers, Autoboxing & Strings",
+          "summary": "Data types, type casting, wrapper classes, autoboxing/unboxing, String immutability, StringBuffer vs StringBuilder.",
+          "key_points": [
+            "Data Types in Java:\n- 8 Primitive Types: `byte` (1B), `short` (2B), `int` (4B), `long` (8B), `float` (4B), `double` (8B), `char` (2B Unicode UTF-16), `boolean` (JVM-dependent, 1 bit logical).\n- Type Casting: Implicit/Widening (safe: `int -> long -> float -> double`) vs Explicit/Narrowing (data loss risk: `(int) 3.14`).",
+            "Wrapper Classes & Autoboxing:\n- Object wrappers for primitives: `Byte, Short, Integer, Long, Float, Double, Character, Boolean`.\n- Autoboxing: Automatic conversion of primitive type into its corresponding wrapper object by compiler (`Integer obj = 10;` invokes `Integer.valueOf(10)`).\n- Unboxing: Automatic conversion of wrapper object back into primitive (`int val = obj;` invokes `obj.intValue()`).",
+            "String Immutability & String Constant Pool (SCP):\n- In Java, `String` objects are strictly IMMUTABLE. Once created in heap/SCP, their character sequence cannot be modified. Any alteration creates an entirely new `String` object.\n- String Constant Pool (SCP): A special cache area in heap memory. When a string literal is created (`String s1 = \"Hello\";`), JVM checks SCP; if present, it returns existing reference without reallocating.\n- `new String(\"Hello\")`: Explicitly allocates a new object in general Heap memory, bypassing SCP reuse unless `intern()` is invoked.\n- Security & Thread Safety: Immutability guarantees strings cannot be altered by malicious code (critical for URLs, database credentials, filenames) and makes strings inherently thread-safe.",
+            "StringBuffer vs StringBuilder:\n- `StringBuffer`: Mutable string buffer. All public methods are `synchronized` $\\implies$ Thread-safe, but slower execution.\n- `StringBuilder`: Mutable string buffer. Methods are NOT synchronized $\\implies$ High performance in single-threaded environments.",
+            "Vector Class:\n- Growable array of objects in `java.util`. Similar to `ArrayList`, but all methods are `synchronized` (legacy thread-safe collection), doubling its capacity when overflow occurs."
+          ],
+          "code_or_formula": "String s1 = \"KTU\"; s1.concat(\"2024\"); // s1 remains \"KTU\" (Immutable!)\nStringBuffer sb = new StringBuffer(\"KTU\"); sb.append(\"2024\"); // Modifies in-place",
+          "exam_tips": "KTU Part A: 'Why is String immutable in Java?' and 'Differentiate between String, StringBuffer, and StringBuilder with respect to mutability and thread safety'."
+        },
+        {
+          "topic_title": "3. Object-Oriented Programming Principles & Paradigms",
+          "summary": "Procedural vs OOP paradigms, four pillars of OOP (Abstraction, Encapsulation, Inheritance, Polymorphism), and Microservices.",
+          "key_points": [
+            "Procedural vs Object-Oriented Paradigm:\n- Procedural (e.g. C): Function-centric; data moves freely around functions via global variables; poor data security; difficult to maintain and scale for complex enterprise software.\n- Object-Oriented (Java): Data-centric; binds data and functions operating on that data into discrete self-contained entities called Classes and Objects; high data security via access control.",
+            "The 4 Core Pillars of OOP:\n1. Encapsulation: Bundling data (state) and methods (behavior) together into a single unit (Class), and restricting direct external access to internal state using `private` access modifiers and public getters/setters (Data Hiding).\n2. Abstraction: Representing essential features of an entity while hiding underlying implementation complexities. Achieved via Abstract Classes and Interfaces.\n3. Inheritance: Mechanism by which a new class (subclass/derived) inherits attributes and methods from an existing class (superclass/base), promoting code reusability and establishing hierarchical `IS-A` relationships.\n4. Polymorphism: Ability of an entity to take multiple forms. Manifested as Compile-Time Polymorphism (Method Overloading) and Runtime Polymorphism (Method Overriding & Dynamic Method Dispatch).",
+            "Microservices Architecture Overview:\n- Architectural style that structures an application as a collection of small, autonomous, loosely coupled services.\n- Each microservice is aligned to a single business domain, runs in its own process, communicates via lightweight protocols (RESTful HTTP/JSON or message queues), and can be deployed independently."
+          ],
+          "code_or_formula": "Class = Blueprint/Template defining fields & methods\nObject = Concrete runtime instance of a Class allocated on Heap via 'new'",
+          "exam_tips": "KTU Part A: 'State the four core OOP principles with real-world examples' and 'Differentiate procedural programming from object-oriented programming'."
+        },
+        {
+          "topic_title": "4. Classes, Objects, Constructors & The 'this' Keyword",
+          "summary": "Object creation, memory allocation, constructor types, constructor overloading, constructor chaining, and usage of 'this'.",
+          "key_points": [
+            "Object Declaration & Memory Allocation:\n- Declaration: `Rectangle r;` (creates an object reference variable on the Stack, initialized to `null`).\n- Instantiation & Initialization: `r = new Rectangle(10, 20);`\n  1. `new` keyword dynamically allocates required memory on the Heap.\n  2. Constructor initializes instance fields.\n  3. Returns memory reference address assigned to `r`.",
+            "Constructors in Java:\n- A special method having the EXACT same name as the class and NO return type (not even `void`). Automatically executed when object is instantiated with `new`.\n- Types of Constructors:\n  1. Default Constructor: Automatically provided by Java compiler with no parameters if NO constructor is explicitly defined. Initializes fields to default values (0, null, false).\n  2. Parameterized Constructor: Accepts arguments to initialize instance variables with custom values.\n  3. Copy Constructor (Custom): Takes an object of the same class to initialize a new clone object: `Rectangle(Rectangle other) { this.w = other.w; this.h = other.h; }`.\n- Constructor Overloading: Defining multiple constructors with different parameter signatures in the same class.",
+            "The 'this' Keyword (5 Primary Usages):\n1. Resolving Shadowed Instance Variables: Distinguishes instance fields from local parameters with identical names: `this.width = width;`.\n2. Constructor Chaining (`this()`): Invoking another overloaded constructor within the same class (MUST be the absolute first statement in constructor body):\n   `public Rectangle() { this(1, 1); }`\n3. Passing current object as parameter: `process(this);`\n4. Returning current object for method chaining: `return this;`\n5. Invoking current class method: `this.display();`"
+          ],
+          "code_or_formula": "Constructor Chaining: this(args); // MUST be first statement in constructor\nInstance Variable Disambiguation: this.var = var;",
+          "exam_tips": "KTU Part A 3-mark question: 'Explain any three uses of \"this\" keyword in Java with code snippets'."
+        },
+        {
+          "topic_title": "5. Java Access Modifiers & Package Visibility Matrix",
+          "summary": "Private, default (package-private), protected, and public access levels across classes, packages, and inheritance hierarchies.",
+          "key_points": [
+            "The 4 Access Levels in Java:\n1. `private`: Accessible ONLY within the exact same class. Inaccessible to subclasses or outside package.\n2. `default` (no modifier specified / package-private): Accessible by any class within the SAME package. Inaccessible outside package.\n3. `protected`: Accessible within the SAME package, AND by SUBCLASSES located in different packages (via inheritance).\n4. `public`: Globally accessible from any class in any package across the application.",
+            "Complete Visibility Matrix (KTU Mandatory Table Question):\n| Location / Context | `private` | `default` | `protected` | `public` |\n|---|---|---|---|---|\n| Same Class | Yes | Yes | Yes | Yes |\n| Same Package Subclass | No | Yes | Yes | Yes |\n| Same Package Non-Subclass | No | Yes | Yes | Yes |\n| Different Package Subclass | No | No | **Yes** (via inheritance) | Yes |\n| Different Package Non-Subclass | No | No | No | Yes |"
+          ],
+          "code_or_formula": "Visibility Order: private < default < protected < public",
+          "exam_tips": "KTU Part A 3-mark repeated question: 'Construct the access protection matrix for Java access modifiers'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which memory area in the JVM is shared across all executing threads and stores instantiated objects?",
+          "options": [
+            "JVM Stack",
+            "Program Counter (PC) Register",
+            "Heap Area",
+            "Native Method Stack"
+          ],
+          "ans": 2,
+          "explanation": "The Heap Area is a runtime data area shared by all threads where memory for all class instances and arrays is allocated."
+        },
+        {
+          "q": "What happens when a method is overloaded based solely on having a different return type in Java?",
+          "options": [
+            "It compiles successfully",
+            "It results in a compile-time error",
+            "It is resolved dynamically at runtime",
+            "It causes a JVM OutOfMemoryError"
+          ],
+          "ans": 1,
+          "explanation": "Overloading requires distinct parameter lists. The return type is not considered by the compiler for signature matching."
+        },
+        {
+          "q": "What is Autoboxing in Java?",
+          "options": [
+            "Automatic conversion of primitive types to their corresponding wrapper class objects",
+            "Automatic deletion of unused heap memory",
+            "Automatic conversion of subclass to superclass",
+            "Packing multiple arguments into a variable-length argument array"
+          ],
+          "ans": 0,
+          "explanation": "Autoboxing is the compiler's automatic conversion of primitive types (like int) into their corresponding wrapper classes (like Integer)."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Explain JVM architecture with a neat diagram and describe its runtime memory areas. (KTU Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "JVM consists of 3 primary subsystems:\n1. ClassLoader Subsystem: Loads bytecode into memory (Bootstrap, Platform, App classloaders), performs Bytecode Verification, and initializes static fields.\n2. Runtime Data Areas:\n   - Method Area / Metaspace: Stores class structures, static variables, and runtime constant pool (shared across threads).\n   - Heap Area: Stores all instantiated objects and instance fields. Managed by Garbage Collector (shared across threads).\n   - JVM Stack: Per-thread stack frames containing Local Variable Array, Operand Stack, and Frame Data.\n   - PC Registers: Per-thread registers tracking current instruction offset.\n   - Native Method Stack: Executes native C/C++ libraries.\n3. Execution Engine: Interprets bytecode, JIT compiles hot code into native instructions, and executes Garbage Collection.",
+          "type": "Part B (9 Marks)"
+        },
+        {
+          "q": "Why is String immutable in Java? Explain String Constant Pool (SCP). (KTU Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "1. Immutability: Once created, character sequence of a String object cannot be altered. Concatenation creates a new object in memory.\n2. Security & Synchronization: Strings carry sensitive data (passwords, URLs, connection strings). Immutability guarantees they cannot be modified unexpectedly by untrusted code, and makes strings inherently thread-safe without synchronization locks.\n3. String Constant Pool (SCP): When string literals are created (e.g. \"Java\"), JVM caches them in SCP. Subsequent identical literals reuse the same reference, saving heap memory.",
+          "type": "Part A (3 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Inheritance, Polymorphism, Abstract Classes & Interfaces",
+      "topics": [
+        "Inheritance: Superclass & Subclass, Types of Inheritance (Single, Multilevel, Hierarchical)",
+        "The 'super' Keyword: Constructor Invocations & Hidden Member Access",
+        "Method Overriding & Dynamic Method Dispatch (Runtime Polymorphism)",
+        "The 'final' Keyword: Variables, Methods, Classes",
+        "Static Members & Static Blocks",
+        "Abstract Classes: Concept, Abstract Methods, Concrete Methods",
+        "Interfaces: Defining, Implementing, Multiple Inheritance via Interfaces"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Class Hierarchies & Code Reuse",
+          "description": "Extending abstractions through parent-child relationships",
+          "root": "Inheritance",
+          "branches": [
+            {
+              "node": "Subclassing",
+              "children": [
+                "extends keyword: Inherits public & protected members",
+                "super keyword: super(...) calls parent constructor, super.var accesses shadowed field"
+              ]
+            },
+            {
+              "node": "Extensibility Guards",
+              "children": [
+                "final variable: Constant",
+                "final method: Prevents overriding",
+                "final class: Prevents extension (e.g. String)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Polymorphism & Pure Abstraction",
+          "description": "Decoupling specification from concrete implementations",
+          "root": "Polymorphism & Contracts",
+          "branches": [
+            {
+              "node": "Dynamic Method Dispatch",
+              "children": [
+                "Method Overriding: Same signature in subclass",
+                "Runtime polymorphism: Superclass reference invokes subclass method at runtime"
+              ]
+            },
+            {
+              "node": "Abstract Contracts",
+              "children": [
+                "Abstract Class: Partial abstraction (can have state + constructors)",
+                "Interface: 100% abstract contract, supports multiple inheritance"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Polymorphism & Method Overloading",
+          "summary": "Compile-time polymorphism, rules of method overloading, passing/returning objects, and recursive methods.",
+          "key_points": [
+            "Method Overloading (Compile-Time / Static Polymorphism):\n- Occurs when two or more methods in the same class share the exact same method name but possess DIFFERENT parameter lists.\n- Rules for Valid Method Overloading: Parameter lists MUST differ in:\n  1. Number of parameters (e.g. `add(int, int)` vs `add(int, int, int)`).\n  2. Data types of parameters (e.g. `add(int, int)` vs `add(double, double)`).\n  3. Order of data types (e.g. `print(int, String)` vs `print(String, int)`).\n- CRITICAL RULE (KTU Exam Trap): Changing the return type alone DOES NOT overload a method and produces a compile-time error (`int add(int, int)` and `double add(int, int)` cannot coexist!).",
+            "Passing Objects to Methods & Object References:\n- In Java, all object arguments are passed by VALUE OF THE REFERENCE.\n- Modifying fields of the passed object through reference (`p.x = 50;`) permanently modifies the caller's object in heap memory.\n- Reassigning the reference itself (`p = new Point();`) within method does NOT affect caller reference.",
+            "Returning Objects from Methods:\nA method can construct a new object dynamically on Heap and return its reference: e.g. Factory methods, Complex number addition returning new `Complex` object."
+          ],
+          "code_or_formula": "Overloading = Same method name + Different parameter signature\nReturn type difference ALONE does not constitute valid overloading!",
+          "exam_tips": "KTU Part A: 'Can we overload a method by changing only its return type in Java? Justify your answer'."
+        },
+        {
+          "topic_title": "2. Static Members, Final Keyword & Inner Classes",
+          "summary": "Static variables and methods, static initialization blocks, final variables/methods/classes, and the 4 types of inner classes.",
+          "key_points": [
+            "Static Members (Class-Level Members):\n- `static` Variables: Memory is allocated only once in Method Area when class is loaded. Shared across all instances of the class. Accessed via class name: `ClassName.count`.\n- `static` Methods: Can be invoked without creating an instance: `Math.sqrt()`. Crucial Restrictions:\n  1. Can only directly call other static methods.\n  2. Can only directly access static data members.\n  3. Cannot use `this` or `super` keywords.\n- `static` Block: Executed exactly once when class is loaded by JVM, before constructor or `main()` executes.",
+            "The `final` Keyword (3 Usages):\n1. `final` Variable: Creates a constant value that cannot be reassigned once initialized: `final double PI = 3.14159;`.\n2. `final` Method: Cannot be overridden by any subclass, preventing modification of critical core algorithms.\n3. `final` Class: Cannot be subclassed / inherited (e.g., `java.lang.String` is final for security and immutability).",
+            "Inner Classes (Nested Classes in Java):\n1. Member Inner Class: Defined inside a class, outside methods. Has direct access to all outer class fields (including private). Requires outer class instance: `Outer.Inner in = outerObj.new Inner();`.\n2. Static Nested Class: Marked with `static`. Can access only static members of outer class. Instantiated without outer object: `Outer.Nested n = new Outer.Nested();`.\n3. Local Inner Class: Defined inside a method block. Can only access `final` or effectively final local variables of enclosing method.\n4. Anonymous Inner Class: A class without a name declared and instantiated in a single expression. Extends a class or implements an interface inline (heavily used in GUI event handling): `btn.addActionListener(new ActionListener() { ... });`."
+          ],
+          "code_or_formula": "Static: Shared memory, accessed via ClassName.member, no 'this'\nFinal: Variable = Constant | Method = No Override | Class = No Subclass",
+          "exam_tips": "KTU Part A: 'Explain the three usages of \"final\" keyword' and 'What are the restrictions on static methods in Java?'."
+        },
+        {
+          "topic_title": "3. Inheritance Hierarchies, 'super' Keyword & Constructor Execution Order",
+          "summary": "Subclassing via extends, single vs multilevel vs hierarchical inheritance, the super keyword, and constructor calling order.",
+          "key_points": [
+            "Inheritance Mechanics in Java:\n- Created using `extends` keyword: `class SubClass extends SuperClass { ... }`.\n- Types Supported in Java:\n  1. Single Inheritance: Class B extends Class A.\n  2. Multilevel Inheritance: Class C extends Class B, which extends Class A.\n  3. Hierarchical Inheritance: Class B and Class C both independently extend Class A.\n  - Note: Multiple inheritance with classes is strictly disallowed in Java to prevent the Diamond Problem ambiguity (resolved via Interfaces).",
+            "The `super` Keyword (3 Usages):\n1. Calling Superclass Constructor: `super(args);` (MUST be the absolute first statement in subclass constructor body).\n2. Calling Superclass Method: `super.display();` (used when subclass overrides method and wants to invoke parent implementation).\n3. Accessing Superclass Field: `super.variableName;` (resolves variable shadowing).",
+            "Constructor Calling Order in Inheritance (KTU Repeated Concept):\n- In an inheritance chain, constructors execute strictly in order of DERIVATION: from Base Class down to Derived Class.\n- Reason: Before subclass constructor body executes, it must invoke `super()` (either explicitly or implicitly inserted by the compiler as `super()`). Thus, the grandparent constructor runs first, then parent, then child."
+          ],
+          "code_or_formula": "Calling Order: Grandparent Constructor -> Parent Constructor -> Child Constructor\nsuper(args); // MUST be first statement in subclass constructor",
+          "exam_tips": "KTU Part A: 'What is the order of execution of constructors in multilevel inheritance? Explain with code output'."
+        },
+        {
+          "topic_title": "4. Method Overriding & Dynamic Method Dispatch (Runtime Polymorphism)",
+          "summary": "Overriding rules, covariant return types, Dynamic Method Dispatch mechanism, and achieving runtime polymorphism.",
+          "key_points": [
+            "Method Overriding Rules:\n- A subclass provides a specific implementation for a method already defined in its superclass.\n- Rules:\n  1. Must have identical method name and identical parameter signature.\n  2. Return type must be identical or a subtype (Covariant Return Type).\n  3. Cannot have a more restrictive access modifier (e.g. if superclass method is `protected`, subclass override must be `protected` or `public`).\n  4. `private`, `static`, and `final` methods CANNOT be overridden.",
+            "Dynamic Method Dispatch (Runtime Polymorphism - KTU Core Question):\n- Mechanism by which a call to an overridden method is resolved at RUNTIME rather than compile time.\n- Principle: A superclass reference variable can point to any subclass object:\n  `SuperClass ref = new SubClass();`\n- When an overridden method is invoked via `ref.show()`, the JVM determines which implementation to execute based upon the TYPE OF THE ACTUAL OBJECT referenced at runtime, NOT the type of the reference variable!\n- Java Code Demonstration:\n```java\nclass Shape { void draw() { System.out.println(\"Drawing Shape\"); } }\nclass Circle extends Shape { void draw() { System.out.println(\"Drawing Circle\"); } }\nclass Square extends Shape { void draw() { System.out.println(\"Drawing Square\"); } }\npublic class Test {\n    public static void main(String[] args) {\n        Shape s; // Superclass reference\n        s = new Circle(); s.draw(); // Prints \"Drawing Circle\"\n        s = new Square(); s.draw(); // Prints \"Drawing Square\"\n    }\n}\n```"
+          ],
+          "code_or_formula": "Dynamic Dispatch: SuperClass ref = new SubClass(); ref.overriddenMethod();\nResolved at runtime based on actual object heap instance",
+          "exam_tips": "KTU Part B 9-mark staple: 'Explain Dynamic Method Dispatch with a suitable Java program. How does it achieve runtime polymorphism?'."
+        },
+        {
+          "topic_title": "5. Abstract Classes vs Interfaces",
+          "summary": "Abstract classes and methods, pure abstraction, interface contracts, default/static methods, and exhaustive comparative table.",
+          "key_points": [
+            "Abstract Classes in Java:\n- Declared with `abstract` keyword. Represents an incomplete blueprint.\n- Cannot be directly instantiated using `new`.\n- Can contain both abstract methods (method signature with no body: `abstract void calculate();`) and concrete methods (methods with full implementation).\n- Can have instance variables, constructors, and static methods.\n- Subclasses extending an abstract class must either provide implementations for all abstract methods or declare themselves as `abstract`.",
+            "Interfaces in Java:\n- Declared with `interface` keyword. Represents a pure functional contract.\n- All fields are implicitly `public static final` (constants).\n- Prior to Java 8, all methods were implicitly `public abstract`.\n- In Java 8+, can include `default` methods (with fallback implementation) and `static` utility methods.\n- A class can implement multiple interfaces (`implements A, B`), solving multiple inheritance.",
+            "Comprehensive Comparison Table (KTU Mandatory Exam Table):\n| Feature | Abstract Class | Interface |\n|---|---|---|\n| Keyword | `abstract class` | `interface` |\n| Methods | Can have abstract and concrete methods | Abstract methods (and default/static in Java 8+) |\n| Fields | Can have instance variables of any access | Only `public static final` constants |\n| Multiple Inheritance | No - a class can extend only ONE class | Yes - a class can implement multiple interfaces |\n| Constructor | Can declare constructors (invoked by subclass) | Cannot declare constructors |\n| Speed | Faster method invocation | Slightly slower due to dynamic interface lookup |\n| Design Use | Best for code sharing among closely related classes (`IS-A`) | Best for defining shared contracts across unrelated classes (`CAN-DO`) |"
+          ],
+          "code_or_formula": "Abstract Class: abstract class A { abstract void run(); void sleep() { ... } }\nInterface: interface B { void fly(); } // implicitly public abstract",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Differentiate between an abstract class and an interface with respect to syntax, inheritance, and use cases'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which keyword is used to call a superclass constructor explicitly from a subclass constructor?",
+          "options": [
+            "this()",
+            "super()",
+            "parent()",
+            "base()"
+          ],
+          "ans": 1,
+          "explanation": "super() must be the first statement in a subclass constructor to invoke the superclass constructor."
+        },
+        {
+          "q": "What happens if a class attempts to inherit from a class declared with the 'final' keyword?",
+          "options": [
+            "The program throws a RuntimeException",
+            "The code fails to compile",
+            "The subclass overrides all methods automatically",
+            "Multiple inheritance is automatically enabled"
+          ],
+          "ans": 1,
+          "explanation": "Declaring a class as final explicitly prevents it from being extended, resulting in a compile-time error."
+        },
+        {
+          "q": "In Java Dynamic Method Dispatch, which entity determines which version of an overridden method is executed?",
+          "options": [
+            "The type of the reference variable at compile time",
+            "The type of the actual object being referenced at runtime",
+            "The order in which imports are declared",
+            "The return type of the method"
+          ],
+          "ans": 1,
+          "explanation": "Dynamic method dispatch evaluates the actual runtime object pointed to by the reference variable."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Explain Dynamic Method Dispatch with a suitable Java program. How does it achieve runtime polymorphism? (KTU Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "Dynamic Method Dispatch is the mechanism by which a call to an overridden method is resolved at RUNTIME based on the actual object instance referenced, rather than the reference type.\nProgram:\n```java\nclass Bank {\n    float getRate() { return 0.0f; }\n}\nclass SBI extends Bank {\n    float getRate() { return 7.5f; }\n}\nclass HDFC extends Bank {\n    float getRate() { return 8.2f; }\n}\npublic class TestBank {\n    public static void main(String[] args) {\n        Bank b; // Superclass reference variable\n        b = new SBI();\n        System.out.println(\"SBI Rate: \" + b.getRate()); // Prints 7.5\n        b = new HDFC();\n        System.out.println(\"HDFC Rate: \" + b.getRate()); // Prints 8.2\n    }\n}\n```\nExplanation: Even though reference `b` is of type `Bank`, the method executed is determined dynamically at runtime by the object instantiated (`new SBI()` or `new HDFC()`), achieving true runtime polymorphism.",
+          "type": "Part B (9 Marks)"
+        },
+        {
+          "q": "Differentiate between Abstract Class and Interface in Java with an example. (KTU Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "| Property | Abstract Class | Interface |\n|---|---|---|\n| Multiple Inheritance | Not supported (single class extension only) | Supported (can implement multiple interfaces) |\n| Method Implementation | Can have both abstract and fully implemented concrete methods | Only abstract methods (and default/static in Java 8+) |\n| Fields / Variables | Can declare instance variables of any access level | Only `public static final` constants |\n| Constructor | Can declare constructors invoked via `super()` | Cannot declare constructors |",
+          "type": "Part A (3 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Exception Handling, Multithreading & Packages",
+      "topics": [
+        "Exception Handling: Throwable Hierarchy, Checked vs Unchecked Exceptions",
+        "Keywords: try, catch, finally, throw, throws",
+        "User-Defined / Custom Exception Classes",
+        "Multithreading: Thread Concepts, Thread Lifecycle",
+        "Thread Creation: Extending Thread Class vs Implementing Runnable Interface",
+        "Thread Synchronization: Synchronized Methods & Synchronized Blocks",
+        "Inter-Thread Communication: wait(), notify(), notifyAll()",
+        "Packages: Defining, Importing, Access Protection Rules"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Exception Management",
+          "description": "Robust error handling framework preventing program crashes",
+          "root": "Throwable Hierarchy",
+          "branches": [
+            {
+              "node": "Exception Types",
+              "children": [
+                "Checked Exceptions (Compile-time verified: IOException, SQLException)",
+                "Unchecked Exceptions (Runtime: NullPointerException, ArithmeticException)"
+              ]
+            },
+            {
+              "node": "Control Blocks",
+              "children": [
+                "try-catch: Intercepts and handles errors gracefully",
+                "finally: Guaranteed execution block for resource cleanup",
+                "throw: Explicitly raises exception object",
+                "throws: Method declaration warning callers"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Concurrent Multithreading",
+          "description": "Concurrent thread execution and race condition synchronization",
+          "root": "Multithreading",
+          "branches": [
+            {
+              "node": "Thread Mechanisms",
+              "children": [
+                "Extending Thread vs Implementing Runnable interface",
+                "Lifecycle: New -> Runnable -> Running -> Blocked -> Dead"
+              ]
+            },
+            {
+              "node": "Thread Safety",
+              "children": [
+                "synchronized: Monitor locks preventing race conditions",
+                "Inter-thread comms: wait() releases lock, notify() wakes waiting thread"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Java Packages: Creation, CLASSPATH & Package Access Architecture",
+          "summary": "Defining packages, directory mappings, CLASSPATH environment variable, package importing, and avoiding naming collisions.",
+          "key_points": [
+            "Concept and Benefits of Packages:\n- A package in Java is a container grouping related classes, interfaces, and subpackages into a single namespace (hierarchical folder structure on disk).\n- Benefits:\n  1. Resolves Naming Conflicts: Two classes in different packages can share the identical name (e.g., `java.sql.Date` and `java.util.Date`).\n  2. Access Control: Provides package-level visibility (default/protected).\n  3. Modularity and Reusability: Easier distribution of components.",
+            "Defining & Creating Packages:\n- Declared as the absolute first non-comment statement in Java source file: `package mypack.graphics;`.\n- File must reside in corresponding directory path: `./mypack/graphics/Shape.java`.\n- Compiling with package hierarchy: `javac -d . Shape.java` (`-d` flag creates required subdirectories).",
+            "The CLASSPATH Environment Variable:\n- Tells the Java compiler and JVM where to search for user-defined classes and third-party JAR libraries.\n- Can be set as system environment variable or passed via command line: `java -classpath ./bin;./lib/mysql.jar mypack.Main`.",
+            "Importing Packages:\n1. Explicit Import: `import java.util.ArrayList;` (imports only specific class).\n2. Wildcard Import: `import java.util.*;` (imports all classes in package, does not import nested subpackages).\n3. Fully Qualified Class Name: `java.util.Scanner sc = new java.util.Scanner(System.in);` (no import statement needed)."
+          ],
+          "code_or_formula": "Package Definition: package com.ktu.study;\nCompile: javac -d . Source.java\nExecute: java com.ktu.study.Source",
+          "exam_tips": "KTU Part A 3-mark question: 'What is the purpose of packages in Java? Explain how CLASSPATH affects class loading'."
+        },
+        {
+          "topic_title": "2. Interface Architecture, Multiple Inheritance & Default Methods",
+          "summary": "Defining and implementing interfaces, multiple inheritance resolution, interface inheritance, and Java 8 default methods.",
+          "key_points": [
+            "Interface Mechanics:\n- Defined via `interface Printable { void print(); }`.\n- Implemented via `class Document implements Printable { public void print() { ... } }`.\n- Class MUST declare overridden interface methods with `public` modifier because interface methods are implicitly public, and reducing method visibility is illegal in Java.",
+            "Multiple Inheritance via Interfaces:\n- Java classes cannot extend multiple classes to avoid ambiguity (the Diamond Problem).\n- Multiple interfaces can be implemented simultaneously: `class SmartPhone implements Phone, Camera, GPS { ... }`.\n- Resolving Diamond Problem with Java 8 Default Methods: If two implemented interfaces provide identical default methods (`default void show()`), the implementing class MUST override the method explicitly and disambiguate: `InterfaceName.super.show();`.",
+            "Extending Interfaces:\nAn interface can extend one or more other interfaces using `extends`: `interface AdvancedPrintable extends Printable, Serializable { void format(); }`."
+          ],
+          "code_or_formula": "Multiple Inheritance: class C implements A, B { ... }\nDefault Method Disambiguation: A.super.show();",
+          "exam_tips": "KTU Part B: 'How does Java achieve multiple inheritance through interfaces? Write a Java program demonstrating multiple interface implementation'."
+        },
+        {
+          "topic_title": "3. Exception Handling Fundamentals: Checked vs Unchecked Exceptions",
+          "summary": "Throwable hierarchy, Checked (compile-time) vs Unchecked (runtime) exceptions, Error class, and exception propagation.",
+          "key_points": [
+            "Java Exception Hierarchy (KTU Diagram Question):\n- `java.lang.Throwable` (Root class)\n  1. `java.lang.Error`: Serious, irrecoverable JVM-level system failures (e.g. `OutOfMemoryError`, `StackOverflowError`, `VirtualMachineError`). Programs should NOT attempt to catch errors.\n  2. `java.lang.Exception`: Conditions that a reasonable application might want to catch.\n     a. Checked Exceptions (Subclasses of `Exception` EXCEPT `RuntimeException`):\n        - Checked by compiler at compile-time.\n        - Method MUST handle with `try-catch` or declare with `throws` clause, else code will NOT compile.\n        - Examples: `IOException`, `SQLException`, `ClassNotFoundException`, `FileNotFoundException`.\n     b. Unchecked Exceptions (Subclasses of `RuntimeException`):\n        - Occur at runtime due to programming bugs or faulty logic.\n        - Compiler does NOT enforce handling.\n        - Examples: `ArithmeticException` (division by 0), `NullPointerException`, `ArrayIndexOutOfBoundsException`, `IllegalArgumentException`.",
+            "Exception Propagation in Call Stack:\nWhen an exception is thrown in a method, JVM searches backwards down the call stack for an active `catch` block capable of handling that exception type. If none is found, JVM terminates the thread and prints the stack trace."
+          ],
+          "code_or_formula": "Throwable -> Exception (Checked: IOException) & RuntimeException (Unchecked: NullPointer) & Error",
+          "exam_tips": "KTU Part A 3-mark staple: 'Differentiate between Checked and Unchecked exceptions with two examples of each'."
+        },
+        {
+          "topic_title": "4. Exception Control Keywords: try, catch, finally, throw, throws & Custom Exceptions",
+          "summary": "Multiple catch blocks, nested try, guaranteed finally execution, throw vs throws, and creating custom user-defined exceptions.",
+          "key_points": [
+            "The 5 Exception Handling Keywords:\n1. `try`: Encloses code segment that might throw an exception.\n2. `catch`: Catches and handles specific exception type thrown from associated try block.\n3. `finally`: Block guaranteed to execute regardless of whether an exception occurred or was handled. Used for mandatory resource cleanup (`con.close()`, `file.close()`). Executes even if `try` or `catch` executes a `return` statement! (Only fails to execute if `System.exit(0)` is invoked or JVM crashes).\n4. `throw`: Used to explicitly throw an exception object inside code: `throw new ArithmeticException(\"Underflow\");`.\n5. `throws`: Method signature declaration stating that the method may pass an unhandled checked exception up the call stack to its caller: `void readFile() throws IOException { ... }`.",
+            "Multiple Catch Block Ordering Rule (KTU Common Error Trap):\n- A single `try` can have multiple `catch` blocks.\n- CRITICAL RULE: Subclass / Specialized exception handlers MUST PRECEDE superclass exception handlers! If `catch (Exception e)` is placed before `catch (ArithmeticException e)`, the compiler issues an 'unreachable catch block' error.",
+            "Custom (User-Defined) Exceptions:\n- Created by subclassing `Exception` (for checked) or `RuntimeException` (for unchecked):\n```java\nclass InvalidAgeException extends Exception {\n    public InvalidAgeException(String message) { super(message); }\n}\npublic class Test {\n    static void validate(int age) throws InvalidAgeException {\n        if (age < 18) throw new InvalidAgeException(\"Age must be >= 18\");\n    }\n}\n```"
+          ],
+          "code_or_formula": "throw = explicitly throw exception instance\nthrows = declare exceptions in method signature\nfinally = guaranteed cleanup execution",
+          "exam_tips": "KTU Part B 5/9-mark question: 'Explain throw vs throws with examples' and 'Write a Java program to create and handle a user-defined InvalidMarksException'."
+        },
+        {
+          "topic_title": "5. Java Design Patterns: Singleton & Adapter Patterns",
+          "summary": "Gang of Four design patterns, Singleton pattern implementation with double-checked locking, and Adapter pattern structural design.",
+          "key_points": [
+            "Design Patterns Overview:\nReusable, battle-tested architectural templates for solving recurring software design challenges.",
+            "Singleton Design Pattern (Creational Pattern):\n- Purpose: Guarantees that a class has EXACTLY ONE instance throughout application lifecycle, providing a single global access point to it (e.g. Database connection pool, Configuration manager, Logger).\n- Implementation Requirements:\n  1. `private` constructor to prevent external instantiation via `new`.\n  2. `private static` instance variable of the class.\n  3. `public static` factory method (e.g. `getInstance()`) that returns the unique instance.\n- Thread-Safe Double-Checked Locking Implementation:\n```java\npublic class DatabaseConnection {\n    private static volatile DatabaseConnection instance;\n    private DatabaseConnection() { /* Initialize DB */ }\n    public static DatabaseConnection getInstance() {\n        if (instance == null) {\n            synchronized (DatabaseConnection.class) {\n                if (instance == null) {\n                    instance = new DatabaseConnection();\n                }\n            }\n        }\n        return instance;\n    }\n}\n```",
+            "Adapter Design Pattern (Structural Pattern):\n- Purpose: Converts the interface of an existing class into another interface expected by clients, allowing classes with incompatible interfaces to work together seamlessly (acts like a physical plug adapter).\n- Structural Participants:\n  1. Target: Domain-specific interface that client uses.\n  2. Client: Interacts with Target interface.\n  3. Adaptee: Existing incompatible legacy class with valuable functionality.\n  4. Adapter: Implements Target interface and wraps/delegates calls to Adaptee instance."
+          ],
+          "code_or_formula": "Singleton: private constructor + private static instance + public static getInstance()\nAdapter: Implements Target interface while wrapping incompatible Adaptee",
+          "exam_tips": "KTU Part A 3-mark & Part B question: 'Explain the Singleton design pattern in Java with thread-safe implementation code' and 'Explain the Adapter design pattern with its structural components'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which statement about the 'finally' block in Java is TRUE?",
+          "options": [
+            "It only executes if an unhandled exception occurs",
+            "It executes regardless of whether an exception is thrown or caught",
+            "It requires a corresponding catch block",
+            "It executes before the try block starts"
+          ],
+          "ans": 1,
+          "explanation": "The finally block is designed for guaranteed resource cleanup and always executes unless System.exit() is called."
+        },
+        {
+          "q": "Why is implementing the Runnable interface preferred over extending the Thread class?",
+          "options": [
+            "Runnable threads execute twice as fast",
+            "Java does not support multiple inheritance of classes, so implementing Runnable preserves the single class inheritance option",
+            "Thread class is deprecated in modern Java",
+            "Runnable threads do not consume heap memory"
+          ],
+          "ans": 1,
+          "explanation": "Since Java allows implementing multiple interfaces but extending only one class, Runnable preserves class inheritance flexibility."
+        },
+        {
+          "q": "Which method releases the monitor lock on an object and causes the calling thread to wait until another thread notifies it?",
+          "options": [
+            "sleep()",
+            "yield()",
+            "wait()",
+            "join()"
+          ],
+          "ans": 2,
+          "explanation": "wait() releases the monitor lock and waits; sleep() pauses execution but retains all locks."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Differentiate between Checked and Unchecked Exceptions in Java with examples. (KTU Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "1. Checked Exceptions: Subclasses of `Exception` excluding `RuntimeException`. Checked by the Java compiler during compilation. The programmer MUST handle them using `try-catch` or declare them with `throws` clause, otherwise code will not compile. Examples: `IOException`, `SQLException`, `ClassNotFoundException`.\n2. Unchecked Exceptions: Subclasses of `RuntimeException`. Occur during runtime due to logic or algorithmic flaws (e.g. division by 0, null pointer access). Compiler does not mandate explicit handling. Examples: `ArithmeticException`, `NullPointerException`, `ArrayIndexOutOfBoundsException`.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Write a Java program to create and handle a user-defined InvalidBalanceException. (KTU Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "```java\nclass InvalidBalanceException extends Exception {\n    public InvalidBalanceException(String message) { super(message); }\n}\nclass BankAccount {\n    private double balance = 5000;\n    void withdraw(double amount) throws InvalidBalanceException {\n        if (amount > balance) throw new InvalidBalanceException(\"Insufficient funds!\");\n        balance -= amount;\n        System.out.println(\"Withdrawal successful. New balance: \" + balance);\n    }\n}\npublic class CustomExceptionDemo {\n    public static void main(String[] args) {\n        BankAccount acc = new BankAccount();\n        try {\n            acc.withdraw(7000);\n        } catch (InvalidBalanceException e) {\n            System.out.println(\"Caught Exception: \" + e.getMessage());\n        }\n    }\n}\n```",
+          "type": "Part B (5 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "File I/O, Generics & Collections Framework",
+      "topics": [
+        "Java I/O: Streams Concept, Byte Streams vs Character Streams",
+        "FileInputStream, FileOutputStream, FileReader, FileWriter",
+        "Generics: Generic Classes, Generic Methods, Type Parameters",
+        "Collections Framework Overview: Interfaces vs Classes Hierarchy",
+        "List Interface: ArrayList vs LinkedList vs Vector",
+        "Set Interface: HashSet vs LinkedHashSet vs TreeSet",
+        "Map Interface: HashMap vs TreeMap",
+        "Iterators: Iterator vs ListIterator"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Stream-Based File I/O",
+          "description": "Sequential byte and character pipelines for persistent storage",
+          "root": "I/O Streams",
+          "branches": [
+            {
+              "node": "Byte Streams (8-bit)",
+              "children": [
+                "InputStream / OutputStream root classes",
+                "FileInputStream / FileOutputStream (Raw binary / media)"
+              ]
+            },
+            {
+              "node": "Character Streams (16-bit)",
+              "children": [
+                "Reader / Writer root classes",
+                "FileReader / FileWriter (Unicode text processing)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Collections & Generics Framework",
+          "description": "Type-safe dynamic data structure architecture",
+          "root": "Collections",
+          "branches": [
+            {
+              "node": "Collection Hierarchy",
+              "children": [
+                "List: ArrayList (O(1) index read) vs LinkedList (O(1) insert)",
+                "Set: HashSet (Unordered, no duplicates) vs TreeSet (Sorted BST)"
+              ]
+            },
+            {
+              "node": "Key-Value & Generics",
+              "children": [
+                "Map: HashMap (O(1) hash bucket lookup) vs TreeMap (O(log N) red-black tree)",
+                "Generics: <T>, <K, V> compile-time type safety preventing ClassCastException"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. SOLID Design Principles in Java",
+          "summary": "Robert C. Martin's 5 core object-oriented architectural principles (S, O, L, I, D) with Java code demonstrations.",
+          "key_points": [
+            "SOLID Principles Overview:\nFive fundamental software engineering design principles introduced by Robert C. Martin (Uncle Bob) to create maintainable, understandable, flexible, and robust object-oriented codebases.",
+            "1. Single Responsibility Principle (SRP):\n- Rule: A class should have one, and only one, reason to change.\n- Violation: An `Employee` class containing business logic, database persistence (`saveToDB()`), and report printing (`printReport()`).\n- Solution: Decompose into `Employee`, `EmployeeRepository` (persistence), and `EmployeeReportGenerator` (reporting).",
+            "2. Open/Closed Principle (OCP):\n- Rule: Software entities (classes, modules, functions) should be OPEN for extension, but CLOSED for modification.\n- Implementation: Use abstraction and interfaces. Adding a new payment method should involve creating a new class implementing `PaymentMethod`, NOT modifying existing `if-else / switch` blocks in payment processor.",
+            "3. Liskov Substitution Principle (LSP):\n- Rule: Subtypes must be substitutable for their base types without altering program correctness.\n- Classic Violation: Square extending Rectangle. Changing Square's width alters height, breaking Rectangle contracts. Subclasses should strengthen, not weaken, parent preconditions.",
+            "4. Interface Segregation Principle (ISP):\n- Rule: Clients should not be forced to depend upon interfaces that they do not use (many small, client-specific interfaces are better than one bloated 'fat' interface).\n- Solution: Break a huge `Worker` interface having `work()`, `eat()`, `sleep()` into `Workable` and `Feedable` so automated robots don't have to implement `eat()`.",
+            "5. Dependency Inversion Principle (DIP):\n- Rule: High-level modules should not depend on low-level modules; both should depend on abstractions (interfaces). Abstractions should not depend on details; details should depend on abstractions.\n- Implementation: Invert dependencies via Dependency Injection (DI) constructor arguments rather than hardcoding `new MySQLDatabase()` inside `BusinessService`."
+          ],
+          "code_or_formula": "S - Single Responsibility | O - Open/Closed\nL - Liskov Substitution | I - Interface Segregation | D - Dependency Inversion",
+          "exam_tips": "KTU Part A 3-mark staple: 'State any two SOLID principles with examples'. Part B 9-mark staple: 'Explain all five SOLID principles in Java with neat class diagrams or code snippets'."
+        },
+        {
+          "topic_title": "2. Java Swing Architecture: AWT vs Swing & MVC Pattern",
+          "summary": "AWT heavyweight vs Swing lightweight components, container hierarchy, Swing packages, and the Model-View-Controller design.",
+          "key_points": [
+            "AWT vs Swing Comparison (KTU Mandatory Table Question):\n| Feature | Abstract Window Toolkit (AWT) | Java Swing |\n|---|---|---|\n| Architecture | Heavyweight: mapped directly to native OS peers | Lightweight: written 100% in pure Java, drawn on top of windows |\n| Platform Dependence | Platform-dependent appearance (looks native to each OS) | Platform-independent: uniform look across Windows, Linux, Mac |\n| Look and Feel | Fixed native look | Pluggable Look and Feel (Metal, Nimbus, Windows) |\n| Component Richness | Basic controls only (Button, List) | Rich advanced components (JTable, JTree, JTabbedPane) |\n| Execution Speed | Fast (native execution) | Slightly slower, but vastly superior GUI capabilities |\n| Package | `java.awt.*` | `javax.swing.*` |",
+            "Model-View-Controller (MVC) in Swing:\n- Model: Encapsulates component data/state (e.g. `ButtonModel`, `TableModel`).\n- View: Renders visual UI representation on screen.\n- Controller: Handles user interaction and translates input events into state updates.\n- In Swing, View and Controller are combined into a single Delegate component (Separable Model Architecture)."
+          ],
+          "code_or_formula": "AWT = Heavyweight (Native OS) | Swing = Lightweight (Pure Java, Pluggable Look & Feel)",
+          "exam_tips": "KTU Part A 3-mark question: 'Compare AWT and Swing components with respect to component weight and look-and-feel'."
+        },
+        {
+          "topic_title": "3. Swing GUI Components, Containers & Layout Managers",
+          "summary": "JFrame, JPanel, JButton, JTextField, JLabel, and FlowLayout, BorderLayout, GridLayout managers.",
+          "key_points": [
+            "Swing Component Hierarchy:\n- Top-Level Containers: Independent windows that can exist standalone on desktop: `JFrame` (main application window with title bar and close button), `JDialog`, `JApplet`.\n- Intermediate Containers: Group components inside windows: `JPanel`.\n- Atomic Controls: Interactive widgets: `JButton`, `JLabel`, `JTextField`, `JCheckBox`, `JRadioButton`.",
+            "Swing Layout Managers (Controls geometry and resizing of components):\n1. `FlowLayout`: Default for `JPanel`. Arranges components horizontally in a row from left to right; wraps to next row when line is filled.\n2. `BorderLayout`: Default for `JFrame`. Divides container into 5 discrete geographical regions: `NORTH, SOUTH, EAST, WEST, CENTER`. Each region holds at most one component.\n3. `GridLayout`: Arranges components in a rectangular 2D grid of equal-sized rows and columns (`new GridLayout(rows, cols)`). Resizes components equally.",
+            "Standard Swing Application Skeleton:\n```java\nimport javax.swing.*;\nimport java.awt.*;\npublic class SimpleGUI {\n    public static void main(String[] args) {\n        JFrame frame = new JFrame(\"KTU Study App\");\n        frame.setSize(300, 200);\n        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n        frame.setLayout(new FlowLayout());\n        JLabel label = new JLabel(\"Enter Name:\");\n        JTextField textField = new JTextField(15);\n        JButton button = new JButton(\"Submit\");\n        frame.add(label); frame.add(textField); frame.add(button);\n        frame.setVisible(true);\n    }\n}\n```"
+          ],
+          "code_or_formula": "BorderLayout: 5 regions (North, South, East, West, Center)\nGridLayout: Grid of equal size cells\nFlowLayout: Horizontal flow with row wrapping",
+          "exam_tips": "KTU Part A: 'Explain the role of layout managers in Java Swing with any two examples'."
+        },
+        {
+          "topic_title": "4. Java Delegation Event Model: Events, Sources & Listeners",
+          "summary": "Event-driven architecture, event sources, EventObject hierarchy, Listener interfaces, and anonymous class implementations.",
+          "key_points": [
+            "The Delegation Event Model Architecture:\nModern Java event handling employs a decoupled Publisher-Subscriber architecture consisting of three core participants:\n1. Event Source: The UI component that generates an event when user interacts with it (e.g. `JButton`, `JTextField`).\n2. Event Object: An object encapsulating the state and metadata of the occurrence (subclass of `java.util.EventObject`).\n3. Event Listener: An object containing callback handler methods registered with the event source to receive notifications.",
+            "Registration & Event Dispatch Workflow:\n1. Listener implements specific listener interface: e.g. `ActionListener`.\n2. Listener registers with source: `button.addActionListener(listenerObj);`.\n3. User triggers action (clicks button) $\\implies$ Source constructs `ActionEvent` and invokes `actionPerformed(e)` on all registered listeners.",
+            "Core Event Classes & Listener Interfaces:\n| Event Class | Generated By | Listener Interface | Key Callback Method |\n|---|---|---|---|\n| `ActionEvent` | Clicking JButton, hitting Enter in JTextField | `ActionListener` | `actionPerformed(ActionEvent e)` |\n| `MouseEvent` | Mouse clicks, movements, dragging | `MouseListener` / `MouseMotionListener` | `mouseClicked()`, `mousePressed()` |\n| `KeyEvent` | Key presses on keyboard | `KeyListener` | `keyPressed()`, `keyReleased()` |\n| `WindowEvent` | Minimizing, maximizing, closing window | `WindowListener` | `windowClosing()` |"
+          ],
+          "code_or_formula": "Registration: source.addActionListener(e -> System.out.println(\"Clicked!\"));",
+          "exam_tips": "KTU Part B 5-mark staple: 'Explain the Delegation Event Model in Java with neat diagram showing Source, Event, and Listener interactions'."
+        },
+        {
+          "topic_title": "5. Database Connectivity using JDBC: Architecture, Driver Types & CRUD Operations",
+          "summary": "Java Database Connectivity, 4 JDBC driver types, 5 mandatory connection steps, PreparedStatement, and CRUD operations.",
+          "key_points": [
+            "JDBC Architecture:\nJava Database Connectivity (JDBC) is a Java API that provides database-independent connectivity between Java applications and a wide range of relational databases (MySQL, Oracle, PostgreSQL).",
+            "4 Standard JDBC Driver Types:\n1. Type 1: JDBC-ODBC Bridge Driver (Translates JDBC calls to ODBC calls; requires native ODBC client installed; obsolete/deprecated).\n2. Type 2: Native-API / Partly Java Driver (Translates JDBC calls into client-side C/C++ DB client API calls; platform dependent).\n3. Type 3: Network-Protocol / Middleware Driver (Sends calls over network to intermediate middleware server which talks to DB; flexible).\n4. Type 4: Thin Driver / Direct-to-Database Pure Java Driver (100% pure Java driver that converts JDBC calls directly into native vendor database network protocol; HIGHEST PERFORMANCE, standard choice in modern apps).",
+            "The 5 Mandatory Steps for JDBC Connection (KTU Core Question):\n1. Register / Load the Driver Class:\n   `Class.forName(\"com.mysql.cj.jdbc.Driver\");`\n2. Establish Connection Object via `DriverManager`:\n   `Connection con = DriverManager.getConnection(\"jdbc:mysql://localhost:3306/ktudb\", \"root\", \"password\");`\n3. Create Statement / PreparedStatement Object:\n   `PreparedStatement pstmt = con.prepareStatement(\"INSERT INTO Student VALUES(?, ?, ?)\");`\n4. Execute SQL Query / Update:\n   - `ResultSet rs = stmt.executeQuery(\"SELECT * FROM Student\");` (For SELECT queries).\n   - `int count = stmt.executeUpdate(\"UPDATE ...\");` (For INSERT, UPDATE, DELETE).\n5. Process ResultSet & Close Resources:\n   `while (rs.next()) { System.out.println(rs.getInt(1) + rs.getString(2)); }`\n   `rs.close(); stmt.close(); con.close();`",
+            "Statement vs PreparedStatement:\n- `Statement`: SQL query is compiled every time it executes. Vulnerable to SQL Injection attacks.\n- `PreparedStatement`: SQL query is pre-compiled by the database engine once and executed repeatedly with dynamic parameters (`?`). Drastically faster execution for repeated queries and completely immunizes against SQL Injection!"
+          ],
+          "code_or_formula": "5 Steps: 1. Class.forName() | 2. DriverManager.getConnection() | 3. con.prepareStatement() | 4. executeQuery/Update() | 5. close()",
+          "exam_tips": "KTU Part B 9-mark guaranteed staple: 'Write the 5 mandatory steps to connect Java application with database using JDBC' and 'Differentiate Statement and PreparedStatement'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which Java Collections class provides O(1) random access retrieval by index but suffers from O(N) element insertion?",
+          "options": [
+            "LinkedList",
+            "ArrayList",
+            "TreeSet",
+            "Vector"
+          ],
+          "ans": 1,
+          "explanation": "ArrayList is backed by a contiguous array, allowing O(1) index computation, but insertions require shifting elements."
+        },
+        {
+          "q": "Which stream class hierarchy is specifically designed to handle 16-bit Unicode characters?",
+          "options": [
+            "InputStream & OutputStream",
+            "Reader & Writer",
+            "DataInputStream & DataOutputStream",
+            "FileStream & ByteStream"
+          ],
+          "ans": 1,
+          "explanation": "Reader and Writer abstract classes and their derivatives process 16-bit Unicode characters."
+        },
+        {
+          "q": "What is the primary benefit of using Generics like `List<String>` in Java?",
+          "options": [
+            "It increases execution speed by 10x",
+            "It provides compile-time type checking and eliminates explicit casting",
+            "It allows storing primitive types directly without wrapper classes",
+            "It enables multi-core threading"
+          ],
+          "ans": 1,
+          "explanation": "Generics enforce type safety at compile time, eliminating manual casting and preventing ClassCastException at runtime."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Write the 5 mandatory steps to connect a Java application to a database using JDBC with code snippets. (KTU Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "The 5 Core JDBC Steps:\n1. Load / Register Driver:\n   `Class.forName(\"com.mysql.cj.jdbc.Driver\");`\n2. Establish Connection Object:\n   `Connection con = DriverManager.getConnection(\"jdbc:mysql://localhost:3306/db\", \"user\", \"pass\");`\n3. Create Statement / PreparedStatement:\n   `PreparedStatement pstmt = con.prepareStatement(\"SELECT * FROM Students WHERE id = ?\");`\n   `pstmt.setInt(1, 101);`\n4. Execute SQL Statement:\n   `ResultSet rs = pstmt.executeQuery();`\n5. Process ResultSet & Clean up Resources:\n   `while (rs.next()) { System.out.println(rs.getString(\"name\")); }`\n   `rs.close(); pstmt.close(); con.close();`",
+          "type": "Part B (9 Marks)"
+        },
+        {
+          "q": "Explain the Delegation Event Model in Java GUI programming. (KTU Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "The Delegation Event Model decouples GUI event generation from event processing:\n1. Event Source: The UI widget (e.g. `JButton`) that triggers an event upon user interaction.\n2. Event Object: Encapsulates event information (e.g. `ActionEvent`).\n3. Event Listener: An interface (e.g. `ActionListener`) implemented by a handler class that registers with the source (`button.addActionListener(listener)`). When the action happens, the source delegates execution by invoking the listener's callback method (`actionPerformed`).",
+          "type": "Part A (3 Marks)"
+        }
+      ]
+    }
+  ]
+}

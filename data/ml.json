@@ -1,0 +1,740 @@
+{
+  "id": "ML",
+  "code": "PCAMT302",
+  "name": "Machine Learning - I",
+  "credits": 4,
+  "modules": [
+    {
+      "num": 1,
+      "title": "ML Paradigms & Parameter Estimation",
+      "topics": [
+        "Machine Learning Paradigms: Supervised, Unsupervised, Semi-Supervised, Reinforcement Learning",
+        "Parameter Estimation: Maximum Likelihood Estimation (MLE)",
+        "Maximum A Posteriori (MAP) Estimation",
+        "Bayes Estimation",
+        "Least Squares Estimation (OLS)",
+        "Minimum Mean Square Estimation (MMSE)",
+        "Gradient Descent Optimization: Batch, Stochastic (SGD), Mini-Batch"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Learning Paradigms",
+          "description": "Foundational taxonomy of learning from data vs experience",
+          "root": "ML Paradigms",
+          "branches": [
+            {
+              "node": "Supervised Learning",
+              "children": [
+                "Labeled data (X, y)",
+                "Classification (discrete) & Regression (continuous)"
+              ]
+            },
+            {
+              "node": "Unsupervised & RL",
+              "children": [
+                "Unsupervised: Unlabeled clustering & density estimation",
+                "Reinforcement: Agent, Environment, Reward, Policy"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Parameter Estimation Methods",
+          "description": "Techniques to deduce unknown distribution parameters from training observations",
+          "root": "Estimation Theory",
+          "branches": [
+            {
+              "node": "Likelihood vs Bayesian",
+              "children": [
+                "MLE: argmax P(Data|theta) (no prior belief)",
+                "MAP: argmax P(Data|theta)*P(theta) (includes prior)",
+                "Bayes Estimation: Full posterior expectation"
+              ]
+            },
+            {
+              "node": "Optimization Methods",
+              "children": [
+                "Least Squares (Closed-form normal equations)",
+                "Gradient Descent (Iterative update w := w - alpha * grad(J))",
+                "SGD (1 sample per step, breaks local minima)"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Machine Learning Paradigms & Problem Taxonomy",
+          "summary": "Core definitions, Tom Mitchell's learning criteria, Supervised vs Unsupervised vs Semi-Supervised vs Reinforcement Learning.",
+          "key_points": [
+            "Formal Definition of Learning (Tom Mitchell, 1997):\n'A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.'\n- Example (Spam Filtering): Task T = classifying emails as spam or not spam; Experience E = watching user label emails; Performance measure P = fraction of emails correctly classified.",
+            "4 Core Machine Learning Paradigms:\n1. Supervised Learning: Model is trained on labeled dataset $\\mathcal{D} = \\{(x_i, y_i)\\}_{i=1}^N$ containing input features $x_i \\in \\mathbb{R}^d$ and ground-truth targets $y_i$.\n   - Classification: Discrete target variable $y \\in \\{C_1, C_2, \\dots, C_k\\}$. Decision boundaries partition feature space (e.g., spam detection, medical diagnosis, image recognition).\n   - Regression: Continuous real-valued target $y \\in \\mathbb{R}$. Maps inputs to output curve/surface (e.g., house price forecasting, stock index estimation).\n2. Unsupervised Learning: Model is provided unlabeled dataset $\\mathcal{D} = \\{x_i\\}_{i=1}^N$ to discover underlying patterns, geometric groupings, or representations.\n   - Clustering: Grouping similar instances without supervision (K-Means, Hierarchical, DBSCAN).\n   - Dimensionality Reduction: Compressing feature space while preserving maximum variance (PCA, t-SNE, SVD).\n   - Density Estimation & Association Rules: Market basket analysis (Apriori), GMMs.\n3. Semi-Supervised Learning: Leverages a small quantity of labeled data alongside a large volume of inexpensive unlabeled data (e.g., pseudo-labeling, self-training, co-training). Reduces human annotation costs.\n4. Reinforcement Learning (RL): Goal-oriented learning through interaction with an external Environment via trial-and-error.\n   - Formalized as a Markov Decision Process (MDP): $(S, A, P, R, \\gamma)$.\n   - At each time step $t$, Agent observes State $s_t$, selects Action $a_t$ based on Policy $\\pi(a|s)$, receives scalar Reward $r_{t+1}$, and transitions to next State $s_{t+1}$.\n   - Objective: Maximize expected cumulative discounted return $G_t = \\sum_{k=0}^{\\infty} \\gamma^k r_{t+k+1}$ where $\\gamma \\in [0, 1)$ is the discount factor."
+          ],
+          "code_or_formula": "Tom Mitchell: Learning = T (Task), E (Experience), P (Performance)\nRL Cumulative Return: G_t = \\sum_{k=0}^{\\infty} \\gamma^k r_{t+k+1}",
+          "exam_tips": "KTU Part A 3-mark staple: 'Distinguish between Supervised learning and Reinforcement learning with examples' or 'Differentiate between Classification and Regression'."
+        },
+        {
+          "topic_title": "2. Maximum Likelihood Estimation (MLE) & Ordinary Least Squares (OLS)",
+          "summary": "Likelihood function, log-likelihood, derivation of parameter estimates, and Ordinary Least Squares normal equations.",
+          "key_points": [
+            "Maximum Likelihood Estimation (MLE) Principle:\n- Given observed i.i.d. dataset $\\mathcal{D} = \\{x_1, x_2, \\dots, x_N\\}$ drawn from probability distribution $P(x|\\theta)$, the Likelihood Function $L(\\theta; \\mathcal{D})$ is the joint probability of observing $\\mathcal{D}$ as a function of parameter vector $\\theta$:\n  $$L(\\theta; \\mathcal{D}) = \\prod_{i=1}^N P(x_i | \\theta)$$\n- Log-Likelihood Function: Products are numerically unstable and computationally difficult to differentiate. Because the natural logarithm is strictly monotonically increasing, maximizing $L(\\theta)$ is identical to maximizing $\\ln L(\\theta)$:\n  $$\\ell(\\theta) = \\ln L(\\theta; \\mathcal{D}) = \\sum_{i=1}^N \\ln P(x_i | \\theta)$$\n- MLE Estimator:\n  $$\\hat{\\theta}_{MLE} = \\arg\\max_{\\theta} \\ell(\\theta)$$\n  Found by solving the score equation: $\\nabla_\\theta \\ell(\\theta) = 0$.",
+            "Derivation of Gaussian MLE Parameters:\nFor 1D Gaussian $X \\sim \\mathcal{N}(\\mu, \\sigma^2)$:\n$$\\ell(\\mu, \\sigma^2) = -\\frac{N}{2}\\ln(2\\pi) - \\frac{N}{2}\\ln(\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^N (x_i - \\mu)^2$$\n1. Differentiating w.r.t $\\mu$: $\\frac{\\partial \\ell}{\\partial \\mu} = \\frac{1}{\\sigma^2}\\sum_{i=1}^N (x_i - \\mu) = 0 \\implies \\hat{\\mu}_{MLE} = \\frac{1}{N}\\sum_{i=1}^N x_i$ (Sample Mean).\n2. Differentiating w.r.t $\\sigma^2$: $\\frac{\\partial \\ell}{\\partial \\sigma^2} = -\\frac{N}{2\\sigma^2} + \\frac{1}{2(\\sigma^2)^2}\\sum_{i=1}^N (x_i - \\mu)^2 = 0 \\implies \\hat{\\sigma}^2_{MLE} = \\frac{1}{N}\\sum_{i=1}^N (x_i - \\hat{\\mu})^2$ (Biased sample variance).",
+            "Ordinary Least Squares (OLS) Estimation:\n- In Linear Regression $y = X\\theta + \\epsilon$, OLS minimizes the Sum of Squared Errors (SSE):\n  $$J(\\theta) = \\|y - X\\theta\\|^2 = (y - X\\theta)^T (y - X\\theta) = y^T y - 2\\theta^T X^T y + \\theta^T X^T X \\theta$$\n- Normal Equations Derivation: Taking derivative w.r.t $\\theta$ and equating to 0:\n  $$\\nabla_\\theta J(\\theta) = -2 X^T y + 2 X^T X \\theta = 0 \\implies X^T X \\theta = X^T y$$\n  $$\\hat{\\theta}_{OLS} = (X^T X)^{-1} X^T y$$\n- Equivalence Theorem: When errors $\\epsilon_i \\sim \\mathcal{N}(0, \\sigma^2)$ are Gaussian i.i.d., the OLS estimator is mathematically identical to the MLE estimator!"
+          ],
+          "code_or_formula": "MLE: \\hat{\\theta}_{MLE} = \\arg\\max_\\theta \\sum_{i=1}^N \\ln P(x_i | \\theta)\nOLS Normal Equation: \\hat{\\theta} = (X^T X)^{-1} X^T y",
+          "exam_tips": "KTU Part B 4/5-mark question: 'Describe the principle behind Maximum Likelihood Estimation (MLE) and derive the estimator for Gaussian mean' or 'Derive the normal equations for linear regression using matrix calculus'."
+        },
+        {
+          "topic_title": "3. Bayesian Parameter Estimation: MAP & MMSE",
+          "summary": "Bayes' theorem in parameter estimation, Maximum A Posteriori (MAP), Minimum Mean Square Estimation (MMSE), and loss functions.",
+          "key_points": [
+            "Frequentist vs Bayesian Philosophy:\n- Frequentist (MLE): Parameter $\\theta$ is an unknown, fixed, deterministic constant. Uncertainty is captured solely via sampling distributions.\n- Bayesian: Parameter $\\theta$ is treated as a random variable having its own prior probability distribution $P(\\theta)$, reflecting prior beliefs before observing data.",
+            "Bayes' Formula for Parameters:\n$$P(\\theta | \\mathcal{D}) = \\frac{P(\\mathcal{D} | \\theta) P(\\theta)}{P(\\mathcal{D})} = \\frac{P(\\mathcal{D} | \\theta) P(\\theta)}{\\int P(\\mathcal{D} | \\theta') P(\\theta') d\\theta'}$$\n- $P(\\theta)$: Prior probability distribution (prior domain knowledge).\n- $P(\\mathcal{D}|\\theta)$: Likelihood of observing data given $\\theta$.\n- $P(\\theta|\\mathcal{D})$: Posterior probability distribution (updated belief after seeing data).\n- $P(\\mathcal{D})$: Evidence (normalizing marginal constant).",
+            "Maximum A Posteriori (MAP) Estimation:\n- Selects the parameter vector that maximizes the posterior mode:\n  $$\\hat{\\theta}_{MAP} = \\arg\\max_\\theta P(\\theta | \\mathcal{D}) = \\arg\\max_\\theta [\\ln P(\\mathcal{D} | \\theta) + \\ln P(\\theta)]$$\n- Connection to Regularization: When prior $P(\\theta)$ is zero-mean Gaussian $\\mathcal{N}(0, \\tau^2 I)$, MAP estimation is mathematically equivalent to L2 Regularization (Ridge Regression). When prior is Laplace, MAP is equivalent to L1 Regularization (Lasso Regression)!\n- When prior is uniform (uninformative), $\\hat{\\theta}_{MAP} = \\hat{\\theta}_{MLE}$.",
+            "Minimum Mean Square Estimation (MMSE):\n- Objective: Find an estimator $\\hat{\\theta}(\\mathcal{D})$ that minimizes the Expected Mean Squared Error (Bayesian Risk under quadratic loss $L(\\theta, \\hat{\\theta}) = (\\theta - \\hat{\\theta})^2$):\n  $$\\text{BMS} = \\mathbb{E}_{\\theta, \\mathcal{D}} [(\\theta - \\hat{\\theta})^2] = \\int \\int (\\theta - \\hat{\\theta})^2 P(\\theta, \\mathcal{D}) d\\theta d\\mathcal{D}$$\n- The MMSE Estimator is strictly the Conditional Mean of the Posterior Distribution:\n  $$\\hat{\\theta}_{MMSE} = \\mathbb{E}[\\theta | \\mathcal{D}] = \\int \\theta P(\\theta | \\mathcal{D}) d\\theta$$\n- Comparison: MAP provides a single peak point estimate (mode); MMSE computes the posterior expectation (center of mass)."
+          ],
+          "code_or_formula": "MAP: \\hat{\\theta}_{MAP} = \\arg\\max_\\theta [\\ln P(D|\\theta) + \\ln P(\\theta)]\nMMSE: \\hat{\\theta}_{MMSE} = \\mathbb{E}[\\theta | D] = \\int \\theta P(\\theta|D) d\\theta",
+          "exam_tips": "KTU Part A/B questions: 'Define MMSE and explain its objective in parameter estimation in an ML context' and 'Compare MLE, MAP, and MMSE estimators'."
+        },
+        {
+          "topic_title": "4. Optimization in ML: Gradient Descent (Batch, Stochastic & Mini-Batch)",
+          "summary": "First-order iterative optimization, learning rates, Batch GD vs SGD vs Mini-Batch GD mechanics, convergence, and oscillation.",
+          "key_points": [
+            "Gradient Descent (GD) Fundamentals:\n- An iterative first-order optimization algorithm to find a local (or global in convex problems) minimum of an objective loss function $J(\\theta)$.\n- Update Equation:\n  $$\\theta^{(t+1)} = \\theta^{(t)} - \\eta \\nabla_\\theta J(\\theta^{(t)})$$\n  where $\\eta > 0$ is the Learning Rate / step size, and $\\nabla_\\theta J(\\theta)$ is the vector of partial derivatives pointing in the direction of steepest ascent.",
+            "Batch Gradient Descent (BGD):\n- Calculates the gradient of the loss over the ENTIRE training set of size $N$ in each step:\n  $$\\nabla_\\theta J(\\theta) = \\frac{1}{N} \\sum_{i=1}^N \\nabla_\\theta L(h_\\theta(x_i), y_i)$$\n- Pros: Stable, smooth convergence along true gradient path directly towards minimum; guaranteed convergence to global minimum for convex loss surfaces.\n- Cons: Computationally disastrous for large datasets ($O(N)$ operations per update); memory-intensive; cannot be trained online.",
+            "Stochastic Gradient Descent (SGD):\n- Updates model parameters immediately for EACH individual training example $(x_i, y_i)$ sampled sequentially or randomly:\n  $$\\theta^{(t+1)} = \\theta^{(t)} - \\eta \\nabla_\\theta L(h_\\theta(x_i), y_i)$$\n- Pros: Extremely fast per iteration $O(1)$; memory efficient; erratic noisy trajectory helps jump out of shallow local minima and saddle points; enables online/streaming learning.\n- Cons: High variance updates cause wild oscillations; never strictly settles at the global minimum (wanders around it unless learning rate is decayed).",
+            "Mini-Batch Gradient Descent (Standard Deep Learning Practice):\n- Computes gradient over small random subsets (mini-batches) of size $B$ (typically $B \\in \\{32, 64, 128, 256\\}$):\n  $$\\theta^{(t+1)} = \\theta^{(t)} - \\frac{\\eta}{B} \\sum_{i=1}^B \\nabla_\\theta L(h_\\theta(x_i), y_i)$$\n- Balances smooth convergence of BGD with high throughput and vectorization efficiency of modern hardware (GPUs/TPUs).",
+            "Critical Learning Rate Hyperparameter $\\eta$ Effects:\n- $\\eta$ too small: Glacially slow convergence, traps in poor local minima.\n- $\\eta$ too large: Overshoots minimum, oscillates wildly, may diverge ($J(\\theta) \\to \\infty$)."
+          ],
+          "code_or_formula": "Batch GD: \\theta := \\theta - \\eta (1/N) \\sum_{i=1}^N \\nabla L_i\nSGD: \\theta := \\theta - \\eta \\nabla L_i (Per single sample)\nMini-Batch GD: \\theta := \\theta - \\eta (1/B) \\sum_{i=1}^B \\nabla L_i",
+          "exam_tips": "KTU Part B 4-mark staple: 'Differentiate between Batch gradient descent and Stochastic gradient descent with convergence curves and update equations'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What distinguishes Maximum A Posteriori (MAP) estimation from Maximum Likelihood Estimation (MLE)?",
+          "options": [
+            "MAP does not use training data",
+            "MAP incorporates a prior probability distribution over the parameters",
+            "MAP is only applicable to unsupervised learning",
+            "MLE minimizes mean squared error while MAP maximizes accuracy"
+          ],
+          "ans": 1,
+          "explanation": "MAP maximizes the posterior probability P(theta|Data), which incorporates both data likelihood and parameter prior P(theta)."
+        },
+        {
+          "q": "Which gradient descent variant updates model parameters using only a single training instance at each iteration?",
+          "options": [
+            "Batch Gradient Descent",
+            "Stochastic Gradient Descent (SGD)",
+            "Mini-Batch Gradient Descent",
+            "Newton-Raphson Optimization"
+          ],
+          "ans": 1,
+          "explanation": "SGD updates weights per single sample, introducing stochastic fluctuations that can escape local minima."
+        },
+        {
+          "q": "In which learning paradigm does an agent learn optimal behavior via rewards and penalties?",
+          "options": [
+            "Supervised Learning",
+            "Unsupervised Learning",
+            "Reinforcement Learning",
+            "Semi-Supervised Learning"
+          ],
+          "ans": 2,
+          "explanation": "Reinforcement Learning relies on feedback in the form of rewards from an environment to optimize actions."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Distinguish between Supervised learning and Reinforcement learning. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "1. Feedback Mechanism: Supervised learning learns from explicit ground-truth target labels y for every training sample (error = y - h(x)). Reinforcement learning receives evaluative scalar rewards r (or penalties) through interaction with an environment.\n2. Data Nature: Supervised learning uses static i.i.d. datasets (x_i, y_i). RL operates in dynamic sequential environments where current action a_t impacts future states s_{t+1}.\n3. Objective: Supervised minimizes loss between prediction and true label; RL maximizes expected cumulative discounted reward G_t = sum(gamma^k * r_{t+k+1}).",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Describe the principle behind Maximum Likelihood Estimation (MLE) and write the log-likelihood formulation. (KTU Model Paper, Part B - 4 Marks)",
+          "marks": 4,
+          "sol": "Principle: Given observed i.i.d. dataset D = {x_1, ..., x_N} sampled from distribution P(x|theta), MLE selects the parameter vector theta that maximizes the probability of observing the collected data.\nLikelihood: L(theta; D) = product_{i=1}^N P(x_i | theta).\nLog-Likelihood: Because log is strictly monotonic, maximizing L is equivalent to maximizing:\nell(theta) = ln L(theta; D) = sum_{i=1}^N ln P(x_i | theta).\nOptimal estimate is found by setting score gradient to zero: grad_theta ell(theta) = 0.",
+          "type": "Part B (4 Marks)"
+        },
+        {
+          "q": "Define MMSE and explain its objective in parameter estimation within a machine learning context. (KTU Model Paper, Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "Definition: Minimum Mean Square Estimation (MMSE) is a Bayesian parameter estimation technique that finds an estimator theta_hat that minimizes the expected quadratic risk / mean squared error: E[(theta - theta_hat)^2].\nObjective: Unlike MLE and MAP which seek mode point estimates, MMSE calculates the Conditional Expectation (mean) of the parameter given the observed data:\ntheta_hat_MMSE = E[theta | D] = integral theta * P(theta | D) d_theta.\nIt incorporates both prior knowledge P(theta) and observation likelihood, providing an estimate that minimizes variance of estimation error.",
+          "type": "Part B (5 Marks)"
+        },
+        {
+          "q": "Differentiate between Batch Gradient Descent and Stochastic Gradient Descent (SGD). (KTU Model Paper, Part B - 4 Marks)",
+          "marks": 4,
+          "sol": "| Feature | Batch Gradient Descent (BGD) | Stochastic Gradient Descent (SGD) |\n|---|---|---|\n| Update Frequency | Once per epoch using all N training samples | Once per individual training instance (x_i, y_i) |\n| Cost per Step | O(N * d) - computationally heavy for large N | O(d) - extremely fast and lightweight |\n| Convergence Trajectory | Smooth, monotonic descent directly toward minimum | Noisy, zigzagging trajectory |\n| Local Minima | Prone to getting stuck in shallow local minima/saddle points | Fluctuations help jump out of suboptimal local minima |\n| Memory Requirement | High - full dataset must be loaded | Low - single sample in memory at any instant |",
+          "type": "Part B (4 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Regression, Decision Trees & Model Regularization",
+      "topics": [
+        "Simple & Multivariable Linear Regression",
+        "Polynomial Regression & Overfitting",
+        "Logistic Regression & Sigmoid Function",
+        "Decision Trees: Concept, Root Selection",
+        "ID3 Algorithm: Entropy & Information Gain",
+        "CART Algorithm: Gini Impurity",
+        "Bias-Variance Tradeoff",
+        "Regularization Techniques: Ridge (L2), Lasso (L1), Elastic Net"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Supervised Regression & Trees",
+          "description": "Continuous function approximation and rule-based decision partitions",
+          "root": "Supervised Models",
+          "branches": [
+            {
+              "node": "Linear & Logistic Models",
+              "children": [
+                "Linear Regression: y = wX + b (MSE loss)",
+                "Logistic Regression: P = 1/(1+e^-z) (Binary classification)"
+              ]
+            },
+            {
+              "node": "Decision Trees",
+              "children": [
+                "ID3: Maximizes Information Gain = H(S) - H(S, A)",
+                "CART: Minimizes Gini Impurity = 1 - sum(p_i^2)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Generalization & Model Tuning",
+          "description": "Controlling model complexity to balance underfitting and overfitting",
+          "root": "Generalization",
+          "branches": [
+            {
+              "node": "Bias-Variance Decomposition",
+              "children": [
+                "High Bias (Underfitting): Model too simple, misses trends",
+                "High Variance (Overfitting): Model too complex, captures noise"
+              ]
+            },
+            {
+              "node": "Regularization Penalties",
+              "children": [
+                "Lasso L1: lambda * sum(|w|) -> Sparse weights / Feature selection",
+                "Ridge L2: lambda * sum(w^2) -> Shrinks weights smoothly",
+                "Elastic Net: Combines L1 + L2 penalties"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Linear & Polynomial Regression Models",
+          "summary": "Hypothesis function, cost functions (MSE/SSE), analytical solution vs gradient descent updates, and polynomial feature expansion.",
+          "key_points": [
+            "Linear Regression Formulation:\n- Hypothesis: $h_\\theta(x) = \\theta_0 + \\theta_1 x_1 + \\dots + \\theta_d x_d = \\theta^T x$ (where $x_0 = 1$ is bias).\n- Mean Squared Error (MSE) Cost Function:\n  $$J(\\theta) = \\frac{1}{2N} \\sum_{i=1}^N (h_\\theta(x_i) - y_i)^2$$\n- Gradient Calculation:\n  $$\\frac{\\partial J}{\\partial \\theta_j} = \\frac{1}{N} \\sum_{i=1}^N (h_\\theta(x_i) - y_i) x_{i, j}$$\n- Gradient Descent Update Rule:\n  $$\\theta_j := \\theta_j - \\eta \\frac{1}{N} \\sum_{i=1}^N (h_\\theta(x_i) - y_i) x_{i, j}$$",
+            "Polynomial Regression:\n- Models non-linear relationships between independent variable $x$ and dependent variable $y$ as an $m$-th degree polynomial:\n  $$y = \\theta_0 + \\theta_1 x + \\theta_2 x^2 + \\dots + \\theta_m x^m + \\epsilon$$\n- Still considered a Linear Model because it is strictly linear in parameters $\\theta$, even though non-linear in features $x$.\n- High degree polynomials ($m \\gg 1$) cause catastrophic overfitting: the curve passes through every training point (zero training error) but fluctuates violently between points, leading to massive test error."
+          ],
+          "code_or_formula": "Hypothesis: h_\\theta(x) = \\theta^T x\nMSE Loss: J(\\theta) = \\frac{1}{2N} \\sum (h_\\theta(x_i) - y_i)^2\nNormal Equations: \\theta = (X^T X)^{-1} X^T y",
+          "exam_tips": "KTU Part A: 'Why is polynomial regression termed a linear model?' and 'Write the closed-form normal equation for multivariable linear regression'."
+        },
+        {
+          "topic_title": "2. Logistic Regression & Binary Classification",
+          "summary": "Sigmoid activation, odds ratio, logit function, binary cross-entropy loss, decision boundaries, and gradient update.",
+          "key_points": [
+            "Why Linear Regression Fails for Classification:\nLinear regression outputs unbounded predictions $\\hat{y} \\in (-\\infty, +\\infty)$, which cannot be interpreted as valid probabilities $P(Y=1|X) \\in [0, 1]$. Additionally, extreme outliers heavily distort linear decision boundaries.",
+            "Logistic / Sigmoid Function Formulation:\n- Maps any real value $z \\in (-\\infty, +\\infty)$ to probability interval $(0, 1)$:\n  $$\\sigma(z) = \\frac{1}{1 + e^{-z}}$$\n- Hypothesis: $P(y = 1 | x; \\theta) = h_\\theta(x) = \\sigma(\\theta^T x) = \\frac{1}{1 + e^{-\\theta^T x}}$.\n- Derivative Property (Crucial for Backpropagation):\n  $$\\frac{d\\sigma(z)}{dz} = \\sigma(z)(1 - \\sigma(z))$$\n- Logit & Odds Ratio: $\\text{Odds} = \\frac{P}{1 - P} = e^{\\theta^T x} \\implies \\ln\\left(\\frac{P}{1 - P}\\right) = \\theta^T x$ (Log-odds is linear in $x$).",
+            "Binary Cross-Entropy Loss (Log-Loss):\n- Derived via Maximum Likelihood Estimation on Bernoulli targets $y \\in \\{0, 1\\}$:\n  $$P(y|x; \\theta) = (h_\\theta(x))^y (1 - h_\\theta(x))^{1 - y}$$\n  $$J(\\theta) = -\\frac{1}{N} \\sum_{i=1}^N \\left[ y_i \\ln(h_\\theta(x_i)) + (1 - y_i) \\ln(1 - h_\\theta(x_i)) \\right]$$\n- Convexity: Unlike MSE with sigmoid which is non-convex with numerous local minima, Binary Cross-Entropy is strictly convex, guaranteeing convergence to the global minimum via Gradient Descent.\n- Gradient Descent Update: Looks identical to linear regression, but $h_\\theta(x)$ is sigmoid:\n  $$\\theta_j := \\theta_j - \\eta \\frac{1}{N} \\sum_{i=1}^N (\\sigma(\\theta^T x_i) - y_i) x_{i, j}$$"
+          ],
+          "code_or_formula": "Sigmoid: \\sigma(z) = \\frac{1}{1 + e^{-z}}\nCross-Entropy Loss: J(\\theta) = -\\frac{1}{N} \\sum [y \\ln \\hat{y} + (1-y)\\ln(1-\\hat{y})]\nDecision Threshold: \\hat{y} >= 0.5 \\iff \\theta^T x >= 0",
+          "exam_tips": "KTU Part A: 'Why can't we use Mean Squared Error as the loss function in Logistic Regression?' (Answer: non-convex cost surface with local minima). Part B: 'Derive the gradient of logistic regression loss'."
+        },
+        {
+          "topic_title": "3. Decision Trees: Representation, ID3 Algorithm & CART Impurity Measures",
+          "summary": "Tree structures, Entropy, Information Gain, ID3 attribute selection, Gini Impurity in CART, and full numerical computation.",
+          "key_points": [
+            "Decision Tree Representation:\n- Non-parametric hierarchical model where internal nodes represent tests on attribute values, branches represent test outcomes, and leaf nodes represent predicted class labels (or regression values).",
+            "ID3 Algorithm (Iterative Dichotomiser 3) by Ross Quinlan:\n- Employs a top-down, greedy heuristic search through the hypothesis space of trees.\n- Core Metric 1: Shannon Entropy (measure of impurity/randomness of set $S$ with $c$ classes):\n  $$H(S) = -\\sum_{i=1}^c p_i \\log_2 p_i$$\n  where $p_i$ is the proportion of examples belonging to class $i$. If all examples belong to one class (pure set), $H(S) = 0$. If classes are evenly split (maximum impurity), $H(S) = 1$.\n- Core Metric 2: Information Gain (expected reduction in entropy by partitioning on attribute $A$):\n  $$Gain(S, A) = H(S) - \\sum_{v \\in \\text{Values}(A)} \\frac{|S_v|}{|S|} H(S_v)$$\n- Attribute Selection Criterion: At each step, choose the attribute that yields the MAXIMAL Information Gain.",
+            "CART Algorithm (Classification and Regression Trees) & Gini Impurity:\n- Produces strictly binary decision trees.\n- Gini Impurity Criterion:\n  $$Gini(S) = 1 - \\sum_{i=1}^c p_i^2$$\n  For pure node $Gini(S) = 0$. For binary equal split $Gini(S) = 1 - (0.5^2 + 0.5^2) = 0.5$.\n- Gini Gain: $\\Delta Gini(S, A) = Gini(S) - \\sum_{v} \\frac{|S_v|}{|S|} Gini(S_v)$. CART picks split maximizing Gini Gain.",
+            "ID3 vs CART Comparison:\n- ID3: Multi-way branch splits, uses Information Gain, cannot handle continuous attributes or missing values directly, categorical only.\n- C4.5: Extension of ID3, uses Gain Ratio to penalize attributes with many distinct values ($GainRatio = Gain / SplitInfo$), handles continuous data and pruning.\n- CART: Strictly binary splits, uses Gini Impurity (classification) or variance reduction (regression)."
+          ],
+          "code_or_formula": "Entropy: H(S) = -\\sum p_i \\log_2 p_i\nInfo Gain: Gain(S, A) = H(S) - \\sum (|S_v|/|S|) H(S_v)\nGini Impurity: Gini(S) = 1 - \\sum p_i^2",
+          "exam_tips": "KTU Part B 9-mark guaranteed staple: 'Calculate Entropy and Information Gain for given dataset (Play Cricket/Tennis) and determine the root attribute for the decision tree using ID3 algorithm'."
+        },
+        {
+          "topic_title": "4. Overfitting in Decision Trees, Pruning & Bias-Variance Decomposition",
+          "summary": "Mechanisms causing tree overfitting, Pre-pruning vs Post-pruning, Reduced Error Pruning, and Bias-Variance tradeoff decomposition.",
+          "key_points": [
+            "Why Decision Trees Overfit:\nIf grown without constraint, a decision tree will continue branching until every single training example is isolated into its own leaf node ($H(S_{leaf}) = 0$). The tree memorizes statistical noise, outliers, and idiosyncratic data quirks, resulting in zero training error but disastrous test error.",
+            "Overcoming Overfitting: Tree Pruning Techniques:\n1. Pre-Pruning (Early Stopping):\n   Halt tree expansion during construction if a stopping condition is met:\n   - Maximum tree depth reached (`max_depth`).\n   - Node sample count falls below threshold (`min_samples_split` or `min_samples_leaf`).\n   - Information gain from splitting is below threshold $\\epsilon$.\n   - Cons: Prone to 'horizon effect' (stopping too early might miss a split that leads to a great subsequent split).\n2. Post-Pruning (Cost-Complexity / Reduced-Error Pruning):\n   Grow the full unconstrained tree $T_0$, then systematically prune subtrees back upwards.\n   - Reduced Error Pruning: Using a validation set, consider collapsing each internal node into a leaf assigned the majority class. If pruning doesn't hurt validation accuracy, permanently prune it.\n   - Cost-Complexity Pruning ($C_\\alpha(T) = R(T) + \\alpha |T|$): Penalizes tree size $|T|$ with complexity parameter $\\alpha$.",
+            "The Bias-Variance Tradeoff Decomposition:\nFor an estimator $\\hat{f}(x)$ on target $y = f(x) + \\epsilon$ with noise $\\epsilon \\sim \\mathcal{N}(0, \\sigma^2)$:\n$$\\mathbb{E}\\left[ (y - \\hat{f}(x))^2 \\right] = \\text{Bias}[\\hat{f}(x)]^2 + \\text{Var}[\\hat{f}(x)] + \\sigma^2$$\n- $\\text{Bias}[\\hat{f}(x)] = \\mathbb{E}[\\hat{f}(x)] - f(x)$: Error introduced by simplifying assumptions. High Bias $\\implies$ Underfitting (model fails to capture underlying trends, e.g. linear model on quadratic data).\n- $\\text{Var}[\\hat{f}(x)] = \\mathbb{E}[(\\hat{f}(x) - \\mathbb{E}[\\hat{f}(x)])^2]$: Sensitivity of model to specific training set variations. High Variance $\\implies$ Overfitting (model captures noise).\n- $\\sigma^2$: Irreducible Bayes error (inherent measurement noise)."
+          ],
+          "code_or_formula": "Expected Test Error = Bias^2 + Variance + Irreducible Error\nPre-pruning = Early stopping during growth\nPost-pruning = Pruning nodes after full tree construction",
+          "exam_tips": "KTU Part A 3-mark questions: 'Discuss the issues in decision tree learning and explain how to overcome them' and 'Define Bias-Variance tradeoff with mathematical formulation'."
+        },
+        {
+          "topic_title": "5. Model Regularization: Ridge (L2), Lasso (L1) & Elastic Net",
+          "summary": "Combating multicollinearity and overfitting via penalty terms, geometric interpretation of L1 sparsity vs L2 weight shrinkage.",
+          "key_points": [
+            "Regularization Concept:\nRegularization introduces a penalty term to the loss function that discourages complex models by shrinking regression coefficients $\\theta$ towards zero, directly reducing model variance at the cost of a small increase in bias.",
+            "Ridge Regression (L2 Regularization):\n- Objective Function: Adds sum of squared weights penalty:\n  $$J_{Ridge}(\\theta) = \\frac{1}{2N} \\sum_{i=1}^N (y_i - \\theta^T x_i)^2 + \\frac{\\lambda}{2} \\sum_{j=1}^d \\theta_j^2$$\n- Closed-Form Analytical Solution:\n  $$\\hat{\\theta}_{Ridge} = (X^T X + \\lambda I)^{-1} X^T y$$\n- Properties:\n  * Even when $X^T X$ is singular / non-invertible due to multicollinearity or $d > N$, $(X^T X + \\lambda I)$ is strictly invertible!\n  * Shrinks coefficients close to zero but NEVER sets them exactly to zero. Retains all features.",
+            "Lasso Regression (L1 Regularization - Least Absolute Shrinkage and Selection Operator):\n- Objective Function: Adds sum of absolute weights penalty:\n  $$J_{Lasso}(\\theta) = \\frac{1}{2N} \\sum_{i=1}^N (y_i - \\theta^T x_i)^2 + \\lambda \\sum_{j=1}^d |\\theta_j|$$\n- Feature Selection / Sparsity Property:\n  * Drives unimportant feature weights strictly to EXACT ZERO.\n  * Performs automatic feature selection, producing sparse, interpretable models.",
+            "Geometric Interpretation (Why Lasso Sets Weights to Zero):\n- In 2D weight space $(\\theta_1, \\theta_2)$:\n  * Ridge constraint region is a smooth hypersphere / circle ($\\theta_1^2 + \\theta_2^2 \\le t$). Contours of MSE loss touch the circle along smooth edges, rarely on coordinate axes.\n  * Lasso constraint region is a diamond / hypercube with sharp corners on axes ($|\\theta_1| + |\\theta_2| \\le t$). Elliptical MSE loss contours typically intersect the constraint region at one of its sharp corners on a coordinate axis where one or more weights are exactly zero!",
+            "Elastic Net:\nCombines both penalties: $J(\\theta) = MSE + r \\lambda \\|\\theta\\|_1 + \\frac{1-r}{2} \\lambda \\|\\theta\\|_2^2$. Excels when features are highly correlated in groups."
+          ],
+          "code_or_formula": "Ridge (L2): J(\\theta) = MSE + \\lambda \\sum \\theta_j^2 -> Shrinks weights, handles multicollinearity\nLasso (L1): J(\\theta) = MSE + \\lambda \\sum |\\theta_j| -> Produces sparse weights (Feature selection)",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'Distinguish between Ridge (L2) and Lasso (L1) regularization' and 'Explain geometrically why Lasso produces sparse models'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What is the primary reason Lasso (L1) regularization creates sparse models with zero coefficients?",
+          "options": [
+            "It uses gradient ascent instead of descent",
+            "Its constraint region has sharp corners that intersect coordinate axes",
+            "It only works with binary classification",
+            "It penalizes the bias term instead of weights"
+          ],
+          "ans": 1,
+          "explanation": "The diamond-shaped L1 ball has sharp corners on axes. Elliptical loss contours frequently hit these corners first, driving coefficients to exact zero."
+        },
+        {
+          "q": "Which criterion is utilized by the CART decision tree algorithm to evaluate node splits?",
+          "options": [
+            "Information Gain",
+            "Entropy",
+            "Gini Impurity",
+            "Chi-Square Test"
+          ],
+          "ans": 2,
+          "explanation": "CART (Classification and Regression Trees) uses Gini Impurity for classification and Variance Reduction for regression."
+        },
+        {
+          "q": "A machine learning model that exhibits low training error but high test error is suffering from:",
+          "options": [
+            "High Bias (Underfitting)",
+            "High Variance (Overfitting)",
+            "Low Variance and Low Bias",
+            "Under-parameterization"
+          ],
+          "ans": 1,
+          "explanation": "High training accuracy coupled with poor validation performance is the hallmark of overfitting (high variance)."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Discuss the issues in Decision tree learning and explain how to overcome them. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Issues in Decision Tree Learning:\n1. Overfitting: Trees grow until all leaves are pure, capturing statistical noise and outliers, resulting in poor test generalization.\n2. High Variance: Minor changes in training data can lead to a completely different tree topology.\n3. Continuous Feature & Missing Value Handling: Discretization requires threshold testing.\nHow to Overcome:\n1. Pre-pruning: Halt tree growth early using max_depth or min_samples_split.\n2. Post-pruning: Grow full tree and prune subtrees using Cost-Complexity or Reduced-Error pruning.\n3. Ensemble Methods: Combine trees using Random Forest or Gradient Boosting to cancel out variance.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Distinguish between Classification and Regression with examples. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "1. Target Output: Classification predicts discrete categorical class labels y in {C_1, ..., C_k} (e.g., spam vs non-spam, benign vs malignant tumor). Regression predicts continuous real-valued quantities y in R (e.g., temperature forecast, house valuation).\n2. Decision Function: Classification learns decision boundaries partitioning feature space; regression learns continuous mapping curves/surfaces.\n3. Evaluation Metrics: Classification uses Accuracy, Precision, Recall, F1-score; regression uses MSE, RMSE, MAE, R^2 score.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Determine the first splitting root attribute for a decision tree using ID3 algorithm on the Play Cricket dataset (14 days: 9 Yes, 5 No). (KTU Model Paper, Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "Total S = 14, Positive (Yes) = 9, Negative (No) = 5.\n1. Overall Entropy H(S):\nH(S) = -(9/14)*log2(9/14) - (5/14)*log2(5/14) = -0.643*(-0.637) - 0.357*(-1.485) = 0.410 + 0.530 = 0.940 bits.\n2. Evaluate Attribute 'View / Outlook':\n- Bright: 5 instances (2 Yes, 3 No) -> H(Bright) = -(2/5)log2(2/5) - (3/5)log2(3/5) = 0.971 bits.\n- Cloudy: 4 instances (4 Yes, 0 No) -> H(Cloudy) = 0 bits (pure!).\n- Rain: 5 instances (3 Yes, 2 No) -> H(Rain) = -(3/5)log2(3/5) - (2/5)log2(2/5) = 0.971 bits.\nExpected Entropy: H(S, View) = (5/14)*0.971 + (4/14)*0 + (5/14)*0.971 = 0.693 bits.\nInformation Gain: Gain(S, View) = 0.940 - 0.693 = 0.247 bits.\n3. Comparison with other attributes (Moisture: Gain = 0.151, Breeze: Gain = 0.048, Temp: Gain = 0.029).\nConclusion: The attribute 'View / Outlook' yields the highest Information Gain (0.247) and is therefore selected as the Root node of the decision tree.",
+          "type": "Part B (9 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Instance-Based Learning & Naive Bayes",
+      "topics": [
+        "Instance-Based Learning: Lazy vs Eager Learning",
+        "K-Nearest Neighbors (KNN): Algorithm, Working Principle",
+        "Distance Metrics: Euclidean, Manhattan, Minkowski Distance",
+        "Effect of K & Curse of Dimensionality in KNN",
+        "Naive Bayes Classifier: Concept & Bayes' Theorem",
+        "Conditional Independence Assumption in Naive Bayes",
+        "Types of Naive Bayes: Gaussian, Multinomial, Bernoulli",
+        "Laplacian Correction / Smoothing"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Instance-Based Memory Models",
+          "description": "Memorizes training instances and defers computation until inference query",
+          "root": "KNN Classifier",
+          "branches": [
+            {
+              "node": "KNN Mechanism",
+              "children": [
+                "Lazy learner (Zero training time, O(N*d) query time)",
+                "Majority voting for classification, mean for regression"
+              ]
+            },
+            {
+              "node": "Distance Metrics",
+              "children": [
+                "Euclidean: sqrt(sum (x_i - y_i)^2)",
+                "Manhattan: sum |x_i - y_i|",
+                "Minkowski: (sum |x_i - y_i|^p)^(1/p)"
+              ]
+            },
+            {
+              "node": "Practical Tuning",
+              "children": [
+                "Odd K for binary classification (avoids ties)",
+                "Feature normalization essential",
+                "Curse of Dimensionality (distances become equidistant)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Probabilistic Generative Models",
+          "description": "Probability distributions conditioned on class hypothesis",
+          "root": "Naive Bayes",
+          "branches": [
+            {
+              "node": "Bayesian Foundation",
+              "children": [
+                "Bayes Theorem: P(C|X) = P(X|C)*P(C) / P(X)",
+                "P(C) = Prior probability, P(X|C) = Likelihood"
+              ]
+            },
+            {
+              "node": "Independence & Variants",
+              "children": [
+                "Assumption: Features are conditionally independent given class",
+                "Gaussian NB (Continuous), Multinomial NB (Text word counts)",
+                "Laplace Smoothing: (count + 1) / (N + V) eliminates zero probability"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Instance-Based Learning: Lazy vs Eager Learning Paradigms",
+          "summary": "Mechanics of Instance-Based Learning, fundamental trade-offs between Lazy (deferred) and Eager (eager generalization) approaches.",
+          "key_points": [
+            "Concept of Instance-Based Learning (Memory-Based Learning):\n- Rather than abstracting training data into an explicit parametric mathematical model, instance-based learners simply store the training instances in memory.\n- Generalization/computation is deferred entirely until a new, unseen query instance must be classified or predicted.",
+            "Lazy vs Eager Learning Comparison Table:\n| Property | Lazy Learners (e.g. KNN, Case-Based Reasoning) | Eager Learners (e.g. Decision Trees, Logistic Regression, SVM) |\n|---|---|---|\n| Training Phase | Trivial / Zero ($O(1)$) - simply memorizes data | Computationally expensive - learns model parameters/rules |\n| Query / Testing Phase | Expensive ($O(N \\cdot d)$) - scans and computes distances to all stored points | Fast ($O(1)$ or $O(\\text{depth})$) - evaluates fixed function or tree |\n| Memory Requirements | High ($O(N \\cdot d)$) - must retain all training data in memory | Low - training data can be discarded after model training |\n| Decision Boundary | Locally complex, flexible, adapts to local data density | Globally fixed parametric or piecewise-linear boundaries |\n| Incremental Learning | Natural and seamless: appending new instances takes $O(1)$ | Difficult: often requires complete model retraining |"
+          ],
+          "code_or_formula": "Lazy: Train Time O(1), Query Time O(N*d), Memory O(N*d)\nEager: Train Time O(Epochs * N * d), Query Time O(1), Memory O(Model)",
+          "exam_tips": "KTU Part A 3-mark staple: 'Differentiate between Lazy and Eager learning with examples'."
+        },
+        {
+          "topic_title": "2. K-Nearest Neighbors (KNN): Algorithm, Metrics & Hyperparameter Tuning",
+          "summary": "Non-parametric classification and regression, distance functions, impact of K, weighted voting, and the curse of dimensionality.",
+          "key_points": [
+            "KNN Classification Algorithm:\nGiven training set $\\mathcal{D} = \\{(x_i, y_i)\\}_{i=1}^N$, distance metric $d(\\cdot, \\cdot)$, integer hyperparameter $K$, and query point $x_q$:\n1. Compute distance $d(x_q, x_i)$ between $x_q$ and every stored training sample $x_i$.\n2. Sort distances and identify the $K$ closest instances: $\\mathcal{N}_K(x_q)$.\n3. Classification: Predict label via majority vote:\n   $$y_q = \\arg\\max_c \\sum_{x_i \\in \\mathcal{N}_K(x_q)} \\mathbb{I}(y_i = c)$$\n4. Regression: Predict target via mean (or inverse-distance weighted mean):\n   $$\\hat{y}_q = \\frac{1}{K} \\sum_{x_i \\in \\mathcal{N}_K(x_q)} y_i$$",
+            "Distance Metrics in $\\mathbb{R}^d$:\n- Euclidean Distance ($L_2$ norm): $d(x, z) = \\sqrt{\\sum_{j=1}^d (x_j - z_j)^2}$. Sensitive to scale; features must be normalized/standardized!\n- Manhattan Distance ($L_1$ norm / Taxicab): $d(x, z) = \\sum_{j=1}^d |x_j - z_j|$. Preferred for high-dimensional or grid-like spaces.\n- Minkowski Distance ($L_p$ generalized norm): $d(x, z) = \\left( \\sum_{j=1}^d |x_j - z_j|^p \\right)^{1/p}$. ($p=1 \\implies L_1, p=2 \\implies L_2$).",
+            "Impact of Hyperparameter $K$ (Bias-Variance Dynamics):\n- $K = 1$: 1-Nearest Neighbor. Decision boundary is jagged and wraps tightly around every individual data point. Zero training error, but extremely high variance (overfitting); highly vulnerable to noisy outliers.\n- $K = N$: Every query point receives the overall majority class of the entire dataset. Extremely high bias (underfitting); decision boundary becomes completely flat.\n- Optimal $K$: Typically chosen via cross-validation; an odd integer is selected for binary classification to prevent voting ties ($K = 3, 5, 7$).",
+            "The Curse of Dimensionality in KNN:\nAs the number of feature dimensions $d$ increases, the volume of feature space grows exponentially ($V \\propto r^d$). Data becomes immensely sparse. In high dimensions, the distance between any two points approaches the distance between the query and its nearest neighbor (all pairwise distances converge to roughly the same value). KNN loses discriminative power unless dimensionality reduction (PCA, feature selection) is applied."
+          ],
+          "code_or_formula": "Minkowski Metric: D(x, z) = [\\sum |x_i - z_i|^p]^(1/p)\nSmall K -> High Variance (Overfitting) | Large K -> High Bias (Underfitting)",
+          "exam_tips": "KTU Part A: 'Explain the effect of choice of K in KNN classifier' and 'What is the curse of dimensionality in instance-based learning?'."
+        },
+        {
+          "topic_title": "3. Naive Bayes Classifier: Bayes' Theorem & Conditional Independence",
+          "summary": "Probabilistic classification, Bayes' formula, class-conditional independence assumption, and MAP decision rule.",
+          "key_points": [
+            "Probabilistic Formulation of Classification:\nGiven an input instance represented by feature vector $X = (x_1, x_2, \\dots, x_d)$, our goal is to assign $X$ to the class $C_k$ that maximizes the posterior probability $P(C_k | X)$ (Bayes Optimal Classifier).",
+            "Bayes' Theorem Formulation:\n$$P(C_k | X) = \\frac{P(X | C_k) P(C_k)}{P(X)} = \\frac{P(x_1, x_2, \\dots, x_d | C_k) P(C_k)}{\\sum_{j} P(x_1, x_2, \\dots, x_d | C_j) P(C_j)}$$\n- Prior Probability $P(C_k)$: Frequency of class $C_k$ in training data: $P(C_k) = \\frac{N_k}{N}$.\n- Likelihood $P(X | C_k)$: Joint probability of features given class $C_k$.\n- Marginal Evidence $P(X)$: Normalizing constant, identical for all candidate classes.",
+            "The 'Naive' Class-Conditional Independence Assumption:\nEstimating the full joint probability $P(x_1, \\dots, x_d | C_k)$ directly requires learning $O(|V|^d)$ parameters, which is computationally intractable and demands an astronomical amount of training data.\n- Naive Bayes Assumption: Assumes all feature attributes $x_1, x_2, \\dots, x_d$ are mutually conditionally independent given the class label $C_k$:\n  $$P(x_1, x_2, \\dots, x_d | C_k) = \\prod_{j=1}^d P(x_j | C_k)$$\n- Classification Decision Rule (MAP):\n  $$\\hat{y} = \\arg\\max_{C_k} P(C_k) \\prod_{j=1}^d P(x_j | C_k)$$\n  In log-space to prevent numerical underflow:\n  $$\\hat{y} = \\arg\\max_{C_k} \\left[ \\ln P(C_k) + \\sum_{j=1}^d \\ln P(x_j | C_k) \\right]$$"
+          ],
+          "code_or_formula": "Naive Bayes Decision: \\hat{y} = \\arg\\max_{C_k} P(C_k) \\prod_{j=1}^d P(x_j | C_k)\nConditional Independence: P(x_1, ..., x_d | C) = P(x_1|C) * ... * P(x_d|C)",
+          "exam_tips": "KTU Part A: 'State the naive assumption in Naive Bayes and explain why it is called naive'. KTU Part B: Full numerical classification calculation."
+        },
+        {
+          "topic_title": "4. Naive Bayes Models (Gaussian, Multinomial) & Laplace Smoothing",
+          "summary": "Feature distributions, continuous attributes via Gaussian PDF, text classification via Multinomial, and the zero-frequency problem.",
+          "key_points": [
+            "Handling Different Feature Types:\n1. Gaussian Naive Bayes (Continuous Features):\n   Assumes continuous feature $x_j$ follows a Gaussian normal distribution within each class $C_k$:\n   $$P(x_j | C_k) = \\frac{1}{\\sqrt{2\\pi \\sigma_{jk}^2}} \\exp\\left( -\\frac{(x_j - \\mu_{jk})^2}{2\\sigma_{jk}^2} \\right)$$\n   Parameters $\\mu_{jk}$ (mean) and $\\sigma_{jk}^2$ (variance) are estimated directly from training data of class $C_k$.\n2. Multinomial Naive Bayes (Discrete Counts):\n   Common in Natural Language Processing and text classification where features represent word counts/frequencies in documents:\n   $$P(w_j | C_k) = \\frac{\\text{count}(w_j, C_k) + \\alpha}{\\sum_{w' \\in V} \\text{count}(w', C_k) + \\alpha |V|}$$\n3. Bernoulli Naive Bayes (Binary Indicators):\n   Features represent binary word presence/absence $x_j \\in \\{0, 1\\}$.",
+            "The Zero-Frequency Problem & Laplace Smoothing:\n- Problem: If a particular feature value $x_j$ never appeared alongside class $C_k$ in the training set, its estimated likelihood becomes strictly zero: $P(x_j | C_k) = 0$.\n- Catastrophic Consequence: Because the overall class posterior is computed as a product of likelihoods, that single zero will wipe out the entire probability product ($0 \\times \\dots = 0$), completely ignoring all other strong evidence!\n- Solution (Laplace Correction / Add-1 Smoothing):\n  Add a pseudocount $\\alpha = 1$ to the numerator and $\\alpha \\cdot |V|$ to the denominator:\n  $$\\hat{P}(x_j = v | C_k) = \\frac{\\text{count}(x_j = v, C_k) + 1}{\\text{count}(C_k) + |V|}$$\n  where $|V|$ is the number of distinct values of attribute $x_j$ (or vocabulary size). Guarantees strictly positive non-zero probabilities."
+          ],
+          "code_or_formula": "Laplace Smoothing: P(x_j | C_k) = [count(x_j, C_k) + 1] / [count(C_k) + |V|]\nGaussian Likelihood: P(x|C) = (1 / sqrt(2*pi*sigma^2)) * exp(-(x - mu)^2 / (2*sigma^2))",
+          "exam_tips": "KTU Part A: 'What is the zero probability problem in Naive Bayes classification and how is it addressed using Laplace smoothing?'"
+        },
+        {
+          "topic_title": "5. Support Vector Machines (SVM): Maximum Margin Hyperplane & Optimization",
+          "summary": "Linear binary classification, geometric margin, support vectors, hard-margin QP formulation, soft-margin with slack variables.",
+          "key_points": [
+            "SVM Working Principle:\n- Support Vector Machine is a powerful supervised learning model that constructs an optimal decision hyperplane separating two classes with the MAXIMUM geometric margin.\n- Hyperplane Equation: $w^T x + b = 0$, where $w \\in \\mathbb{R}^d$ is the normal weight vector perpendicular to the hyperplane, and $b \\in \\mathbb{R}$ is the bias scalar.\n- Decision Rule: $\\hat{y} = \\text{sign}(w^T x + b)$. Labels $y_i \\in \\{-1, +1\\}$.",
+            "Support Vectors & Margin:\n- Canonical Hyperplanes: $w^T x + b = +1$ (positive boundary) and $w^T x + b = -1$ (negative boundary).\n- Geometric Margin: The perpendicular distance between the two bounding hyperplanes is given by:\n  $$\\text{Margin} = \\frac{2}{\\|w\\|}$$\n- Support Vectors: The critical data points that lie directly on the canonical margins ($y_i(w^T x_i + b) = 1$). Only these points determine the hyperplane position; removing non-support vectors leaves the decision boundary completely unchanged!",
+            "Hard-Margin SVM Optimization Formulation:\nTo maximize margin $\\frac{2}{\\|w\\|}$, we minimize $\\frac{1}{2}\\|w\\|^2$ subject to perfect linear separation:\n$$\\min_{w, b} \\frac{1}{2}\\|w\\|^2 \\quad \\text{subject to } y_i(w^T x_i + b) \\ge 1, \\quad \\forall i=1, \\dots, N$$\nSolved using Lagrange Multipliers and Karush-Kuhn-Tucker (KKT) conditions.",
+            "Soft-Margin SVM (Handling Non-Separable Data & Outliers):\nWhen data has noise, outliers, or class overlap, hard-margin SVM either fails to find a solution or produces an overfitted margin. We introduce non-negative Slack Variables $\\xi_i \\ge 0$:\n$$\\min_{w, b, \\xi} \\frac{1}{2}\\|w\\|^2 + C \\sum_{i=1}^N \\xi_i \\quad \\text{subject to } y_i(w^T x_i + b) \\ge 1 - \\xi_i, \\quad \\xi_i \\ge 0$$\n- Penalty Hyperparameter $C$:\n  * Large $C$: Heavy penalty for violations; behaves like hard-margin $\\implies$ narrow margin, low bias, high variance (risk of overfitting).\n  * Small $C$: Tolerates more margin violations $\\implies$ wide margin, smoother boundary, high bias (risk of underfitting)."
+          ],
+          "code_or_formula": "Margin: M = 2 / ||w||\nHard-Margin Problem: min (1/2)||w||^2 s.t. y_i(w^T x_i + b) >= 1\nSoft-Margin Problem: min (1/2)||w||^2 + C * sum(xi_i) s.t. y_i(w^T x_i + b) >= 1 - xi_i",
+          "exam_tips": "KTU Part B 5-mark question: 'State the mathematical formulation of the SVM problem. Explain the role of support vectors and slack variables'."
+        },
+        {
+          "topic_title": "6. Non-Linear SVM: Kernel Trick, Standard Kernels & Gamma Parameter",
+          "summary": "Mapping into high-dimensional space, Mercer's condition, Linear, Polynomial, RBF/Gaussian kernels, and the role of Gamma.",
+          "key_points": [
+            "The Non-Linear Problem & Feature Mapping:\nMany real-world datasets cannot be linearly separated in their original input space $\\mathcal{X} \\subseteq \\mathbb{R}^d$. By mapping instances into a higher-dimensional feature space $\\mathcal{H}$ via a non-linear transformation $\\phi: \\mathcal{X} \\to \\mathcal{H}$, the data frequently becomes linearly separable (Cover's Theorem on separability).",
+            "The Kernel Trick:\n- In the dual SVM formulation, inputs appear ONLY inside inner dot products: $\\langle \\phi(x_i), \\phi(x_j) \\rangle$.\n- Explicitly computing high-dimensional coordinates $\\phi(x)$ is computationally prohibitive or impossible (e.g. infinite dimensions for Gaussian).\n- Kernel Function Definition: A function $K(x, z)$ that computes the inner product in transformed space directly using original vectors, without explicitly computing $\\phi(x)$:\n  $$K(x, z) = \\langle \\phi(x), \\phi(z) \\rangle$$\n- Mercer's Theorem: Any symmetric continuous function whose Gram matrix is positive semi-definite is a valid kernel.",
+            "Standard Kernel Functions (KTU Repeated Question):\n1. Linear Kernel: $K(x, z) = x^T z$.\n2. Polynomial Kernel: $K(x, z) = (x^T z + c)^d$ (where $d$ is the polynomial degree, $c \\ge 0$).\n3. Radial Basis Function (RBF) / Gaussian Kernel:\n   $$K(x, z) = \\exp\\left( -\\gamma \\|x - z\\|^2 \\right) = \\exp\\left( -\\frac{\\|x - z\\|^2}{2\\sigma^2} \\right)$$\n   Maps input vectors into an infinite-dimensional Hilbert space! Measures similarity based on Euclidean distance.\n4. Sigmoid Kernel: $K(x, z) = \\tanh(\\alpha x^T z + c)$.",
+            "Significance of the Gamma ($\\gamma$) Hyperparameter in RBF Kernel (KTU Model Paper Question):\n- $\\gamma = \\frac{1}{2\\sigma^2}$ controls the radius of influence of each individual support vector:\n  * High $\\gamma$: Small $\\sigma$ (narrow bell curve). The influence of each support vector is restricted to a tiny localized neighborhood. The decision boundary becomes extremely convoluted, tight, and irregular around training points $\\implies$ High Variance / Severe Overfitting.\n  * Low $\\gamma$: Large $\\sigma$ (broad bell curve). Influence of support vectors spreads widely over the entire feature space. The decision boundary becomes overly smooth and flat $\\implies$ High Bias / Underfitting."
+          ],
+          "code_or_formula": "Kernel Trick: K(x, z) = <phi(x), phi(z)>\nPolynomial: K(x, z) = (x^T z + c)^d\nRBF Kernel: K(x, z) = exp(-gamma * ||x - z||^2)\nHigh gamma -> Complex boundary (Overfitting) | Low gamma -> Smooth boundary (Underfitting)",
+          "exam_tips": "KTU Part A 3-mark questions: 'Define a Kernel function. Give an example' and 'Suppose you are using RBF Kernel in SVM with high Gamma value. Identify the significance'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What happens in Naive Bayes if a particular feature value never appears with a specific class in the training dataset?",
+          "options": [
+            "The algorithm throws a runtime exception",
+            "The entire class posterior probability evaluates to zero",
+            "The feature is automatically removed",
+            "The prior probability becomes 1.0"
+          ],
+          "ans": 1,
+          "explanation": "Because Naive Bayes multiplies all feature probabilities together, a single zero likelihood forces the entire product to zero. Laplace smoothing fixes this."
+        },
+        {
+          "q": "Why is KNN termed a 'Lazy Learner'?",
+          "options": [
+            "It requires few CPU cycles during prediction",
+            "It performs no explicit generalization during training and defers computation to query time",
+            "It only trains on a random 10% subset of data",
+            "It fails to converge on large datasets"
+          ],
+          "ans": 1,
+          "explanation": "KNN performs zero training computations (just stores data) and conducts all intensive distance calculations during query time."
+        },
+        {
+          "q": "In a 2-class classification problem using KNN, what value of K should be selected to guarantee no voting ties?",
+          "options": [
+            "An even number",
+            "An odd number",
+            "K equal to number of samples N",
+            "K = 2"
+          ],
+          "ans": 1,
+          "explanation": "An odd value of K prevents 50-50 tie situations in binary classification."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Define a Kernel function. Give an example. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Definition: A Kernel function K(x, z) computes the inner dot product <phi(x), phi(z)> between two vectors in a high-dimensional transformed feature space directly using their coordinates in the original input space, without explicitly calculating the high-dimensional mapping phi(x).\nExample: Polynomial Kernel K(x, z) = (x^T z + c)^d or Radial Basis Function (RBF) Kernel: K(x, z) = exp(-gamma * ||x - z||^2).",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Suppose you are using RBF Kernel in SVM with high Gamma value. Identify the significance. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Significance of High Gamma:\nIn RBF kernel K(x, z) = exp(-gamma * ||x - z||^2), gamma = 1 / (2*sigma^2) determines the spread of influence of individual support vectors.\n- High Gamma implies small variance sigma^2 (narrow bell curve), meaning each support vector has a very localized sphere of influence.\n- As a result, the decision boundary becomes extremely tight, intricate, and wraps around individual training points, leading to High Variance and severe Overfitting.\n- The model fits the training set near-perfectly but generalizes poorly to unseen data.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Based on the provided dataset (12 instances), classify a species if features are Swim=Slow, Fly=Rarely, Crawl=No using Naive Bayes algorithm. (KTU Model Paper, Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "Dataset summary (Total N = 12):\nClasses: Animal (N=5), Fish (N=3), Bird (N=4).\nPrior Probabilities:\nP(Animal) = 5/12 = 0.417\nP(Fish) = 3/12 = 0.250\nP(Bird) = 4/12 = 0.333\n\nConditional Probabilities for Query X = (Swim=Slow, Fly=Rarely, Crawl=No):\n1. For Class = Animal (Total 5):\n- P(Swim=Slow | Animal) = 2/5 = 0.4\n- P(Fly=Rarely | Animal) = 1/5 = 0.2\n- P(Crawl=No | Animal) = 3/5 = 0.6\nLikelihood product = 0.4 * 0.2 * 0.6 = 0.048\nPosterior numerator = P(Animal) * Likelihood = (5/12) * 0.048 = 0.0200\n\n2. For Class = Fish (Total 3):\n- P(Swim=Slow | Fish) = 2/3 = 0.667\n- P(Fly=Rarely | Fish) = 0/3 = 0 (With Laplace smoothing: (0+1)/(3+3) = 1/6 = 0.167)\n- P(Crawl=No | Fish) = 2/3 = 0.667\nPosterior numerator = (3/12) * (2/3 * 0 * 2/3) = 0 (or with smoothing ~0.00185)\n\n3. For Class = Bird (Total 4):\n- P(Swim=Slow | Bird) = 0/4 = 0 (or with smoothing (0+1)/(4+3) = 1/7 = 0.143)\n- P(Fly=Rarely | Bird) = 0/4 = 0\n- P(Crawl=No | Bird) = 4/4 = 1.0\nPosterior numerator = 0\n\nConclusion: P(Animal | X) is strictly highest. The species is classified as Animal.",
+          "type": "Part B (9 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Ensemble Learning & Model Assessment",
+      "topics": [
+        "Ensemble Learning Concepts: Wisdom of the Crowd",
+        "Simple Ensemble Techniques: Max Voting, Averaging, Weighted Averaging",
+        "Bagging (Bootstrap Aggregation): Concept & Mechanism",
+        "Random Forest Classifier: Feature Bagging & Tree Ensemble",
+        "Boosting Techniques: Sequential Learning & AdaBoost",
+        "Stacking (Stacked Generalization): Meta-Learner",
+        "Classification Assessment: Confusion Matrix, TP, FP, FN, TN",
+        "Performance Metrics: Accuracy, Precision, Recall, F1-Score, Specificity",
+        "ROC Curve & Area Under the Curve (AUC)"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Ensemble Architectures",
+          "description": "Combining multiple weak learners to form an optimal meta-predictor",
+          "root": "Ensemble Paradigms",
+          "branches": [
+            {
+              "node": "Bagging (Parallel)",
+              "children": [
+                "Bootstrap sample subsets with replacement",
+                "Trains independent base models in parallel",
+                "Random Forest: Adds random feature subsampling at splits",
+                "Primary goal: Reduces model Variance"
+              ]
+            },
+            {
+              "node": "Boosting (Sequential)",
+              "children": [
+                "Sequential iterative models",
+                "AdaBoost: Weights misclassified instances higher",
+                "Gradient Boosting: Fits trees to residual errors",
+                "Primary goal: Reduces model Bias"
+              ]
+            },
+            {
+              "node": "Stacking",
+              "children": [
+                "Heterogeneous base learners",
+                "Meta-classifier trained on predictions of base models"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Model Evaluation & Diagnostic Metrics",
+          "description": "Quantitative metrics for assessing classification effectiveness",
+          "root": "Evaluation Metrics",
+          "branches": [
+            {
+              "node": "Confusion Matrix",
+              "children": [
+                "TP (True Positives), TN (True Negatives)",
+                "FP (Type I Error), FN (Type II Error)"
+              ]
+            },
+            {
+              "node": "Derived Ratios",
+              "children": [
+                "Accuracy = (TP + TN) / Total",
+                "Precision = TP / (TP + FP) (Quality of positive claims)",
+                "Recall / Sensitivity = TP / (TP + FN) (Coverage of actual positives)",
+                "F1-Score = 2 * (P * R) / (P + R)"
+              ]
+            },
+            {
+              "node": "Threshold Analysis",
+              "children": [
+                "ROC Curve: Plots TPR (Recall) vs FPR across thresholds",
+                "AUC (Area Under Curve): 1.0 = Perfect, 0.5 = Random guess"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Ensemble Learning Foundations & Simple Ensemble Methods",
+          "summary": "Wisdom of the crowd, Condorcet's jury theorem, base learners, Max Voting, Simple Averaging, and Weighted Averaging.",
+          "key_points": [
+            "Ensemble Learning Concept:\n- Combines the predictive power of multiple individual models (called Base Learners or Weak Learners) to construct a Meta-Model with significantly higher accuracy and generalization ability than any single constituent model.\n- Theoretical Justification (Condorcet's Jury Theorem):\n  If each independent base classifier has an individual accuracy $p > 0.5$, then as the number of classifiers $M \\to \\infty$, the probability that the majority vote is correct approaches 1.0:\n  $$P_{\\text{ensemble}} = \\sum_{k = \\lfloor M/2 \\rfloor + 1}^M \\binom{M}{k} p^k (1 - p)^{M - k} > p$$",
+            "Simple Ensemble Techniques:\n1. Max Voting / Hard Voting (Classification):\n   Each base model casts a discrete vote for a class. The class receiving the plurality of votes is selected:\n   $$\\hat{y} = \\text{mode}\\{h_1(x), h_2(x), \\dots, h_M(x)\\}$$\n2. Soft Voting / Probability Averaging (Classification):\n   Predicts the class that maximizes the average predicted class probability across all calibrated base models:\n   $$\\hat{y} = \\arg\\max_c \\frac{1}{M} \\sum_{m=1}^M P_m(y = c | x)$$\n   Outperforms hard voting by giving greater weight to highly confident predictions.\n3. Simple Averaging (Regression):\n   Predicts the arithmetic mean of all base model outputs: $\\hat{y} = \\frac{1}{M} \\sum_{m=1}^M h_m(x)$.\n4. Weighted Averaging (Regression / Classification):\n   Assigns higher weights $w_m$ to models exhibiting superior validation performance:\n   $$\\hat{y} = \\sum_{m=1}^M w_m h_m(x) \\quad \\text{where } \\sum_{m=1}^M w_m = 1$$"
+          ],
+          "code_or_formula": "Hard Voting: Mode of predictions\nSoft Voting: Argmax of average predicted probabilities\nWeighted Average: y = \\sum w_i * h_i(x) s.t. \\sum w_i = 1",
+          "exam_tips": "KTU Part A 3-mark question: 'Distinguish between bagging, boosting and voting ensembles'."
+        },
+        {
+          "topic_title": "2. Bootstrap Aggregation (Bagging) & Random Forest",
+          "summary": "Parallel ensemble learning, bootstrap sampling with replacement, Out-of-Bag (OOB) error, Feature Bagging in Random Forests.",
+          "key_points": [
+            "Bagging (Bootstrap Aggregation) Mechanics:\n- Developed by Leo Breiman (1996) to reduce the VARIANCE of high-variance, unstable base learners (like unpruned decision trees) without increasing bias.\n- Step-by-Step Bagging Algorithm:\n  1. Given training dataset $\\mathcal{D}$ of size $N$.\n  2. For $b = 1$ to $B$:\n     a. Generate a bootstrap sample $\\mathcal{D}_b$ by randomly drawing $N$ instances from $\\mathcal{D}$ WITH REPLACEMENT.\n     b. Train an unpruned, high-capacity base learner $h_b(x)$ on $\\mathcal{D}_b$.\n  3. Aggregate predictions: Majority vote for classification, averaging for regression.",
+            "Out-of-Bag (OOB) Evaluation:\n- In bootstrap sampling of size $N$, the probability that a specific instance is NOT chosen in a single draw is $(1 - 1/N)$.\n- Over $N$ independent draws, probability of never being selected is:\n  $$\\lim_{N \\to \\infty} \\left(1 - \\frac{1}{N}\\right)^N = e^{-1} \\approx 0.368 \\ (36.8\\%)$$\n- The remaining ~36.8% unselected samples form the Out-of-Bag (OOB) set for that tree. Evaluating each instance using only the trees for which it was OOB provides an unbiased test error estimate without needing a separate cross-validation set!",
+            "Random Forest Classifier (Breiman, 2001):\n- Solves the Tree Correlation problem in Bagging: In standard bagging, if a few dominant features exist, all trees split on them first, producing highly correlated trees (limiting variance reduction: $\\text{Var} = \\rho \\sigma^2 + \\frac{1-\\rho}{B}\\sigma^2$).\n- Mechanism (Feature Bagging / Random Subspace Method):\n  At each split node during tree growth, instead of searching over all $d$ features, Random Forest randomly selects a subset of $m$ features ($m = \\sqrt{d}$ for classification, $m = d/3$ for regression) and picks the best split strictly from this subset.\n- Effect: De-correlates the individual trees, driving $\\rho \\to 0$ and drastically minimizing ensemble variance while resisting overfitting."
+          ],
+          "code_or_formula": "Bootstrap Sampling: Size N with replacement -> ~63.2% unique, ~36.8% OOB\nRandom Forest Feature Subset: m = sqrt(d) for classification",
+          "exam_tips": "KTU Part B 4/5-mark questions: 'Describe the Random Forest algorithm to improve classifier accuracy' and 'Explain Out-of-Bag (OOB) error estimation in Bagging'."
+        },
+        {
+          "topic_title": "3. Boosting Algorithms: Sequential Ensembles & AdaBoost",
+          "summary": "Sequential bias reduction, sample reweighting, weak learner hypothesis combination, and the AdaBoost mathematical derivation.",
+          "key_points": [
+            "Boosting Philosophy (Sequential Ensemble):\n- Unlike Bagging where models are trained independently in parallel to reduce variance, Boosting trains base models SEQUENTIALLY to systematically reduce BIAS.\n- Principle: Each subsequent base learner is explicitly trained to correct the mistakes and misclassifications made by the preceding learners.",
+            "AdaBoost (Adaptive Boosting) by Freund & Schapire (1997):\nGiven training dataset $\\{(x_i, y_i)\\}_{i=1}^N$ with labels $y_i \\in \\{-1, +1\\}$:\n1. Initialize sample weights uniformly: $w_i^{(1)} = \\frac{1}{N}$ for all $i = 1, \\dots, N$.\n2. For round $t = 1$ to $T$:\n   a. Train a weak base classifier $h_t(x)$ (typically a Decision Stump: 1-level decision tree) using weights $w^{(t)}$.\n   b. Calculate weighted training error $\\epsilon_t$:\n      $$\\epsilon_t = \\sum_{i=1}^N w_i^{(t)} \\mathbb{I}(y_i \\ne h_t(x_i))$$\n   c. Compute classifier weight (importance / stage value) $\\alpha_t$:\n      $$\\alpha_t = \\frac{1}{2} \\ln\\left( \\frac{1 - \\epsilon_t}{\\epsilon_t} \\right)$$\n      (If $\\epsilon_t \\to 0$, $\\alpha_t \\to +\\infty$; if $\\epsilon_t = 0.5$ (random guess), $\\alpha_t = 0$).\n   d. Update sample weights for the next round:\n      $$w_i^{(t+1)} = \\frac{w_i^{(t)} \\exp(-\\alpha_t y_i h_t(x_i))}{Z_t}$$\n      where $Z_t$ is a normalization factor ensuring $\\sum w_i^{(t+1)} = 1$. (Misclassified points have $y_i h_t(x_i) = -1$, boosting their weight by $e^{\\alpha_t}$; correctly classified points have their weights decreased by $e^{-\\alpha_t}$).\n3. Final Ensemble Prediction:\n   $$H(x) = \\text{sign}\\left( \\sum_{t=1}^T \\alpha_t h_t(x) \\right)$$"
+          ],
+          "code_or_formula": "AdaBoost Classifier Weight: \\alpha_t = (1/2) * ln((1 - \\epsilon_t) / \\epsilon_t)\nSample Weight Update: w_i := w_i * exp(-\\alpha_t * y_i * h_t(x_i)) / Z_t\nFinal Hypothesis: H(x) = sign(\\sum \\alpha_t * h_t(x))",
+          "exam_tips": "KTU Part A: 'State the difference between Bagging and Boosting'. KTU Part B: 'Explain the working of AdaBoost algorithm with step-by-step weight update equations'."
+        },
+        {
+          "topic_title": "4. Stacking (Stacked Generalization) & Meta-Learning",
+          "summary": "Heterogeneous base models, meta-features, multi-level learning architecture, and preventing leakage via out-of-fold cross-validation.",
+          "key_points": [
+            "Stacked Generalization Architecture (David Wolpert, 1992):\n- Unlike Bagging and Boosting which typically employ homogeneous base learners, Stacking combines diverse, HETEROGENEOUS base learners (e.g. SVM, Random Forest, Logistic Regression, KNN).\n- Architecture:\n  * Level-0 (Base Learners): Distinct algorithms trained on the input dataset.\n  * Level-1 (Meta-Learner): A secondary model (often a simple linear model like Logistic Regression) trained to optimally combine the predictions of the Level-0 models.",
+            "Two-Level Training Workflow & Preventing Data Leakage:\n- Naive Stacking Flaw: If base models make predictions on the same data they were trained on, they will be overfitted, causing the meta-learner to assign disproportionately large weights to models that overfit the training data.\n- Solution: K-Fold Out-of-Fold (OOF) Prediction Generation:\n  1. Split training set into $K$ folds.\n  2. For each base model $m$ and each fold $k$:\n     - Train model $m$ on remaining $K - 1$ folds.\n     - Generate out-of-fold predictions on fold $k$.\n  3. Concatenate out-of-fold predictions across all folds to construct the Meta-Feature Matrix $X_{\\text{meta}} \\in \\mathbb{R}^{N \\times M}$.\n  4. Train the Level-1 Meta-Learner on $(X_{\\text{meta}}, y)$."
+          ],
+          "code_or_formula": "Level 0: Diverse models produce Meta-Features [h_1(x), h_2(x), ..., h_M(x)]\nLevel 1: Meta-Learner learns optimal combination weights y = g(h_1(x), ..., h_M(x))",
+          "exam_tips": "KTU Part A: 'Explain the concept of Stacking in ensemble learning and how data leakage is avoided using out-of-fold predictions'."
+        },
+        {
+          "topic_title": "5. Classification Evaluation Metrics: Confusion Matrix & Derived Scores",
+          "summary": "Confusion Matrix components (TP, FP, FN, TN), Accuracy, Precision, Recall, Specificity, and F1-Score trade-offs.",
+          "key_points": [
+            "The Confusion Matrix (2x2 for Binary Classification):\n| | Predicted Positive | Predicted Negative |\n|---|---|---|\n| **Actual Positive** | True Positive (TP) | False Negative (FN) - Type II Error |\n| **Actual Negative** | False Positive (FP) - Type I Error | True Negative (TN) |\n- Type I Error (False Alarm): Predicting positive when actually negative.\n- Type II Error (Missed Detection): Predicting negative when actually positive (critical in cancer screening, fraud detection).",
+            "Core Evaluation Metrics (KTU Repeated Formulas):\n1. Accuracy:\n   $$\\text{Accuracy} = \\frac{TP + TN}{TP + TN + FP + FN}$$\n   *Flaw:* Severely misleading on imbalanced datasets (e.g., in a dataset with 99% negative cases, a trivial dummy classifier predicting negative for all instances achieves 99% accuracy while having 0% utility).\n2. Precision (Positive Predictive Value):\n   $$\\text{Precision} = \\frac{TP}{TP + FP}$$\n   Measures the exactness/purity of positive predictions. Crucial when False Positives are expensive (e.g., spam filtering).\n3. Recall / Sensitivity / True Positive Rate (TPR):\n   $$\\text{Recall} = \\frac{TP}{TP + FN}$$\n   Measures completeness/coverage of actual positive cases. Crucial when False Negatives are dangerous (e.g., disease diagnosis).\n4. Specificity / True Negative Rate (TNR):\n   $$\\text{Specificity} = \\frac{TN}{TN + FP}$$\n5. F1-Score (Harmonic Mean of Precision and Recall):\n   $$F_1 = 2 \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision} + \\text{Recall}} = \\frac{2 TP}{2 TP + FP + FN}$$\n   Harmonic mean heavily penalizes extreme imbalances between Precision and Recall.",
+            "Worked KTU Model Question:\nDataset has 80 records, 55 relevant (Actual Positives $= 55$, so Actual Negatives $= 80 - 55 = 25$). A search retrieved 50 records (Predicted Positives $= 50$), of which 40 were relevant ($TP = 40$).\n- $TP = 40$\n- $FP = 50 - 40 = 10$\n- $FN = 55 - 40 = 15$\n- $TN = 25 - 10 = 15$\n- $\\text{Precision} = \\frac{40}{40 + 10} = \\frac{40}{50} = 0.80 \\ (80\\%)$\n- $\\text{Recall} = \\frac{40}{40 + 15} = \\frac{40}{55} \\approx 0.727 \\ (72.7\\%)$"
+          ],
+          "code_or_formula": "Precision = TP / (TP + FP) | Recall = TP / (TP + FN)\nF1 = 2 * (P * R) / (P + R) | Specificity = TN / (TN + FP)",
+          "exam_tips": "KTU Part A 3-mark & Part B 5-mark guaranteed questions: 'Explain precision and recall' and numerical problem computing confusion matrix, precision, and recall."
+        },
+        {
+          "topic_title": "6. Receiver Operating Characteristic (ROC) & AUC Analysis",
+          "summary": "Threshold variation, True Positive Rate vs False Positive Rate curve, AUC interpretation, and optimal operating point.",
+          "key_points": [
+            "Receiver Operating Characteristic (ROC) Curve:\n- A graphical curve that illustrates the diagnostic ability of a binary classification model across all possible classification decision thresholds $\\tau \\in [0, 1]$.\n- Axes:\n  * Y-axis: True Positive Rate (TPR) / Sensitivity / Recall: $\\text{TPR} = \\frac{TP}{TP + FN}$.\n  * X-axis: False Positive Rate (FPR) / (1 - Specificity): $\\text{FPR} = \\frac{FP}{TN + FP}$.",
+            "Key Points on ROC Space:\n- $(0, 0)$: Threshold $\\tau = 1$. Model classifies all instances as Negative. No false alarms ($FPR = 0$), but no true positives ($TPR = 0$).\n- $(1, 1)$: Threshold $\\tau = 0$. Model classifies all instances as Positive ($TPR = 1, FPR = 1$).\n- Diagonal Line from $(0, 0)$ to $(1, 1)$: Represents completely random guessing ($TPR = FPR$).\n- Point $(0, 1)$ (Top-Left Corner): The Ideal / Perfect Classifier with $TPR = 1.0$ and $FPR = 0.0$.",
+            "Area Under the ROC Curve (ROC-AUC):\n- Measures the two-dimensional area underneath the entire ROC curve from $(0, 0)$ to $(1, 1)$:\n  $$\\text{AUC} = \\int_0^1 \\text{TPR}(\\text{FPR}) d(\\text{FPR})$$\n- Statistical Interpretation: The AUC value equals the exact probability that the classifier will rank a randomly chosen positive instance higher than a randomly chosen negative instance.\n- Value Interpretation:\n  * $\\text{AUC} = 1.0$: Perfect discrimination.\n  * $0.8 \\le \\text{AUC} < 0.9$: Excellent discrimination.\n  * $\\text{AUC} = 0.5$: Completely random classifier (no discriminative ability).\n  * $\\text{AUC} < 0.5$: Inverted classifier (can be fixed by flipping all predictions!)."
+          ],
+          "code_or_formula": "ROC: Plot of TPR (Sensitivity) vs FPR (1 - Specificity) across thresholds tau in [0, 1]\nAUC = Probability that positive instance is scored higher than negative instance",
+          "exam_tips": "KTU Part B 3-mark question: 'Explain the working principle of Receiver Operating Characteristics (ROC) Curve and how AUC is used to compare classifiers'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Why does a Random Forest perform better than a standard Bagged Decision Tree ensemble?",
+          "options": [
+            "It trains trees sequentially instead of in parallel",
+            "It randomly subsets features at each split, decorrelating the trees",
+            "It uses gradient descent to prune trees",
+            "It uses only linear models instead of trees"
+          ],
+          "ans": 1,
+          "explanation": "By randomly selecting m features at each node split, Random Forest prevents dominant strong features from correlating all trees, reducing ensemble variance."
+        },
+        {
+          "q": "In a cancer screening system, which evaluation metric is most critical to maximize in order to prevent diseased patients from being sent home undetected?",
+          "options": [
+            "Accuracy",
+            "Specificity",
+            "Precision",
+            "Recall (Sensitivity)"
+          ],
+          "ans": 3,
+          "explanation": "Recall = TP / (TP + FN). Maximizing Recall minimizes False Negatives (FN), ensuring patients with cancer are not mistakenly diagnosed as negative."
+        },
+        {
+          "q": "What is the AUC (Area Under Curve) score of a completely uninformative, random-guessing binary classifier?",
+          "options": [
+            "0.0",
+            "0.5",
+            "1.0",
+            "-1.0"
+          ],
+          "ans": 1,
+          "explanation": "A random classifier produces a diagonal ROC line where TPR = FPR, resulting in an area under the curve of exactly 0.5."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Distinguish between bagging, boosting and voting. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "1. Bagging: Trains homogeneous base learners in parallel on bootstrap samples with replacement; aggregates via voting/averaging to reduce variance (e.g. Random Forest).\n2. Boosting: Trains homogeneous base learners sequentially where each model focuses on errors of previous models; aggregates via weighted voting to reduce bias (e.g. AdaBoost, XGBoost).\n3. Voting: Combines multiple independent, often heterogeneous models (e.g. SVM + Logistic Regression + Random Forest) via simple hard majority vote or soft probability averaging.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Explain precision and recall. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Precision: Proportion of predicted positive instances that are truly positive:\nPrecision = TP / (TP + FP). Reflects the purity of positive predictions.\nRecall (Sensitivity): Proportion of actual positive instances that are correctly identified:\nRecall = TP / (TP + FN). Reflects the coverage and completeness of positive identification.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "A database contains 80 records of which 55 are relevant. A search retrieved 50 records, of which 40 were relevant. Construct confusion matrix and calculate precision and recall. (KTU Model Paper, Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "Given Data: Total N = 80.\nActual Relevant (Positive) = 55 -> Actual Irrelevant (Negative) = 80 - 55 = 25.\nRetrieved (Predicted Positive) = 50 -> Not Retrieved (Predicted Negative) = 80 - 50 = 30.\nRelevant records retrieved (TP) = 40.\n\nConfusion Matrix Derivation:\n- TP = 40\n- FP = Total Retrieved - TP = 50 - 40 = 10\n- FN = Total Relevant - TP = 55 - 40 = 15\n- TN = Total Irrelevant - FP = 25 - 10 = 15\n\nConfusion Matrix Table:\n                Predicted Relevant    Predicted Irrelevant    Total\nActual Relevant        40 (TP)               15 (FN)            55\nActual Irrelevant      10 (FP)               15 (TN)            25\nTotal                  50                    30                 80\n\nMetric Calculations:\nPrecision = TP / (TP + FP) = 40 / (40 + 10) = 40 / 50 = 0.80 (80.0%)\nRecall = TP / (TP + FN) = 40 / (40 + 15) = 40 / 55 = 8 / 11 approx 0.7273 (72.73%)\nF1-Score = 2 * (0.80 * 0.7273) / (0.80 + 0.7273) approx 0.7619 (76.19%)",
+          "type": "Part B (5 Marks)"
+        }
+      ]
+    }
+  ]
+}

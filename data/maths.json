@@ -1,0 +1,700 @@
+{
+  "id": "Maths",
+  "code": "GAMAT301",
+  "name": "Maths for Info Science-3",
+  "credits": 3,
+  "modules": [
+    {
+      "num": 1,
+      "title": "Discrete Random Variables & Distributions",
+      "topics": [
+        "Random Variables, Discrete Random Variables, Probability Mass Function (pmf)",
+        "Cumulative Distribution Function (CDF) for Discrete Variables",
+        "Mathematical Expectation, Mean and Variance",
+        "Binomial Probability Distribution: pmf, Mean, Variance",
+        "Poisson Probability Distribution: pmf, Poisson Approximation to Binomial",
+        "Joint pmf of Two Discrete Random Variables, Marginal pmfs",
+        "Independent Discrete Random Variables, Expected Value of Functions E[g(X, Y)]"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Univariate Discrete Probability",
+          "description": "Discrete probability distributions and statistical moments",
+          "root": "Discrete Distributions",
+          "branches": [
+            {
+              "node": "Foundations",
+              "children": [
+                "pmf: p(x) >= 0 and sum p(x) = 1",
+                "CDF: F(x) = P(X <= x) = sum_{t<=x} p(t)",
+                "Mean: E[X] = sum x * p(x)",
+                "Variance: Var(X) = E[X^2] - (E[X])^2"
+              ]
+            },
+            {
+              "node": "Standard Models",
+              "children": [
+                "Binomial B(n, p): P(X=k) = nCk * p^k * (1-p)^(n-k)",
+                "Poisson: P(X=k) = e^(-lambda) * lambda^k / k!",
+                "Limit: Poisson approximates Binomial when n -> inf, p -> 0, lambda = np"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Bivariate Discrete Systems",
+          "description": "Joint distributions and statistical independence of random variables",
+          "root": "Joint pmf",
+          "branches": [
+            {
+              "node": "Joint & Marginal",
+              "children": [
+                "Joint pmf: p(x, y) = P(X=x, Y=y), sum_x sum_y p(x, y) = 1",
+                "Marginal p_X(x) = sum_y p(x, y)",
+                "Marginal p_Y(y) = sum_x p(x, y)"
+              ]
+            },
+            {
+              "node": "Independence",
+              "children": [
+                "X and Y independent iff p(x, y) = p_X(x) * p_Y(y) for all x, y",
+                "E[X * Y] = E[X] * E[Y]"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Discrete Random Variables, PMF Axioms, Expectation & Variance",
+          "summary": "Random variable mapping, probability mass function (pmf) axioms, cumulative distribution function (CDF), expectation and variance theorems.",
+          "key_points": [
+            "Random Variable Definition:\nA real-valued function $X: S \\to \\mathbb{R}$ that maps each outcome $s$ of sample space $S$ to a real number $X(s)$. A Discrete Random Variable takes countably many values $\\{x_1, x_2, \\dots\\}$.",
+            "Probability Mass Function (pmf) Axioms:\n1. $p(x) = P(X = x) \\ge 0$ for all $x$.\n2. $\\sum_{x} p(x) = 1$.\n- Cumulative Distribution Function (CDF): $F(x) = P(X \\le x) = \\sum_{y \\le x} p(y)$. Non-decreasing step function right-continuous with $\\lim_{x \\to -\\infty} F(x) = 0$ and $\\lim_{x \\to \\infty} F(x) = 1$.",
+            "Mathematical Expectation (Mean $\\mu$):\n$$\\mu = E[X] = \\sum_{x} x \\cdot p(x)$$\n- Properties: $E[aX + b] = a E[X] + b$, and $E[g(X)] = \\sum_x g(x) p(x)$.",
+            "Variance & Standard Deviation:\n$$\\sigma^2 = \\text{Var}(X) = E[(X - \\mu)^2] = E[X^2] - (E[X])^2 = \\sum_x x^2 p(x) - \\mu^2$$\n- Properties: $\\text{Var}(aX + b) = a^2 \\text{Var}(X)$. Standard Deviation $\\sigma = \\sqrt{\\text{Var}(X)}$."
+          ],
+          "code_or_formula": "pmf: sum p(x) = 1 | E[X] = sum x*p(x)\nVar(X) = E[X^2] - (E[X])^2 | Var(aX + b) = a^2 * Var(X)",
+          "exam_tips": "KTU Part A 3-mark numerical staple: 'Given tabular pmf of memory X (1, 2, 4, 8, 16 GB), calculate mean E[X] and variance Var(X)'."
+        },
+        {
+          "topic_title": "2. Binomial Distribution: PMF, Mean, Variance & Derivation",
+          "summary": "Bernoulli trials, binomial probability mass function, binomial expansion derivation, expectation, and variance.",
+          "key_points": [
+            "Bernoulli Trial Criteria:\nExperiment consists of $n$ identical, independent trials. Each trial has exactly two outcomes: Success ($S$) with constant probability $p$, and Failure ($F$) with probability $q = 1 - p$.",
+            "Binomial Probability Mass Function:\nLet $X$ count number of successes in $n$ trials ($X \\sim B(n, p)$):\n$$P(X = k) = \\binom{n}{k} p^k (1 - p)^{n - k} = \\frac{n!}{k!(n - k)!} p^k q^{n - k}, \\quad k = 0, 1, 2, \\dots, n$$\n- Normalization: $\\sum_{k=0}^n \\binom{n}{k} p^k q^{n-k} = (p + q)^n = 1^n = 1$.",
+            "Mean & Variance Derivation (KTU Derivation Question):\n- Mean: $E[X] = \\sum_{k=0}^n k \\frac{n!}{k!(n-k)!} p^k q^{n-k} = np \\sum_{k=1}^n \\frac{(n-1)!}{(k-1)!(n-k)!} p^{k-1} q^{(n-1)-(k-1)} = np (p + q)^{n-1} = np$.\n- Factorial Moment: $E[X(X-1)] = n(n-1)p^2$.\n- Variance: $\\text{Var}(X) = E[X(X-1)] + E[X] - (E[X])^2 = n(n-1)p^2 + np - n^2 p^2 = np(1 - p) = npq$."
+          ],
+          "code_or_formula": "Binomial: P(X = k) = nCk * p^k * (1-p)^(n-k)\nMean: mu = n*p | Variance: sigma^2 = n*p*(1-p)",
+          "exam_tips": "KTU Part A: 'In 256 tosses of 8 fair coins, how many tosses are expected to have zero heads?' (Answer: N * (1/2)^8 = 256 * 1/256 = 1)."
+        },
+        {
+          "topic_title": "3. Poisson Distribution & Poisson as Limiting Form of Binomial",
+          "summary": "Poisson pmf, rate parameter lambda, mean and variance equality, and mathematical limit derivation as n -> infinity.",
+          "key_points": [
+            "Poisson Distribution Definition:\nModels the number of rare events occurring in a fixed interval of time or space with constant average rate $\\lambda > 0$ ($X \\sim \\text{Poisson}(\\lambda)$):\n$$P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}, \\quad k = 0, 1, 2, \\dots$$\n- Unique Characteristic: Both Mean and Variance are strictly equal to $\\lambda$:\n  $$\\mu = E[X] = \\lambda, \\quad \\sigma^2 = \\text{Var}(X) = \\lambda$$",
+            "Poisson as a Limiting Form of Binomial (KTU Mandatory Proof):\n- Conditions: $n \\to \\infty$ and $p \\to 0$ such that product $np = \\lambda$ remains constant (so $p = \\lambda / n$):\n  $$P(X = k) = \\lim_{n \\to \\infty} \\binom{n}{k} \\left(\\frac{\\lambda}{n}\\right)^k \\left(1 - \\frac{\\lambda}{n}\\right)^{n - k}$$\n  $$= \\lim_{n \\to \\infty} \\frac{n(n-1)\\dots(n-k+1)}{k!} \\frac{\\lambda^k}{n^k} \\left(1 - \\frac{\\lambda}{n}\\right)^n \\left(1 - \\frac{\\lambda}{n}\\right)^{-k}$$\n  $$= \\frac{\\lambda^k}{k!} \\cdot \\lim_{n \\to \\infty} \\left[ 1 \\cdot \\left(1 - \\frac{1}{n}\\right) \\dots \\left(1 - \\frac{k-1}{n}\\right) \\right] \\cdot \\lim_{n \\to \\infty} \\left(1 - \\frac{\\lambda}{n}\\right)^n \\cdot 1$$\n  Using standard limit $\\lim_{n \\to \\infty} (1 - \\lambda/n)^n = e^{-\\lambda}$:\n  $$P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}$$"
+          ],
+          "code_or_formula": "Poisson pmf: P(X = k) = (e^-lambda * lambda^k) / k!\nE[X] = Var(X) = lambda | Limiting condition: n -> inf, p -> 0, np = lambda",
+          "exam_tips": "KTU Part B 5-mark question: 'Prove that the Poisson distribution is the limiting form of the Binomial distribution as n approaches infinity'."
+        },
+        {
+          "topic_title": "4. Two-Dimensional Discrete Random Variables: Joint & Marginal PMFs",
+          "summary": "Joint probability mass functions, marginal distributions, conditional pmf, and independence criteria.",
+          "key_points": [
+            "Joint pmf Definition & Normalization:\nFor two discrete random variables $(X, Y)$, the joint pmf is $p(x, y) = P(X = x, Y = y)$ satisfying:\n1. $p(x, y) \\ge 0$ for all $(x, y)$.\n2. $\\sum_x \\sum_y p(x, y) = 1$.",
+            "Marginal Probability Mass Functions:\nObtained by summing out the other variable over all its possible values:\n$$p_X(x) = \\sum_y p(x, y), \\quad p_Y(y) = \\sum_x p(x, y)$$ (row sums and column sums in joint table).",
+            "Independence of Discrete Random Variables:\n$X$ and $Y$ are statistically independent IF AND ONLY IF for ALL possible pairs $(x, y)$:\n$$p(x, y) = p_X(x) \\cdot p_Y(y)$$"
+          ],
+          "code_or_formula": "Joint: sum_x sum_y p(x, y) = 1\nMarginal: p_X(x) = sum_y p(x, y) | p_Y(y) = sum_x p(x, y)\nIndependence: p(x, y) = p_X(x) * p_Y(y) for all x, y",
+          "exam_tips": "KTU Part B staple: 'Given joint pmf p(x, y) = c(2x + 3y) for x=0,1,2 and y=1,2,3: find constant c, marginal pmfs, and test independence'."
+        },
+        {
+          "topic_title": "5. Bivariate Expectations, Covariance & Correlation Coefficient",
+          "summary": "Expected value of function g(X, Y), product expectation E[XY], covariance definition, and Pearson correlation coefficient.",
+          "key_points": [
+            "Expectation of Function $g(X, Y)$:\n$$E[g(X, Y)] = \\sum_x \\sum_y g(x, y) p(x, y)$$\n- Linearity: $E[aX + bY + c] = a E[X] + b E[Y] + c$ unconditionally.",
+            "Covariance $\\text{Cov}(X, Y)$:\nMeasures the joint linear variability of $X$ and $Y$:\n$$\\text{Cov}(X, Y) = E[(X - \\mu_X)(Y - \\mu_Y)] = E[XY] - E[X] E[Y]$$\n- If $X$ and $Y$ are independent, $E[XY] = E[X] E[Y] \\implies \\text{Cov}(X, Y) = 0$. (Note: Converse is not necessarily true!).",
+            "Pearson Correlation Coefficient ($\\rho$):\n$$\\rho(X, Y) = \\frac{\\text{Cov}(X, Y)}{\\sigma_X \\sigma_Y}$$\n- Range: Strictly $-1 \\le \\rho \\le +1$.\n- $\\rho = +1$: Perfect positive linear correlation. $\\rho = -1$: Perfect negative linear correlation. $\\rho = 0$: Uncorrelated."
+          ],
+          "code_or_formula": "Cov(X, Y) = E[XY] - E[X]*E[Y]\nCorrelation: rho = Cov(X, Y) / (sigma_X * sigma_Y) | -1 <= rho <= +1",
+          "exam_tips": "KTU Part A: 'If X and Y are independent, prove that Cov(X, Y) = 0. Does Cov(X, Y) = 0 imply independence?'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "For a Poisson distribution with parameter lambda = 3, what is its variance?",
+          "options": [
+            "sqrt(3)",
+            "3",
+            "9",
+            "1.5"
+          ],
+          "ans": 1,
+          "explanation": "In a Poisson distribution, the mean and variance are both equal to parameter lambda = 3."
+        },
+        {
+          "q": "Under what mathematical condition are two discrete random variables X and Y independent?",
+          "options": [
+            "p(x, y) = p_X(x) + p_Y(y)",
+            "p(x, y) = p_X(x) * p_Y(y) for all x and y",
+            "E[X + Y] = E[X] + E[Y]",
+            "Var(X + Y) = Var(X) + Var(Y)"
+          ],
+          "ans": 1,
+          "explanation": "Statistical independence requires the joint probability mass function to factorize into the product of marginals for all values."
+        },
+        {
+          "q": "What is the expected value of a Binomial random variable with n = 50 and p = 0.2?",
+          "options": [
+            "5",
+            "10",
+            "8",
+            "25"
+          ],
+          "ans": 1,
+          "explanation": "Mean E[X] = n * p = 50 * 0.2 = 10."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "The p.m.f. of the amount of memory X (GB) in a purchased flash drive is given: X: [1, 2, 4, 8, 16], P(X): [0.05, 0.10, 0.35, 0.40, 0.10]. Find the mean and variance. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "1. Mean E[X] = sum(x * P(x)):\nE[X] = 1(0.05) + 2(0.10) + 4(0.35) + 8(0.40) + 16(0.10)\n     = 0.05 + 0.20 + 1.40 + 3.20 + 1.60 = 6.45 GB.\n\n2. E[X^2] = sum(x^2 * P(x)):\nE[X^2] = 1^2(0.05) + 2^2(0.10) + 4^2(0.35) + 8^2(0.40) + 16^2(0.10)\n       = 0.05 + 4(0.10) + 16(0.35) + 64(0.40) + 256(0.10)\n       = 0.05 + 0.40 + 5.60 + 25.60 + 25.60 = 57.25.\n\n3. Variance Var(X) = E[X^2] - (E[X])^2:\nVar(X) = 57.25 - (6.45)^2 = 57.25 - 41.6025 = 15.6475 (GB)^2.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "8 Coins are tossed 256 times. In how many tosses do you expect no heads? (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Let X be the number of heads in 8 coin tosses. n = 8, p = 1/2, q = 1/2.\nX ~ B(8, 0.5).\nProbability of zero heads in a single toss of 8 coins:\nP(X = 0) = 8C0 * (1/2)^0 * (1/2)^8 = 1 / 256.\nFor N = 256 independent repetitions, the expected number of tosses with no heads is:\nExpected Frequency = N * P(X = 0) = 256 * (1 / 256) = 1 toss.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "The joint probability mass function of X and Y is given by p(x, y) = c(2x + 3y), for x in {0, 1, 2} and y in {1, 2, 3}. Find (i) value of c, (ii) marginal distributions of X and Y, (iii) test independence. (KTU Model Paper, Part B - 5 Marks)",
+          "marks": 5,
+          "sol": "(i) Find c:\nSum over x in {0,1,2} and y in {1,2,3} of (2x + 3y):\nFor x=0: 3(1) + 3(2) + 3(3) = 3 + 6 + 9 = 18\nFor x=1: (2+3) + (2+6) + (2+9) = 5 + 8 + 11 = 24\nFor x=2: (4+3) + (4+6) + (4+9) = 7 + 10 + 13 = 30\nTotal sum = 18 + 24 + 30 = 72.\nSince sum p(x, y) = 1 -> c * 72 = 1 => c = 1 / 72.\n\n(ii) Marginal pmfs:\n- p_X(0) = 18/72 = 1/4\n- p_X(1) = 24/72 = 1/3\n- p_X(2) = 30/72 = 5/12\n- p_Y(1) = c*[(0+3) + (2+3) + (4+3)] = c*(3 + 5 + 7) = 15/72\n- p_Y(2) = c*[(0+6) + (2+6) + (4+6)] = c*(6 + 8 + 10) = 24/72 = 1/3\n- p_Y(3) = c*[(0+9) + (2+9) + (4+9)] = c*(9 + 11 + 13) = 33/72\n\n(iii) Independence Test:\nCheck if p(0, 1) = p_X(0) * p_Y(1):\np(0, 1) = c * (0 + 3) = 3/72 = 1/24.\np_X(0) * p_Y(1) = (18/72) * (15/72) = (1/4) * (5/24) = 5/96.\nSince 1/24 != 5/96, X and Y are NOT independent.",
+          "type": "Part B (5 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Continuous Random Variables & Distributions",
+      "topics": [
+        "Continuous Random Variables, Probability Density Function (pdf)",
+        "Cumulative Distribution Function (CDF) for Continuous Variables",
+        "Expectation, Mean, Variance of Continuous Variables",
+        "Uniform Probability Distribution: pdf, Mean, Variance",
+        "Normal Distribution: pdf, Standard Normal (Z-Score), Properties",
+        "Exponential Distribution: pdf, Mean, Memoryless Property",
+        "Joint pdf of Continuous Random Variables, Marginal pdfs, Independence"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Univariate Continuous Density",
+          "description": "Continuous probability curves and integration of distributions",
+          "root": "Continuous Distributions",
+          "branches": [
+            {
+              "node": "Foundations",
+              "children": [
+                "pdf: f(x) >= 0 and int f(x) dx = 1",
+                "P(a <= X <= b) = int_a^b f(x) dx",
+                "CDF: F(x) = int_{-inf}^x f(t) dt",
+                "f(x) = d/dx [F(x)]"
+              ]
+            },
+            {
+              "node": "Standard Models",
+              "children": [
+                "Uniform U(a, b): f(x) = 1/(b-a), Mean = (a+b)/2",
+                "Normal N(mu, sigma^2): Bell curve, Z = (X-mu)/sigma",
+                "Exponential: f(x) = lambda * e^(-lambda * x), Memoryless"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Bivariate Continuous Systems",
+          "description": "Surface probability density over 2D planes",
+          "root": "Joint pdf",
+          "branches": [
+            {
+              "node": "Joint Density",
+              "children": [
+                "double_int f(x, y) dx dy = 1",
+                "Marginal f_X(x) = int f(x, y) dy",
+                "Marginal f_Y(y) = int f(x, y) dx"
+              ]
+            },
+            {
+              "node": "Independence",
+              "children": [
+                "Independent iff f(x, y) = f_X(x) * f_Y(y)"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Continuous Random Variables, PDF Properties & Cumulative Distribution Function",
+          "summary": "Probability density function (pdf) axioms, probability over intervals, point probability nullity, and CDF fundamental relationship.",
+          "key_points": [
+            "Continuous Random Variable & PDF Axioms:\nA random variable $X$ is continuous if its possible values form an unbroken continuum (an interval or collection of intervals of $\\mathbb{R}$). Its distribution is specified by a Probability Density Function (pdf) $f(x)$ satisfying:\n1. $f(x) \\ge 0$ for all $x \\in \\mathbb{R}$.\n2. $\\int_{-\\infty}^{\\infty} f(x) dx = 1$ (Total area under curve is unity).\n3. $P(a \\le X \\le b) = \\int_a^b f(x) dx$.",
+            "Critical Property: Probability at a Single Exact Point is ZERO:\nFor any single point $c$, $P(X = c) = \\int_c^c f(x) dx = 0$. Consequently:\n$$P(a \\le X \\le b) = P(a < X \\le b) = P(a \\le X < b) = P(a < X < b)$$",
+            "Cumulative Distribution Function (CDF):\n$$F(x) = P(X \\le x) = \\int_{-\\infty}^x f(t) dt$$\n- Fundamental Theorem of Calculus Relationship: At every point where $f(x)$ is continuous:\n  $$f(x) = F'(x) = \\frac{d}{dx} F(x)$$",
+            "Expectation & Variance:\n$$\\mu = E[X] = \\int_{-\\infty}^{\\infty} x f(x) dx$$\n$$\\sigma^2 = \\text{Var}(X) = \\int_{-\\infty}^{\\infty} (x - \\mu)^2 f(x) dx = E[X^2] - (E[X])^2$$"
+          ],
+          "code_or_formula": "pdf: f(x) >= 0 | int_{-inf}^{inf} f(x) dx = 1\nCDF: F(x) = int_{-inf}^x f(t) dt | f(x) = d/dx F(x)\nP(X = c) = 0 for any exact point",
+          "exam_tips": "KTU Part A: 'Why is P(X = c) = 0 for a continuous random variable?' and 'Find constant k such that f(x) = k*x^2 (0 < x < 2) is a valid pdf'."
+        },
+        {
+          "topic_title": "2. Continuous Uniform Distribution: Properties, Mean & Variance",
+          "summary": "Rectangular distribution on interval [a, b], constant density, derivation of mean (a+b)/2, variance (b-a)^2/12, and bus waiting times.",
+          "key_points": [
+            "Uniform Distribution $X \\sim U(a, b)$:\nRandom variable with constant probability density over finite interval $[a, b]$:\n$$f(x) = \\begin{cases} \\frac{1}{b - a}, & a \\le x \\le b \\\\ 0, & \\text{otherwise} \\end{cases}$$\n- Cumulative Distribution Function:\n  $$F(x) = \\begin{cases} 0, & x < a \\\\ \\frac{x - a}{b - a}, & a \\le x \\le b \\\\ 1, & x > b \\end{cases}$$",
+            "Mean & Variance Derivations:\n- Mean: $E[X] = \\int_a^b x \\frac{1}{b-a} dx = \\frac{1}{b-a} \\left[ \\frac{x^2}{2} \\right]_a^b = \\frac{b^2 - a^2}{2(b-a)} = \\frac{a + b}{2}$.\n- Second Moment: $E[X^2] = \\int_a^b x^2 \\frac{1}{b-a} dx = \\frac{b^3 - a^3}{3(b-a)} = \\frac{a^2 + ab + b^2}{3}$.\n- Variance: $\\text{Var}(X) = E[X^2] - (E[X])^2 = \\frac{a^2 + ab + b^2}{3} - \\frac{(a+b)^2}{4} = \\frac{(b - a)^2}{12}$."
+          ],
+          "code_or_formula": "Uniform(a, b): f(x) = 1/(b - a)\nMean: mu = (a + b)/2 | Variance: sigma^2 = (b - a)^2 / 12",
+          "exam_tips": "KTU Part B 4-mark staple: 'Buses arrive every 15 mins. If arrival time is uniformly distributed between 7:00 and 7:30, find probability waiting time is < 5 mins'."
+        },
+        {
+          "topic_title": "3. Exponential Distribution & The Memoryless Property",
+          "summary": "Exponential density function, rate parameter lambda, survival function, and formal mathematical proof of memoryless property.",
+          "key_points": [
+            "Exponential Distribution $X \\sim \\text{Exp}(\\lambda)$:\nModels continuous time elapsed between events in a Poisson point process:\n$$f(x) = \\begin{cases} \\lambda e^{-\\lambda x}, & x \\ge 0 \\\\ 0, & x < 0 \\end{cases}$$\n- Cumulative Distribution Function: $F(x) = 1 - e^{-\\lambda x}$ for $x \\ge 0$.\n- Survival / Reliability Function: $P(X > x) = 1 - F(x) = e^{-\\lambda x}$.\n- Moments: Mean $\\mu = E[X] = \\frac{1}{\\lambda}$, Variance $\\sigma^2 = \\text{Var}(X) = \\frac{1}{\\lambda^2}$.",
+            "The Memoryless Property (KTU Mandatory Proof):\n- Theorem: For any $s, t > 0$:\n  $$P(X > s + t \\mid X > s) = P(X > t)$$\n- Proof:\n  By conditional probability formula:\n  $$P(X > s + t \\mid X > s) = \\frac{P(X > s + t \\cap X > s)}{P(X > s)} = \\frac{P(X > s + t)}{P(X > s)}$$\n  Substituting survival function $P(X > x) = e^{-\\lambda x}$:\n  $$= \\frac{e^{-\\lambda(s + t)}}{e^{-\\lambda s}} = \\frac{e^{-\\lambda s} \\cdot e^{-\\lambda t}}{e^{-\\lambda s}} = e^{-\\lambda t} = P(X > t)$$\n- Physical Meaning: Given that a component has survived for $s$ hours, the probability that it survives an additional $t$ hours is identical to the probability of a brand-new component surviving $t$ hours (no wear or aging)."
+          ],
+          "code_or_formula": "Exp(lambda): f(x) = lambda * e^(-lambda * x)\nSurvival: P(X > x) = e^(-lambda * x)\nMean: 1/lambda | Var: 1/lambda^2\nMemoryless: P(X > s + t | X > s) = P(X > t)",
+          "exam_tips": "KTU Part A 3-mark & Part B staple: 'State and prove the memoryless property of the Exponential distribution' and 'Calculate probability of component lasting > 20000 hrs given mean 40000 hrs'."
+        },
+        {
+          "topic_title": "4. Normal (Gaussian) Distribution: Density, Standardization (Z-Score) & Probabilities",
+          "summary": "Bell-shaped normal curve, parameters mu and sigma^2, standard normal distribution Z, and standard normal table evaluation.",
+          "key_points": [
+            "Normal Distribution $X \\sim \\mathcal{N}(\\mu, \\sigma^2)$:\n$$f(x) = \\frac{1}{\\sigma \\sqrt{2\\pi}} \\exp\\left( -\\frac{(x - \\mu)^2}{2\\sigma^2} \\right), \\quad -\\infty < x < \\infty$$\n- Properties: Symmetrical bell curve centered at $x = \\mu$. Mean, Median, and Mode are identical. Points of inflection at $x = \\mu \\pm \\sigma$. Total area $= 1$.",
+            "Standard Normal Distribution $Z \\sim \\mathcal{N}(0, 1)$:\nStandardized variable $Z$ obtained via the Z-Score transform:\n$$Z = \\frac{X - \\mu}{\\sigma}$$\n- Probability Density Function: $\\phi(z) = \\frac{1}{\\sqrt{2\\pi}} e^{-z^2 / 2}$.\n- Standard Normal CDF $\\Phi(z) = P(Z \\le z)$. Symmetry property: $\\Phi(-z) = 1 - \\Phi(z)$.\n- Empirical 68-95-99.7 Rule:\n  * $P(\\mu - \\sigma \\le X \\le \\mu + \\sigma) \\approx 68.27\\%$\n  * $P(\\mu - 2\\sigma \\le X \\le \\mu + 2\\sigma) \\approx 95.45\\%$\n  * $P(\\mu - 3\\sigma \\le X \\le \\mu + 3\\sigma) \\approx 99.73\\%$."
+          ],
+          "code_or_formula": "Z-score: Z = (X - mu) / sigma\nP(a <= X <= b) = Phi((b - mu)/sigma) - Phi((a - mu)/sigma)\nPhi(-z) = 1 - Phi(z)",
+          "exam_tips": "KTU Part A: 'If X ~ N(3, 2^2), find k such that P(|X - 3| > k) = 0.05'. (Answer: P(|Z| > k/2) = 0.05 -> k/2 = 1.96 -> k = 3.92)."
+        },
+        {
+          "topic_title": "5. Bivariate Continuous Distributions: Joint & Marginal Density Functions",
+          "summary": "Joint pdf axioms, double integration, marginal pdfs, independent continuous variables, and region integrals.",
+          "key_points": [
+            "Joint Continuous pdf Axioms:\n1. $f(x, y) \\ge 0$ for all $(x, y) \\in \\mathbb{R}^2$.\n2. Total Volume: $\\int_{-\\infty}^{\\infty} \\int_{-\\infty}^{\\infty} f(x, y) dx dy = 1$.\n3. Region Probability: $P((X, Y) \\in R) = \\iint_R f(x, y) dx dy$.",
+            "Marginal Probability Density Functions:\n$$f_X(x) = \\int_{-\\infty}^{\\infty} f(x, y) dy, \\quad f_Y(y) = \\int_{-\\infty}^{\\infty} f(x, y) dx$$\n- Independence Criterion: $X$ and $Y$ are independent if and only if $f(x, y) = f_X(x) f_Y(y)$ everywhere.",
+            "Expectation of Function $g(X, Y)$:\n$$E[g(X, Y)] = \\int_{-\\infty}^{\\infty} \\int_{-\\infty}^{\\infty} g(x, y) f(x, y) dx dy$$"
+          ],
+          "code_or_formula": "int int f(x, y) dx dy = 1\nMarginals: f_X(x) = int f(x, y) dy | f_Y(y) = int f(x, y) dx\nIndependence: f(x, y) = f_X(x) * f_Y(y)",
+          "exam_tips": "KTU Part B 5-mark staple: 'Given joint pdf f(x, y) = k(6 - x - y) for 0 < x < 2, 2 < y < 4: find k and calculate P(X < 1, Y < 3)'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "If a continuous random variable X follows an Exponential distribution with mean 5, what is its parameter lambda?",
+          "options": [
+            "5",
+            "0.2",
+            "25",
+            "2.5"
+          ],
+          "ans": 1,
+          "explanation": "For an Exponential distribution, Mean = 1 / lambda => lambda = 1 / Mean = 1 / 5 = 0.2."
+        },
+        {
+          "q": "What is the relationship between the probability density function f(x) and cumulative distribution function F(x) of a continuous random variable?",
+          "options": [
+            "f(x) = integral F(x) dx",
+            "f(x) = d/dx [ F(x) ]",
+            "f(x) = 1 - F(x)",
+            "f(x) = F(x)^2"
+          ],
+          "ans": 1,
+          "explanation": "The probability density function is the first derivative of the cumulative distribution function."
+        },
+        {
+          "q": "Which property states that P(X > s + t | X > s) = P(X > t) for an Exponential random variable?",
+          "options": [
+            "Central Limit Property",
+            "Markov Property",
+            "Memoryless Property",
+            "Ergodic Property"
+          ],
+          "ans": 2,
+          "explanation": "The memoryless property asserts that past elapsed time does not affect remaining lifetime probability."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "The mileage of a radial tire is an exponential random variable with mean 40,000 km. Find the probability that a tire lasts at least 20,000 km. (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "X ~ Exp(lambda) with mean E[X] = 1/lambda = 40,000 km -> lambda = 1 / 40000.\nSurvival function for exponential distribution:\nP(X >= x) = e^(-lambda * x).\nFor x = 20,000 km:\nP(X >= 20000) = e^(- (1/40000) * 20000) = e^(-0.5) approx 0.6065 (60.65%).",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Buses arrive at 15 min intervals (7:00, 7:15, 7:30...). A passenger arrives uniformly between 7:00 and 7:30 am. Find probability passenger waits: (i) less than 5 mins, (ii) at least 12 mins. (KTU Model Paper, Part B - 4 Marks)",
+          "marks": 4,
+          "sol": "Let arrival time T in minutes past 7:00 be T ~ U(0, 30). PDF f(t) = 1/30 for 0 <= t <= 30.\nBuses depart at t = 15 and t = 30.\nWaiting time W(t) = 15 - t for 0 <= t <= 15, and 30 - t for 15 < t <= 30.\n\n(i) Waits less than 5 mins (W < 5):\n- In interval [0, 15]: 15 - t < 5 -> t in (10, 15] (Length = 5 mins).\n- In interval [15, 30]: 30 - t < 5 -> t in (25, 30] (Length = 5 mins).\nTotal favorable duration = 5 + 5 = 10 mins.\nP(W < 5) = 10 / 30 = 1/3 approx 0.3333.\n\n(ii) Waits at least 12 mins (W >= 12):\n- In interval [0, 15]: 15 - t >= 12 -> t in [0, 3] (Length = 3 mins).\n- In interval [15, 30]: 30 - t >= 12 -> t in (15, 18] (Length = 3 mins).\nTotal favorable duration = 3 + 3 = 6 mins.\nP(W >= 12) = 6 / 30 = 1/5 = 0.20.",
+          "type": "Part B (4 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Limit Theorems & Stochastic Processes",
+      "topics": [
+        "Markov's Inequality: Statement & Application",
+        "Chebyshev's Inequality: Statement, Upper Bound Derivation, Applications",
+        "Strong Law of Large Numbers (SLLN)",
+        "Central Limit Theorem (CLT): Normal Approximation of Sums",
+        "Stochastic Processes: Definitions, Discrete-Time vs Continuous-Time",
+        "Counting Processes: Independent & Stationary Increments",
+        "The Poisson Process: Postulates, Properties & Distribution",
+        "Interarrival Times & Waiting Times in a Poisson Process"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Asymptotic Limit Theorems",
+          "description": "Bounds on probability deviations and universal convergence to normal",
+          "root": "Limit Theorems",
+          "branches": [
+            {
+              "node": "Probability Inequalities",
+              "children": [
+                "Markov: P(X >= a) <= E[X] / a (for non-negative X, a > 0)",
+                "Chebyshev: P(|X - mu| >= k*sigma) <= 1 / k^2 (Bounding deviation from mean)"
+              ]
+            },
+            {
+              "node": "Asymptotic Laws",
+              "children": [
+                "Strong Law of Large Numbers (SLLN): Sample mean converges to true mean",
+                "Central Limit Theorem (CLT): Sum of n i.i.d variables approaches N(n*mu, n*sigma^2)"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "Stochastic & Arrival Processes",
+          "description": "Random collections of variables indexed over time",
+          "root": "Stochastic Processes",
+          "branches": [
+            {
+              "node": "Process Classifications",
+              "children": [
+                "State Space (Discrete vs Continuous)",
+                "Time Parameter (Discrete vs Continuous)"
+              ]
+            },
+            {
+              "node": "Poisson Process {N(t)}",
+              "children": [
+                "Counting process: N(0) = 0, independent stationary increments",
+                "N(t) ~ Poisson(lambda * t)",
+                "Interarrival times are independent Exponential(lambda) variables"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Markov's Inequality: Theorem, Proof & Upper Tail Bounds",
+          "summary": "Non-negative random variable bounds, rigorous proof via expectation splitting, and tail bound calculations.",
+          "key_points": [
+            "Markov's Inequality Theorem:\nLet $X$ be a non-negative random variable ($X \\ge 0$). For any positive constant $a > 0$:\n$$P(X \\ge a) \\le \\frac{E[X]}{a}$$\n- Intuition: If the average height in a population is 5 feet, at most $1/2$ the population can be taller than 10 feet.",
+            "Rigorous Proof of Markov's Inequality (Continuous Case):\n$$E[X] = \\int_0^{\\infty} x f(x) dx = \\int_0^a x f(x) dx + \\int_a^{\\infty} x f(x) dx$$\nSince $x \\ge 0$ everywhere, $\\int_0^a x f(x) dx \\ge 0$. Dropping the first integral:\n$$E[X] \\ge \\int_a^{\\infty} x f(x) dx$$\nIn the second integral, the integration variable $x \\ge a$. Replacing $x$ with $a$:\n$$E[X] \\ge \\int_a^{\\infty} a f(x) dx = a \\int_a^{\\infty} f(x) dx = a P(X \\ge a)$$\nDividing by $a > 0$:\n$$P(X \\ge a) \\le \\frac{E[X]}{a} \\quad \\blacksquare$$"
+          ],
+          "code_or_formula": "Markov Inequality: P(X >= a) <= E[X] / a (for X >= 0 and a > 0)",
+          "exam_tips": "KTU Part A 3-mark staple: 'State and prove Markov's inequality' or 'If X_1..X_10 are independent Poisson with mean 1, bound P(sum X_i >= 15) using Markov inequality'."
+        },
+        {
+          "topic_title": "2. Chebyshev's Inequality: Dispersion Bounds & Confidence Intervals",
+          "summary": "Derivation using Markov inequality, two-sided dispersion bounds, k-sigma deviation bounds, and numerical verification.",
+          "key_points": [
+            "Chebyshev's Inequality Theorem:\nLet $X$ be any random variable with finite mean $\\mu$ and variance $\\sigma^2$. For any constant $k > 0$:\n$$P(|X - \\mu| \\ge k\\sigma) \\le \\frac{1}{k^2} \\quad \\iff \\quad P(|X - \\mu| < k\\sigma) \\ge 1 - \\frac{1}{k^2}$$\nAlternatively, for any distance $\\epsilon > 0$:\n$$P(|X - \\mu| \\ge \\epsilon) \\le \\frac{\\sigma^2}{\\epsilon^2}$$",
+            "Derivation from Markov's Inequality:\nDefine the non-negative random variable $Y = (X - \\mu)^2 \\ge 0$. Notice that $|X - \\mu| \\ge \\epsilon \\iff (X - \\mu)^2 \\ge \\epsilon^2$. Applying Markov's inequality with $a = \\epsilon^2$:\n$$P((X - \\mu)^2 \\ge \\epsilon^2) \\le \\frac{E[(X - \\mu)^2]}{\\epsilon^2} = \\frac{\\sigma^2}{\\epsilon^2}$$\nSubstituting $\\epsilon = k\\sigma$ yields $P(|X - \\mu| \\ge k\\sigma) \\le \\frac{\\sigma^2}{k^2 \\sigma^2} = \\frac{1}{k^2}$.",
+            "Significance:\nChebyshev's inequality holds for ANY distribution whatsoever, regardless of its shape (symmetric, skewed, multimodal), needing only knowledge of mean and variance."
+          ],
+          "code_or_formula": "Chebyshev: P(|X - mu| >= k*sigma) <= 1/k^2\nAlternative: P(|X - mu| < epsilon) >= 1 - (sigma^2 / epsilon^2)",
+          "exam_tips": "KTU Part A: 'Factory weekly production has mean 500, variance 100. Using Chebyshev inequality, what is the lower bound for probability production is between 400 and 600?' (k = 100/10 = 10 -> P >= 1 - 1/100 = 0.99)."
+        },
+        {
+          "topic_title": "3. Asymptotic Limit Theorems: Strong Law of Large Numbers (SLLN) & Central Limit Theorem (CLT)",
+          "summary": "Sample mean convergence, almost sure convergence in SLLN, Gaussian convergence in CLT, and sums of independent variables.",
+          "key_points": [
+            "Strong Law of Large Numbers (SLLN):\n- Statement: Let $X_1, X_2, \\dots, X_n$ be a sequence of independent and identically distributed (i.i.d.) random variables, each having finite mean $\\mu = E[X_i]$. Let $\\bar{X}_n = \\frac{1}{n} \\sum_{i=1}^n X_i$ be the sample mean.\n- Theorem: As $n \\to \\infty$, the sample mean $\\bar{X}_n$ converges ALMOST SURELY to the true population mean $\\mu$:\n  $$P\\left( \\lim_{n \\to \\infty} \\bar{X}_n = \\mu \\right) = 1$$\n- Difference from WLLN: WLLN asserts convergence in probability ($P(|\\bar{X}_n - \\mu| > \\epsilon) \\to 0$); SLLN asserts point-by-point pathwise convergence.",
+            "Central Limit Theorem (CLT - The Cornerstone of Statistics):\n- Statement: Let $X_1, X_2, \\dots, X_n$ be i.i.d. random variables with arbitrary distribution having mean $\\mu$ and finite variance $\\sigma^2$. Let $S_n = \\sum_{i=1}^n X_i$ be their sum.\n- Theorem: As $n \\to \\infty$, the standardized sample sum (or standardized sample mean) converges in distribution to the Standard Normal Distribution $\\mathcal{N}(0, 1)$:\n  $$Z_n = \\frac{S_n - n\\mu}{\\sigma \\sqrt{n}} = \\frac{\\bar{X}_n - \\mu}{\\sigma / \\sqrt{n}} \\xrightarrow{d} \\mathcal{N}(0, 1)$$\n  $$\\lim_{n \\to \\infty} P\\left( \\frac{S_n - n\\mu}{\\sigma \\sqrt{n}} \\le z \\right) = \\Phi(z) = \\frac{1}{\\sqrt{2\\pi}} \\int_{-\\infty}^z e^{-u^2/2} du$$"
+          ],
+          "code_or_formula": "SLLN: P(lim X_bar_n = mu) = 1 (Almost sure convergence)\nCLT: Z = (S_n - n*mu) / (sigma * sqrt(n)) -> N(0, 1) as n -> infinity",
+          "exam_tips": "KTU Part B 4-mark staple: 'Battery lifespan mean 40 hrs, std dev 20 hrs. For 25 batteries, approximate the probability that total lifespan exceeds 1100 hrs using CLT'."
+        },
+        {
+          "topic_title": "4. Stochastic Processes: Classification & State/Parameter Spaces",
+          "summary": "Definition of stochastic processes, classification matrix based on state space (discrete/continuous) and parameter space (discrete/continuous).",
+          "key_points": [
+            "Stochastic Process Definition:\nA collection/family of random variables $\\{X(t), t \\in T\\}$ defined on a common probability space, indexed by parameter $t \\in T$ (usually representing time).\n- State Space ($S$): The set of all possible values that $X(t)$ can assume.\n- Parameter Space ($T$): The set of values that the index $t$ can take.",
+            "The 4-Fold Classification Matrix (KTU Mandatory Classification Question):\n1. Discrete-Time, Discrete-State Space Process:\n   $T = \\{0, 1, 2, \\dots\\}$, $S = \\{0, 1, 2, \\dots\\}$.\n   *Example:* Number of heads in $n$ coin tosses; Daily closing stock prices rounded to nearest integer.\n2. Continuous-Time, Discrete-State Space Process:\n   $T = [0, \\infty)$, $S = \\{0, 1, 2, \\dots\\}$.\n   *Example:* Number of phone calls received by a call center up to time $t$ (Poisson process); Number of customers in a queue at time $t$.\n3. Discrete-Time, Continuous-State Space Process:\n   $T = \\{0, 1, 2, \\dots\\}$, $S = \\mathbb{R}$.\n   *Example:* Daily maximum temperature recorded at noon every day.\n4. Continuous-Time, Continuous-State Space Process:\n   $T = [0, \\infty)$, $S = \\mathbb{R}$.\n   *Example:* Brownian motion of a microscopic particle suspended in liquid; Thermal noise voltage across an electrical resistor over time."
+          ],
+          "code_or_formula": "Stochastic Process: {X(t), t in T}\nClassification: (Discrete/Continuous Time T) x (Discrete/Continuous State S)",
+          "exam_tips": "KTU Part A 3-mark staple: 'Classify stochastic processes based on state space and parameter space with neat examples for each category'."
+        },
+        {
+          "topic_title": "5. Counting Processes & The Poisson Process",
+          "summary": "Counting process properties, independent and stationary increments, Poisson process postulates, and distribution of event counts.",
+          "key_points": [
+            "Counting Process Definition:\nA stochastic process $\\{N(t), t \\ge 0\\}$ is a counting process if $N(t)$ represents the total number of events that have occurred up to time $t$:\n1. $N(t) \\ge 0$.\n2. $N(t)$ is an integer for all $t \\ge 0$.\n3. If $s < t$, then $N(s) \\le N(t)$ (Non-decreasing).\n4. For $s < t$, $N(t) - N(s)$ represents the number of events in time interval $(s, t]$.",
+            "Key Increment Properties:\n- Independent Increments: Numbers of events occurring in non-overlapping time intervals are statistically independent.\n- Stationary Increments: The distribution of events in any interval $(s, s+t]$ depends ONLY on the length $t$ of the interval, not on the starting time $s$.",
+            "The Poisson Process Definition (with Rate $\\lambda > 0$):\nA counting process $\\{N(t), t \\ge 0\\}$ is a Poisson process with rate $\\lambda$ if:\n1. $N(0) = 0$.\n2. The process has independent and stationary increments.\n3. The number of events in any interval of length $t$ follows a Poisson distribution with mean $\\lambda t$:\n   $$P(N(t+s) - N(s) = k) = P(N(t) = k) = \\frac{e^{-\\lambda t}(\\lambda t)^k}{k!}, \\quad k = 0, 1, 2, \\dots$$\n- Expected value and variance of event count in time $t$:\n  $$E[N(t)] = \\lambda t, \\quad \\text{Var}(N(t)) = \\lambda t$$"
+          ],
+          "code_or_formula": "Poisson Process: P(N(t) = k) = [e^(-lambda*t) * (lambda*t)^k] / k!\nE[N(t)] = Var(N(t)) = lambda * t",
+          "exam_tips": "KTU Part B 5-mark staple: 'People immigrate at rate lambda = 2 per day. Find probability of 10 arrivals in 7 days and expected days for 20 arrivals'."
+        },
+        {
+          "topic_title": "6. Interarrival Times & Waiting Times in Poisson Processes",
+          "summary": "Interarrival times distribution, proof that T_n ~ Exp(lambda), waiting time S_n ~ Gamma(n, lambda), and interval probabilities.",
+          "key_points": [
+            "Interarrival Times ($T_n$):\n- Let $T_1$ be time of 1st event. For $n \\ge 2$, let $T_n$ be elapsed time between $(n-1)$-th and $n$-th event.\n- Theorem: The interarrival times $T_1, T_2, \\dots$ are independent, identically distributed Exponential random variables with mean $1/\\lambda$ ($T_n \\sim \\text{Exp}(\\lambda)$)!\n- Proof for $T_1$:\n  $$P(T_1 > t) = P(N(t) = 0) = \\frac{e^{-\\lambda t}(\\lambda t)^0}{0!} = e^{-\\lambda t}$$\n  CDF: $F_{T_1}(t) = 1 - e^{-\\lambda t} \\implies f_{T_1}(t) = \\lambda e^{-\\lambda t}$ for $t \\ge 0$ (Exponential density).",
+            "Waiting Time to $n$-th Event ($S_n$):\n- $S_n = \\sum_{i=1}^n T_i$ represents the arrival time of the $n$-th event.\n- $S_n$ follows a Gamma (or Erlang) distribution with parameters $n$ and $\\lambda$:\n  $$f_{S_n}(t) = \\frac{\\lambda e^{-\\lambda t} (\\lambda t)^{n-1}}{(n-1)!}, \\quad t \\ge 0$$\n  $$E[S_n] = \\frac{n}{\\lambda}, \\quad \\text{Var}(S_n) = \\frac{n}{\\lambda^2}$$"
+          ],
+          "code_or_formula": "Interarrival Times: T_n ~ Exp(lambda) i.i.d. with mean 1/lambda\nWaiting Time to n-th arrival: S_n = sum_{i=1}^n T_i ~ Gamma(n, lambda), E[S_n] = n/lambda",
+          "exam_tips": "KTU Part B 6-mark staple: 'Customers arrive at rate 3 per min. Find probability interval between 2 arrivals is: (i) > 1 min, (ii) between 1 and 2 mins, (iii) <= 4 mins'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "According to Chebyshev's Inequality, what is the upper bound on the probability that a random variable deviates from its mean by at least 3 standard deviations (k = 3)?",
+          "options": [
+            "1/3",
+            "1/9 (approx 0.111)",
+            "1/27",
+            "1/6"
+          ],
+          "ans": 1,
+          "explanation": "P(|X - mu| >= 3*sigma) <= 1 / 3^2 = 1/9."
+        },
+        {
+          "q": "What distribution governs the interarrival times between successive events in a Poisson process with rate lambda?",
+          "options": [
+            "Uniform distribution",
+            "Normal distribution",
+            "Exponential distribution with parameter lambda",
+            "Poisson distribution"
+          ],
+          "ans": 2,
+          "explanation": "The time between consecutive events in a Poisson process is exponentially distributed with rate parameter lambda."
+        },
+        {
+          "q": "The Central Limit Theorem guarantees that the sum of N independent identically distributed random variables approaches which distribution as N becomes large?",
+          "options": [
+            "Exponential",
+            "Normal (Gaussian)",
+            "Uniform",
+            "Binomial"
+          ],
+          "ans": 1,
+          "explanation": "The CLT states that the standardized sum of independent identically distributed variables converges to a standard Normal distribution."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "Suppose weekly factory production has mean 500 items and variance 100. What does Chebyshev's inequality say about the probability that this week's production is between 400 and 600? (KTU Model Paper, Part A - 3 Marks)",
+          "marks": 3,
+          "sol": "Given: Mean mu = 500, Variance sigma^2 = 100 -> Standard deviation sigma = 10.\nWe want to bound P(400 < X < 600) = P(|X - 500| < 100).\nUsing Chebyshev inequality form P(|X - mu| < k*sigma) >= 1 - 1/k^2:\nk * sigma = 100 -> k * 10 = 100 -> k = 10.\nP(|X - 500| < 100) >= 1 - (1 / 10^2) = 1 - 0.01 = 0.99 (99%).\nConclusion: The probability that weekly production will be between 400 and 600 items is AT LEAST 0.99.",
+          "type": "Part A (3 Marks)"
+        },
+        {
+          "q": "Battery lifetimes are independent with mean 40 hours and standard deviation 20 hours. For a stockpile of 25 batteries used sequentially, approximate the probability that over 1100 hours of use can be obtained using CLT. (KTU Model Paper, Part B - 4 Marks)",
+          "marks": 4,
+          "sol": "Let X_i be lifetime of battery i. n = 25, mu = 40, sigma = 20.\nTotal lifetime S_25 = sum_{i=1}^{25} X_i.\nBy Central Limit Theorem:\nMean of S_25 = n * mu = 25 * 40 = 1000 hours.\nStd Dev of S_25 = sigma * sqrt(n) = 20 * sqrt(25) = 20 * 5 = 100 hours.\nStandardize Z for S_25 > 1100:\nZ = (1100 - 1000) / 100 = 100 / 100 = 1.0.\nP(S_25 > 1100) = P(Z > 1.0) = 1 - Phi(1.0) = 1 - 0.8413 = 0.1587 (15.87%).",
+          "type": "Part B (4 Marks)"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Markov Chains & Random Walk",
+      "topics": [
+        "Markov Chains: Markov Property, Discrete-Time Markov Chain (DTMC)",
+        "Transition Probability Matrix (TPM): 1-Step Transition Matrix",
+        "Chapman-Kolmogorov Equations: Multi-Step Transition Probabilities",
+        "Random Walk Model: Formulation & Boundaries",
+        "Classification of States: Accessible, Communicating, Irreducible Markov Chain",
+        "Periodicity of States: Periodic vs Aperiodic",
+        "Recurrent vs Transient States",
+        "Long-Run Proportions & Stationary Distribution: pi * P = pi"
+      ],
+      "concept_tree": [
+        {
+          "cloud_title": "Markovian State Transitions",
+          "description": "Memoryless state sequences and stochastic transition matrices",
+          "root": "Markov Chains",
+          "branches": [
+            {
+              "node": "Markov Property",
+              "children": [
+                "P(X_{n+1} = j | X_n = i, ..., X_0) = P(X_{n+1} = j | X_n = i)",
+                "Future depends ONLY on present state"
+              ]
+            },
+            {
+              "node": "Transition Matrix",
+              "children": [
+                "TPM P: p_ij >= 0, row sum = 1 (stochastic matrix)",
+                "Chapman-Kolmogorov: P^(m+n) = P^m * P^n",
+                "n-step transition matrix = matrix power P^n"
+              ]
+            },
+            {
+              "node": "Random Walk",
+              "children": [
+                "Particle moves right with p, left with 1-p",
+                "Absorbing vs reflecting boundaries"
+              ]
+            }
+          ]
+        },
+        {
+          "cloud_title": "State Topologies & Equilibrium",
+          "description": "Long-term behavior and invariant probability distributions",
+          "root": "Equilibrium Analysis",
+          "branches": [
+            {
+              "node": "State Classification",
+              "children": [
+                "Communicating: i <-> j (mutual accessibility)",
+                "Irreducible: All states communicate",
+                "Recurrent: Probability of eventual return = 1",
+                "Transient: Probability of return < 1"
+              ]
+            },
+            {
+              "node": "Stationary Vector",
+              "children": [
+                "pi * P = pi  with  sum(pi_i) = 1",
+                "Long-run fraction of time process spends in state j"
+              ]
+            }
+          ]
+        }
+      ],
+      "detailed_notes": [
+        {
+          "topic_title": "1. Discrete-Time Markov Chains: The Markov Property & Transition Probability Matrix (TPM)",
+          "summary": "Markov property, state space, 1-step transition probability matrix P, row stochasticity, and state transition diagrams.",
+          "key_points": [
+            "The Markov Property (Memorylessness of Transitions):\nA discrete-time stochastic process $\\{X_n, n = 0, 1, 2, \\dots\\}$ taking values in discrete state space $S$ satisfies the Markov property if the conditional distribution of any future state $X_{n+1}$ given the present state $X_n$ and all past states $X_{n-1}, \\dots, X_0$ depends SOLELY on the present state $X_n$:\n$$P(X_{n+1} = j \\mid X_n = i, X_{n-1} = i_{n-1}, \\dots, X_0 = i_0) = P(X_{n+1} = j \\mid X_n = i) = P_{ij}$$",
+            "Transition Probability Matrix (TPM) $P$:\n- $P_{ij}$ is the probability of transitioning from state $i$ to state $j$ in one step.\n- Structure of TPM $P = [P_{ij}]$:\n  $$P = \\begin{bmatrix} P_{00} & P_{01} & P_{02} & \\dots \\\\ P_{10} & P_{11} & P_{12} & \\dots \\\\ \\vdots & \\vdots & \\vdots & \\ddots \\end{bmatrix}$$\n- 2 Mandatory Stochastic Properties:\n  1. $P_{ij} \\ge 0$ for all $i, j \\in S$.\n  2. $\\sum_{j \\in S} P_{ij} = 1$ for all rows $i$ (Each row must sum up to EXACTLY 1.0).",
+            "State Transition Diagram (Graph):\nDirected graph where nodes represent states and directed edges represent non-zero transition probabilities $P_{ij}$."
+          ],
+          "code_or_formula": "Markov Property: P(X_{n+1} = j | X_n = i, ...) = P_{ij}\nTPM Properties: P_{ij} >= 0 and sum_j P_{ij} = 1 for all rows i",
+          "exam_tips": "KTU Part A 3-mark staple: 'Define a Markov chain and state the properties of its transition probability matrix'."
+        },
+        {
+          "topic_title": "2. Chapman-Kolmogorov Equations & n-Step Transition Probabilities",
+          "summary": "Multi-step transitions, Chapman-Kolmogorov theorem, matrix power formulation P^(n) = P^n, and path probability calculation.",
+          "key_points": [
+            "The Chapman-Kolmogorov Equations:\n- Provide a method for computing $n$-step transition probabilities $P_{ij}^{(n)} = P(X_n = j \\mid X_0 = i)$.\n- Theorem: For any intermediate step $m$ ($0 < m < n$):\n  $$P_{ij}^{(n)} = \\sum_{k \\in S} P_{ik}^{(m)} P_{kj}^{(n - m)}$$\n  where $k$ represents all possible intermediate states visited at step $m$.",
+            "Matrix Formulation ($P^{(n)} = P^n$):\n- In matrix algebra, the $n$-step transition matrix $P^{(n)}$ is simply the $n$-th algebraic power of the 1-step TPM:\n  $$P^{(n)} = P \\times P \\times \\dots \\times P = P^n$$\n  2-Step TPM: $P^{(2)} = P^2$.\n  3-Step TPM: $P^{(3)} = P^3 = P^2 \\times P$.",
+            "State Probability Vector at Step $n$ ($p^{(n)}$):\nLet $p^{(0)} = [P(X_0=1), P(X_0=2), \\dots]$ be the initial probability distribution. Then the probability distribution at step $n$ is:\n$$p^{(n)} = p^{(0)} P^n$$\n- Joint Path Probability Calculation:\n  $$P(X_3 = k, X_2 = j, X_1 = i, X_0 = h) = P(X_0 = h) \\cdot P_{hi} \\cdot P_{ij} \\cdot P_{jk}$$"
+          ],
+          "code_or_formula": "Chapman-Kolmogorov: P_ij^(n+m) = sum_k P_ik^(n) * P_kj^(m)\nMatrix Power: P^(n) = P^n\nState Distribution at step n: p^(n) = p^(0) * P^n",
+          "exam_tips": "KTU Part B 9-mark staple: 'Given 3-state TPM P and initial vector p(0): calculate P^(2), P(X_2 = 2), and joint path probability P(X_3=3, X_2=2, X_1=1, X_0=3)'."
+        },
+        {
+          "topic_title": "3. The Random Walk Model: Unrestricted, Absorbing & Reflecting Boundaries",
+          "summary": "1D lattice walk, transition probabilities, absorbing barriers (Gambler's ruin), and reflecting boundaries.",
+          "key_points": [
+            "1D Random Walk Formulation:\nA Markov chain on integer state space $S = \\{0, \\pm 1, \\pm 2, \\dots\\}$ where a particle moves one step right with probability $p$ and one step left with probability $q = 1 - p$:\n$$P_{i, i+1} = p, \\quad P_{i, i-1} = q, \\quad P_{i, j} = 0 \\text{ for } |i - j| \\ne 1$$",
+            "Boundary Conditions:\n1. Absorbing Barrier: Once state $k$ is entered, the chain never leaves it: $P_{kk} = 1$.\n   - Gambler's Ruin Problem: Chain on states $\\{0, 1, \\dots, N\\}$ with absorbing states at 0 (ruin/bankruptcy) and $N$ (target fortune).\n2. Reflecting Barrier: When state reaches boundary (e.g. 0), it is bounced back into state 1 on next step with probability 1: $P_{0, 1} = 1$."
+          ],
+          "code_or_formula": "Random Walk: P_{i, i+1} = p | P_{i, i-1} = 1 - p\nAbsorbing Barrier: P_kk = 1 | Reflecting Barrier: P_01 = 1",
+          "exam_tips": "KTU Part A: 'Formulate the Gambler's Ruin problem as a Markov chain with absorbing barriers'."
+        },
+        {
+          "topic_title": "4. Classification of States: Accessibility, Communication & Irreducibility",
+          "summary": "Accessible states, communicating relation, equivalence classes, and irreducible Markov chains.",
+          "key_points": [
+            "Accessibility & Communication:\n- Accessible State: State $j$ is accessible from state $i$ (written $i \\to j$) if there exists some finite $n \\ge 0$ such that $P_{ij}^{(n)} > 0$ (there exists a path of non-zero probability from $i$ to $j$).\n- Communicating States: States $i$ and $j$ communicate (written $i \\leftrightarrow j$) if $i \\to j$ and $j \\to i$.\n- Equivalence Relation: Communication is Reflexive ($i \\leftrightarrow i$), Symmetric ($i \\leftrightarrow j \\implies j \\leftrightarrow i$), and Transitive ($i \\leftrightarrow j$ and $j \\leftrightarrow k \\implies i \\leftrightarrow k$). Communication partitions state space into disjoint Communicating Classes.",
+            "Irreducible Markov Chain:\nA Markov chain is Irreducible if it contains EXACTLY ONE communicating class; that is, every state can eventually reach every other state ($i \\leftrightarrow j$ for all $i, j \\in S$)."
+          ],
+          "code_or_formula": "Accessibility: i -> j if P_ij^(n) > 0 for some n >= 0\nCommunicating: i <-> j if i -> j and j -> i\nIrreducible: All states communicate in a single class",
+          "exam_tips": "KTU Part A: 'Define irreducible Markov chain with an example transition matrix'."
+        },
+        {
+          "topic_title": "5. Periodicity, Recurrence & Transience of States",
+          "summary": "State period d(i), aperiodicity, return probability f_ii, recurrent vs transient criteria, positive recurrence, and ergodicity.",
+          "key_points": [
+            "Period of a State ($d(i)$):\n- $d(i) = \\gcd\\{n \\ge 1: P_{ii}^{(n)} > 0\\}$.\n- Aperiodic: If $d(i) = 1$. (Periodic if $d(i) > 1$).\n- Class Property: All states in the same communicating class share the identical period!",
+            "Recurrence vs Transience:\nLet $f_i$ denote the probability that starting in state $i$, the process ever returns to state $i$ in a finite number of steps ($f_i = \\sum_{n=1}^\\infty f_{ii}^{(n)}$):\n1. Recurrent State: $f_i = 1$.\n   - The chain returns to state $i$ infinitely often with probability 1:\n     $$\\sum_{n=1}^\\infty P_{ii}^{(n)} = \\infty$$\n   - Positive Recurrent: Recurrent and expected return time $m_i < \\infty$.\n   - Null Recurrent: Recurrent but expected return time $m_i = \\infty$ (only possible in infinite state chains).\n2. Transient State: $f_i < 1$.\n   - Expected number of returns is finite:\n     $$\\sum_{n=1}^\\infty P_{ii}^{(n)} = \\frac{f_i}{1 - f_i} < \\infty$$\n   - Eventually the chain leaves state $i$ forever.",
+            "Ergodic State / Ergodic Markov Chain:\nA state is Ergodic if it is both Aperiodic ($d=1$) and Positive Recurrent. A finite irreducible aperiodic Markov chain is always Ergodic."
+          ],
+          "code_or_formula": "Period: d(i) = gcd{n >= 1: P_ii^(n) > 0}\nRecurrent: f_i = 1 <=> sum P_ii^(n) = infinity\nTransient: f_i < 1 <=> sum P_ii^(n) < infinity\nErgodic: Aperiodic + Positive Recurrent",
+          "exam_tips": "KTU Part A: 'Differentiate between transient and recurrent states in a Markov chain'."
+        },
+        {
+          "topic_title": "6. Stationary Distribution & Long-Run Proportions (Ergodic Theorem)",
+          "summary": "Limiting probabilities, stationary distribution vector pi = pi * P, solving linear system, and long-run proportion problems.",
+          "key_points": [
+            "Stationary Distribution Vector $\\pi = [\\pi_0, \\pi_1, \\dots, \\pi_k]$:\n- A probability distribution vector $\\pi$ is stationary if:\n  $$\\pi P = \\pi \\quad \\text{subject to } \\sum_{i \\in S} \\pi_i = 1, \\quad \\pi_i \\ge 0$$\n- Physical Meaning: If initial distribution is $\\pi$, then the distribution at every future time step remains strictly $\\pi$ ($p^{(n)} = \\pi P^n = \\pi$).",
+            "The Limiting (Long-Run) Theorem for Ergodic Chains:\n- For any finite, irreducible, aperiodic (ergodic) Markov chain, the limiting probabilities exist uniquely and are independent of initial state:\n  $$\\lim_{n \\to \\infty} P_{ij}^{(n)} = \\pi_j$$\n- Each $\\pi_j$ represents the long-run proportion of time the process spends in state $j$, and $\\pi_j = \\frac{1}{m_j}$ where $m_j$ is the mean recurrence time of state $j$.",
+            "Solving 2-State Stationary Distribution (KTU Formula):\nFor $P = \\begin{bmatrix} 1 - a & a \\\\ b & 1 - b \\end{bmatrix}$:\n$$\\pi_0 = \\frac{b}{a + b}, \\quad \\pi_1 = \\frac{a}{a + b}$$"
+          ],
+          "code_or_formula": "Stationary System: pi * P = pi and sum pi_i = 1\nLimiting matrix: Row n approaches [pi_0, pi_1, ..., pi_k]\n2-State formula: pi_0 = b / (a + b), pi_1 = a / (a + b)",
+          "exam_tips": "KTU Part B 9-mark guaranteed staple: 'Calculate the stationary distribution / long-run proportions for given transition matrix P by solving system pi*P = pi'."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What is the sum of entries along any row of a Transition Probability Matrix (TPM)?",
+          "options": [
+            "0",
+            "1",
+            "Variable depending on number of states",
+            "Infinity"
+          ],
+          "ans": 1,
+          "explanation": "Since from any state i the process must transition to one of the possible states in the next step, every row sums to exactly 1."
+        },
+        {
+          "q": "What defines an Irreducible Markov Chain?",
+          "options": [
+            "No transitions are possible between states",
+            "Every state can be reached from every other state (all states communicate)",
+            "The matrix has zero determinant",
+            "The chain possesses absorbing states only"
+          ],
+          "ans": 1,
+          "explanation": "A Markov chain is irreducible if every state communicates with every other state in a finite number of steps."
+        },
+        {
+          "q": "In matrix terms, how is the 2-step transition probability matrix P^(2) calculated from the 1-step TPM P?",
+          "options": [
+            "P^(2) = P + P",
+            "P^(2) = P * P (matrix multiplication)",
+            "P^(2) = 2 * P",
+            "P^(2) = P^T"
+          ],
+          "ans": 1,
+          "explanation": "By the Chapman-Kolmogorov equations, the n-step transition matrix is given by matrix exponentiation P^n."
+        }
+      ],
+      "pyqs": [
+        {
+          "q": "The TPM of a 3-state Markov chain is P = [[0.2, 0.3, 0.5], [0.1, 0.6, 0.3], [0.4, 0.3, 0.3]] and initial distribution is P(0) = [0.5, 0.3, 0.3]. Find (i) P(X_2 = 2), (ii) P(X_3 = 3, X_2 = 2, X_1 = 1, X_0 = 3), (iii) P^(2), the 2-step TPM. (KTU Model Paper, Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "(iii) Compute 2-step TPM P^(2) = P * P:\nRow 1: [0.2*0.2 + 0.3*0.1 + 0.5*0.4, 0.2*0.3 + 0.3*0.6 + 0.5*0.3, 0.2*0.5 + 0.3*0.3 + 0.5*0.3]\n       = [0.04 + 0.03 + 0.20, 0.06 + 0.18 + 0.15, 0.10 + 0.09 + 0.15] = [0.27, 0.39, 0.34]\nRow 2: [0.1*0.2 + 0.6*0.1 + 0.3*0.4, 0.1*0.3 + 0.6*0.6 + 0.3*0.3, 0.1*0.5 + 0.6*0.3 + 0.3*0.3]\n       = [0.02 + 0.06 + 0.12, 0.03 + 0.36 + 0.09, 0.05 + 0.18 + 0.09] = [0.20, 0.48, 0.32]\nRow 3: [0.4*0.2 + 0.3*0.1 + 0.3*0.4, 0.4*0.3 + 0.3*0.6 + 0.3*0.3, 0.4*0.5 + 0.3*0.3 + 0.3*0.3]\n       = [0.08 + 0.03 + 0.12, 0.12 + 0.18 + 0.09, 0.20 + 0.09 + 0.09] = [0.23, 0.39, 0.38]\nSo P^(2) = [[0.27, 0.39, 0.34], [0.20, 0.48, 0.32], [0.23, 0.39, 0.38]].\n\n(i) Find P(X_2 = 2):\np^(2) = p^(0) * P^(2) = [0.5, 0.3, 0.3] * P^(2)\nComponent for state 2 is the 2nd column product:\nP(X_2 = 2) = 0.5*(0.39) + 0.3*(0.48) + 0.3*(0.39) = 0.195 + 0.144 + 0.117 = 0.456.\n\n(ii) Joint Path Probability P(X_3 = 3, X_2 = 2, X_1 = 1, X_0 = 3):\nP = P(X_0 = 3) * P_{3, 1} * P_{1, 2} * P_{2, 3}\n  = 0.3 * 0.4 * 0.3 * 0.3 = 0.0108.",
+          "type": "Part B (9 Marks)"
+        },
+        {
+          "q": "Capa plays either 1 or 2 chess games every day according to a Markov chain with TPM P11=0.2, P12=0.8, P21=0.4, P22=0.6. Capa wins each game with probability p. She plays 2 games on Monday. (a) Probability she wins all games on Tuesday? (b) Expected games on Wednesday? (c) Long-run proportion of days she wins all games? (KTU Model Paper, Part B - 9 Marks)",
+          "marks": 9,
+          "sol": "States: State 1 (plays 1 game), State 2 (plays 2 games).\nGiven Monday is State 2 ($X_0 = 2$).\n(a) Tuesday transition from State 2: P_{2,1} = 0.4 (plays 1 game), P_{2,2} = 0.6 (plays 2 games).\n- If she plays 1 game, prob of winning all is p.\n- If she plays 2 games, prob of winning all is p^2.\nTotal probability = P_{2,1}*p + P_{2,2}*p^2 = 0.4p + 0.6p^2.\n\n(b) Expected games on Wednesday (Step 2 from Monday):\n2-step transition from state 2 to states 1 and 2:\nP^(2) = P * P.\nP_{2,1}^(2) = 0.4(0.2) + 0.6(0.4) = 0.08 + 0.24 = 0.32.\nP_{2,2}^(2) = 0.4(0.8) + 0.6(0.6) = 0.32 + 0.36 = 0.68.\nExpected games on Wednesday = 1 * P_{2,1}^(2) + 2 * P_{2,2}^(2) = 1(0.32) + 2(0.68) = 0.32 + 1.36 = 1.68 games.\n\n(c) Long-run stationary distribution pi = [pi_1, pi_2]:\npi * P = pi and pi_1 + pi_2 = 1.\npi_1 = 0.2 pi_1 + 0.4 pi_2 -> 0.8 pi_1 = 0.4 pi_2 -> pi_2 = 2 pi_1.\npi_1 + 2 pi_1 = 1 -> 3 pi_1 = 1 -> pi_1 = 1/3, pi_2 = 2/3.\nLong-run proportion of days she wins all games:\npi_1 * p + pi_2 * p^2 = (1/3)p + (2/3)p^2.",
+          "type": "Part B (9 Marks)"
+        }
+      ]
+    }
+  ]
+}
