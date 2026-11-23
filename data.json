@@ -3781,25 +3781,52 @@
                 "topic": "Discrete random variables, expectation and variance",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Always check that the probabilities sum to 1 (\\(\\sum p(x) = 1\\)) and use \\(\\text{Var}(X) = E(X^2) - [E(X)]^2\\)."
+                "rule": "Check that probabilities sum to 1 (\\(\\sum p(x) = 1\\)) and use \\(\\text{Var}(X) = E(X^2) - [E(X)]^2\\).",
+                "notes": [
+                  "**PMF Axioms & Unknown Parameter $k$**: For a valid discrete PMF, $p(x_i) \\ge 0$ and $\\sum p(x_i) = 1$. In exam questions with unknown $k$, set $\\sum p(x) = 1$ to solve for $k$, then verify that $p(x) \\ge 0$ for all values.",
+                  "**Expected Value (Mean)**: $\\mu = E[X] = \\sum x \\cdot p(x)$. Linearity property: $E[aX + b] = a E[X] + b$.",
+                  "**Variance & Standard Deviation**: $\\sigma^2 = \\text{Var}(X) = E[(X - \\mu)^2] = E[X^2] - [E(X)]^2$, where $E[X^2] = \\sum x^2 p(x)$. Property: $\\text{Var}(aX + b) = a^2 \\text{Var}(X)$.",
+                  "**CDF**: Step function $F(x) = P(X \\le x) = \\sum_{t \\le x} p(t)$. For intervals: $P(a < X \\le b) = F(b) - F(a)$."
+                ],
+                "formula": "p(x) >= 0 | sum p(x) = 1\nE[X] = sum x*p(x) | E[X^2] = sum x^2*p(x)\nVar(X) = E[X^2] - (E[X])^2 | Var(aX + b) = a^2 * Var(X)"
               },
               {
                 "topic": "Poisson and binomial distributions in system reliability",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Binomial: \\(P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}\\). Poisson: \\(P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}\\). Mean and variance are both \\(\\lambda\\)."
+                "rule": "Binomial is for fixed $n$ trials; Poisson is for rare events ($n \\to \\infty, p \\to 0$) or continuous rate-based arrivals.",
+                "notes": [
+                  "**Binomial Distribution**: $X \\sim B(n, p)$. PMF: $P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$ for $k = 0, 1, \\dots, n$. Mean $\\mu = np$, Variance $\\sigma^2 = np(1-p)$.",
+                  "**Poisson Distribution**: $X \\sim \\text{Poisson}(\\lambda)$. PMF: $P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}$ for $k = 0, 1, 2, \\dots$. Mean and Variance are equal: $\\mu = \\sigma^2 = \\lambda$.",
+                  "**Poisson Approximation to Binomial**: When $n \\ge 30$ and $p \\le 0.05$, use $\\lambda = np$.",
+                  "**System Reliability**: For independent redundant components with failure probability $q = 1-p$, system reliability (at least one working component) is $P(\\text{Survives}) = 1 - P(\\text{all fail}) = 1 - q^n$."
+                ],
+                "formula": "Binomial: P(X = k) = nCk * p^k * (1-p)^(n-k) | Mean = np, Var = np(1-p)\nPoisson:  P(X = k) = (e^-lambda * lambda^k) / k! | Mean = lambda, Var = lambda\nReliability (Parallel): R = 1 - (1 - p)^n"
               },
               {
                 "topic": "Joint pmf and marginal distributions",
                 "priority": "High Priority",
                 "appearances": "4 appearances",
-                "insight": "Find the constant \\(c\\) first via \\(\\sum_x \\sum_y f(x,y) = 1\\), then sum out \\(y\\) or \\(x\\) for the marginal distributions."
+                "rule": "Find constant $c$ first using $\\sum_x \\sum_y f(x,y) = 1$, then sum out $y$ for $p_X(x)$ and sum out $x$ for $p_Y(y)$.",
+                "notes": [
+                  "**Axiom of Total Probability**: $\\sum_x \\sum_y p(x, y) = 1$. Use this double sum equation first to solve for the normalization constant $c$.",
+                  "**Marginal PMFs**: Sum along columns/rows: $p_X(x) = \\sum_y p(x, y)$ and $p_Y(y) = \\sum_x p(x, y)$.",
+                  "**Independence**: $X$ and $Y$ are independent if and only if $p(x, y) = p_X(x) p_Y(y)$ for all $(x, y)$.",
+                  "**Distribution of Sum $Z = X + Y$**: Sum probabilities of all ordered pairs $(x, y)$ satisfying $x + y = z$: $P(Z = z) = \\sum_{x+y=z} p(x, y)$."
+                ],
+                "formula": "sum_x sum_y p(x,y) = 1\np_X(x) = sum_y p(x,y) | p_Y(y) = sum_x p(x,y)\nP(X + Y = z) = sum_{x+y=z} p(x,y)"
               },
               {
                 "topic": "Hypergeometric and geometric distributions",
                 "priority": "Medium Priority",
                 "appearances": "3 appearances",
-                "insight": "Binomial is sampling with replacement; hypergeometric is sampling without replacement: \\(P(X = k) = \\frac{\\binom{K}{k} \\binom{N-K}{n-k}}{\\binom{N}{n}}\\)."
+                "rule": "Binomial is sampling with replacement; hypergeometric is sampling without replacement.",
+                "notes": [
+                  "**Hypergeometric Distribution**: Population of size $N$ containing $K$ successes and $N-K$ failures. Draw a sample of size $n$ without replacement: $$P(X = k) = \\frac{\\binom{K}{k} \\binom{N-K}{n-k}}{\\binom{N}{n}}$$ Mean: $E[X] = n \\frac{K}{N}$.",
+                  "**Geometric Distribution**: Number of independent Bernoulli trials until the 1st success occurs: $$P(X = k) = (1-p)^{k-1} p, \\quad k = 1, 2, 3, \\dots$$ Mean: $E[X] = \\frac{1}{p}$, Variance: $\\text{Var}(X) = \\frac{1-p}{p^2}$.",
+                  "**Memoryless Property of Geometric**: $P(X > s + t \\mid X > s) = P(X > t) = (1-p)^t$."
+                ],
+                "formula": "Hypergeometric: P(X=k) = [KCk * (N-K)C(n-k)] / NCn\nGeometric:      P(X=k) = (1-p)^(k-1) * p | Mean = 1/p, Var = (1-p)/p^2"
               }
             ],
             "practice_questions": [
@@ -3842,25 +3869,51 @@
                 "topic": "Normal distribution and tolerance limits",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Standardize with \\(Z = \\frac{X - \\mu}{\\sigma}\\). For two-tailed tail probability \\(P(|X - \\mu| > k) = 0.05\\), use critical value \\(z_{0.025} = 1.96\\)."
+                "rule": "Standardize with $Z = \\frac{X - \\mu}{\\sigma}$. For two-tailed tail probability $P(|X - \\mu| > k) = 0.05$, use $z_{0.025} = 1.96$.",
+                "notes": [
+                  "**Standard Normal Transformation**: For $X \\sim N(\\mu, \\sigma^2)$, define $Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1)$. Cumulative distribution function is denoted $\\Phi(z) = P(Z \\le z)$.",
+                  "**Symmetry Properties**: $\\Phi(-z) = 1 - \\Phi(z)$. For symmetric intervals: $P(-z \\le Z \\le z) = 2\\Phi(z) - 1$.",
+                  "**Tolerance Limits**: $P(|X - \\mu| > k) = \\alpha \\iff P(|Z| > k/\\sigma) = \\alpha \\implies k = z_{\\alpha/2} \\cdot \\sigma$. For a 5% risk ($\u0007lpha = 0.05$), $z_{0.025} = 1.96$, so $k = 1.96\\sigma$.",
+                  "**Interval Probability**: $P(a \\le X \\le b) = \\Phi\\left(\\frac{b-\\mu}{\\sigma}\\right) - \\Phi\\left(\\frac{a-\\mu}{\\sigma}\\right)$."
+                ],
+                "formula": "Z = (X - mu) / sigma\nP(|X - mu| > k) = 0.05 => k = 1.96 * sigma\nP(a <= X <= b) = Phi((b - mu)/sigma) - Phi((a - mu)/sigma)"
               },
               {
                 "topic": "Exponential distribution and lifetimes",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Reliability / Survival function: \\(P(X > t) = e^{-\\lambda t}\\), with mean \\(E(X) = 1/\\lambda\\) and variance \\(\\text{Var}(X) = 1/\\lambda^2\\)."
+                "rule": "Survival / reliability function $P(X > t) = e^{-\\lambda t}$, with mean $E(X) = 1/\\lambda$ and variance $\\text{Var}(X) = 1/\\lambda^2$.",
+                "notes": [
+                  "**PDF & CDF**: PDF $f(x) = \\lambda e^{-\\lambda x}$ for $x \\ge 0$, and CDF $F(x) = 1 - e^{-\\lambda x}$.",
+                  "**Survival / Reliability Function**: $P(X \\ge t) = 1 - F(t) = e^{-\\lambda t}$.",
+                  "**Mean & Variance**: $E[X] = \\frac{1}{\\lambda}$, $\\text{Var}(X) = \\frac{1}{\\lambda^2}$. Standard deviation equals the mean ($\\sigma = \\mu = 1/\\lambda$).",
+                  "**Memoryless Property**: $P(X > s + t \\mid X > s) = P(X > t) = e^{-\\lambda t}$. The past operating history does not affect future failure probability."
+                ],
+                "formula": "f(x) = lambda * e^(-lambda * x) | F(x) = 1 - e^(-lambda * x)\nP(X >= t) = e^(-lambda * t) | E[X] = 1/lambda, Var(X) = 1/lambda^2\nP(X > s + t | X > s) = P(X > t)"
               },
               {
                 "topic": "Uniform distribution and waiting times",
                 "priority": "High Priority",
                 "appearances": "4 appearances",
-                "insight": "PDF is \\(f(x) = \\frac{1}{b - a}\\). Always sketch arrival intervals on the time axis to map waiting time \\(W\\)."
+                "rule": "The PDF is $f(x) = \\frac{1}{b - a}$. Sketch the arrival time axis to map passenger arrivals to scheduled bus departures.",
+                "notes": [
+                  "**Uniform PDF & CDF**: $X \\sim U(a, b)$, $f(x) = \\frac{1}{b - a}$ on $[a, b]$, and CDF $F(x) = \\frac{x - a}{b - a}$.",
+                  "**Mean & Variance**: $E[X] = \\frac{a + b}{2}$, $\\text{Var}(X) = \\frac{(b - a)^2}{12}$.",
+                  "**Waiting Time Model**: If passenger arrival $T \\sim U(0, L)$ and buses depart every $\\Delta t$ minutes, waiting time is $W = t_{\\text{next}} - T$. Calculate $P(W \\le w)$ or $P(W \\ge w)$ by computing the total length of favorable intervals on the $T$-axis divided by the total duration $L$."
+                ],
+                "formula": "f(x) = 1 / (b - a) | F(x) = (x - a) / (b - a)\nE[X] = (a + b) / 2 | Var(X) = (b - a)^2 / 12\nP(W in interval) = (Total favorable length of arrival window) / (b - a)"
               },
               {
                 "topic": "Bivariate normal and joint continuous distributions",
                 "priority": "Medium Priority",
                 "appearances": "3 appearances",
-                "insight": "Normalization: \\(\\iint f(x,y) dx dy = 1\\). Key skill is setting the double integral limits correctly according to geometry."
+                "rule": "The main skill is setting double-integral limits correctly according to geometry ($\\iint f(x,y) dx dy = 1$).",
+                "notes": [
+                  "**Normalization**: $\\int_{-\\infty}^\\infty \\int_{-\\infty}^\\infty f(x, y) \\, dy \\, dx = 1$. Use to evaluate unknown constant $k$.",
+                  "**Marginal Densities**: $f_X(x) = \\int_{-\\infty}^\\infty f(x, y) \\, dy$ and $f_Y(y) = \\int_{-\\infty}^\\infty f(x, y) \\, dx$.",
+                  "**Region Probability**: $P((X, Y) \\in R) = \\iint_R f(x, y) \\, dy \\, dx$. When integrating over diagonal regions (e.g. $X + Y < c$), express limits as $y < c - x$ and integrate with respect to $y$ first."
+                ],
+                "formula": "int int f(x, y) dy dx = 1\nf_X(x) = int f(x, y) dy | f_Y(y) = int f(x, y) dx\nP(X + Y < c) = int_{x_min}^{x_max} int_{y_min}^{c - x} f(x, y) dy dx"
               }
             ],
             "practice_questions": [
@@ -3903,25 +3956,49 @@
                 "topic": "Poisson process and interarrival distribution",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Arrivals in time \\(t\\) are \\(\\text{Poisson}(\\lambda t)\\), while the gap between consecutive arrivals is exponentially distributed \\(\\text{Exp}(\\lambda)\\)."
+                "rule": "Arrivals in time $t$ are $\\text{Poisson}(\\lambda t)$, and the gap between consecutive arrivals is $\\text{Exp}(\\lambda)$.",
+                "notes": [
+                  "**Counting Process $N(t)$**: Total arrivals up to time $t$. Follows Poisson with parameter $\\alpha = \\lambda t$: $$P(N(t) = k) = \\frac{e^{-\\lambda t} (\\lambda t)^k}{k!}, \\quad E[N(t)] = \\lambda t$$",
+                  "**Interarrival Times $T_i$**: The time elapsed between the $(i-1)$-th and $i$-th arrival is exponentially distributed: $T_i \\sim \\text{Exp}(\\lambda)$, with mean $E[T_i] = 1/\\lambda$.",
+                  "**Time of $n$-th Arrival $S_n$**: $S_n = T_1 + T_2 + \\dots + T_n \\sim \\text{Gamma}(n, \\lambda)$ (Erlang distribution). Expected time until $n$ arrivals: $E[S_n] = \\frac{n}{\\lambda}$."
+                ],
+                "formula": "P(N(t) = k) = [e^(-lambda*t) * (lambda*t)^k] / k! | E[N(t)] = lambda * t\nT_i ~ Exp(lambda) => P(T > t) = e^(-lambda * t) | E[T] = 1/lambda\nS_n = sum T_i => E[S_n] = n / lambda"
               },
               {
                 "topic": "Chebyshev's and Markov's inequalities",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Markov: \\(P(X \\ge a) \\le \\frac{E(X)}{a}\\) for non-negative \\(X\\). Chebyshev: \\(P(|X - \\mu| \\ge k\\sigma) \\le \\frac{1}{k^2}\\) and \\(P(|X - \\mu| < k\\sigma) \\ge 1 - \\frac{1}{k^2}\\)."
+                "rule": "Markov: $P(X \\ge a) \\le \\frac{E(X)}{a}$ for non-negative $X$. Chebyshev: $P(|X - \\mu| \\ge k\\sigma) \\le \\frac{1}{k^2}$.",
+                "notes": [
+                  "**Markov's Inequality**: For any non-negative random variable $X \\ge 0$ and any constant $a > 0$: $$P(X \\ge a) \\le \\frac{E[X]}{a}$$ If $a < E[X]$, the bound $> 1$, yielding the trivial bound $\\le 1$.",
+                  "**Chebyshev's Inequality**: For any random variable with mean $\\mu$ and variance $\\sigma^2$: $$P(|X - \\mu| \\ge k\\sigma) \\le \\frac{1}{k^2} \\iff P(|X - \\mu| < k\\sigma) \\ge 1 - \\frac{1}{k^2}$$ Alternative absolute deviation form: $P(|X - \\mu| \\ge c) \\le \\frac{\\sigma^2}{c^2}$."
+                ],
+                "formula": "Markov:    P(X >= a) <= E[X] / a  (for X >= 0)\nChebyshev: P(|X - mu| >= k*sigma) <= 1 / k^2\n           P(|X - mu| < k*sigma)  >= 1 - 1 / k^2"
               },
               {
                 "topic": "Central Limit Theorem & Battery Stockpile",
                 "priority": "High Priority",
                 "appearances": "4 appearances",
-                "insight": "The sum of \\(n\\) i.i.d. lifetimes \\(S_n = \\sum X_i\\) is approximately \\(N(n\\mu, n\\sigma^2)\\). Standardize with \\(Z = \\frac{S_n - n\\mu}{\\sqrt{n}\\sigma}\\)."
+                "rule": "The sum of $n$ independent lifetimes $S_n = \\sum X_i$ is approximately $N(n\\mu, n\\sigma^2)$.",
+                "notes": [
+                  "**CLT Theorem**: For $n$ independent and identically distributed random variables with mean $\\mu$ and variance $\\sigma^2$, the total sum $S_n = \\sum_{i=1}^n X_i$ is approximately normal: $$S_n \\sim N(n\\mu, n\\sigma^2), \\quad Z = \\frac{S_n - n\\mu}{\\sigma \\sqrt{n}} \\sim N(0, 1)$$",
+                  "**Battery Stockpile Problem**: A stockpile of $n$ batteries used sequentially has total lifetime $S_n$ with mean $n\\mu$ and standard deviation $\\sigma_{S} = \\sigma \\sqrt{n}$.",
+                  "**Probability of Target Life $T$**: $P(S_n > T) = P\\left(Z > \\frac{T - n\\mu}{\\sigma \\sqrt{n}}\\right) = 1 - \\Phi\\left(\\frac{T - n\\mu}{\\sigma \\sqrt{n}}\\right)$."
+                ],
+                "formula": "E[S_n] = n * mu | Var(S_n) = n * sigma^2 => sigma_{S_n} = sigma * sqrt(n)\nZ = (S_n - n*mu) / (sigma * sqrt(n))\nP(S_n > T) = 1 - Phi((T - n*mu) / (sigma * sqrt(n)))"
               },
               {
                 "topic": "Classification of stochastic processes",
                 "priority": "High Priority",
                 "appearances": "4 appearances",
-                "insight": "Use the 2×2 grid: Discrete/Continuous State Space vs Discrete/Continuous Parameter Space, providing a neat engineering example for each."
+                "rule": "Use the 2×2 grid: Discrete/Continuous State Space vs Discrete/Continuous Parameter Space, with engineering examples.",
+                "notes": [
+                  "**1. Discrete Parameter, Discrete State**: $T = \\{0, 1, 2, \\dots\\}$, $S = \\{0, 1, 2, \\dots\\}$. Example: Number of bit transmission errors in the $n$-th packet.",
+                  "**2. Continuous Parameter, Discrete State**: $T = [0, \\infty)$, $S = \\{0, 1, 2, \\dots\\}$. Example: Number of API requests received by a web server up to time $t$ (Poisson counting process).",
+                  "**3. Discrete Parameter, Continuous State**: $T = \\{0, 1, 2, \\dots\\}$, $S = \\mathbb{R}$. Example: CPU temperature recorded once every minute.",
+                  "**4. Continuous Parameter, Continuous State**: $T = [0, \\infty)$, $S = \\mathbb{R}$. Example: Thermal noise voltage fluctuating across an electrical resistor over time $t$."
+                ],
+                "formula": "Parameter Space T x State Space S (2x2 Matrix):\n1. (Disc T, Disc S): Bit errors in packet n\n2. (Cont T, Disc S): Poisson arrivals up to time t\n3. (Disc T, Cont S): CPU temp sampled hourly\n4. (Cont T, Cont S): Thermal noise voltage over time t"
               }
             ],
             "practice_questions": [
@@ -3964,25 +4041,54 @@
                 "topic": "Markov property and multi-step transition probabilities",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Memoryless property: $P(X_{n+1}=j | X_n=i, \\dots) = P(X_{n+1}=j | X_n=i)$. Multi-step distribution: $p(n) = p(0) \\cdot P^n$."
+                "rule": "Memoryless property: $P(n) = P(0) \\cdot P^n$. Path probability: multiply transition probabilities along the chain.",
+                "notes": [
+                  "**Markov Property**: $P(X_{n+1} = j \\mid X_n = i, X_{n-1} = i_{n-1}, \\dots) = P(X_{n+1} = j \\mid X_n = i) = p_{ij}$. Current state contains all relevant information about the future.",
+                  "**Transition Probability Matrix (TPM)**: $P = [p_{ij}]$, where $p_{ij} \\ge 0$ and each row sums to 1: $\\sum_j p_{ij} = 1$.",
+                  "**Chapman-Kolmogorov Equations**: $p_{ij}^{(m+n)} = \\sum_k p_{ik}^{(m)} p_{kj}^{(n)}$, hence $P^{(n)} = P^n$.",
+                  "**Multi-step State Vector**: $p(n) = p(0) \\cdot P^n$.",
+                  "**Joint Path Probability**: $P(X_3=k, X_2=j, X_1=i, X_0=s) = P(X_0=s) \\cdot p_{si} \\cdot p_{ij} \\cdot p_{jk}$."
+                ],
+                "formula": "P = [p_ij] with sum_j p_ij = 1\nP^(n) = P^n | p(n) = p(0) * P^n\nP(X_3=k, X_2=j, X_1=i, X_0=s) = P(X_0=s) * p_si * p_ij * p_jk"
               },
               {
                 "topic": "Stationary distributions and steady-state proportions",
                 "priority": "High Priority",
                 "appearances": "5 appearances",
-                "insight": "Solve linear system $\\pi P = \\pi$ alongside normalization condition $\\sum \\pi_i = 1$. For 2-state matrix $[[1-a, a], [b, 1-b]]$, $\\pi_1 = \\frac{b}{a+b}$."
+                "rule": "Solve $\\pi P = \\pi$ with $\\sum \\pi_i = 1$. For 2-state matrix $[[1-a, a], [b, 1-b]]$, $\\pi_1 = \\frac{b}{a+b}$ and $\\pi_2 = \\frac{a}{a+b}$.",
+                "notes": [
+                  "**Stationary Distribution $\\pi$**: A probability vector $\\pi = [\\pi_1, \\pi_2, \\dots]$ satisfying $\\pi P = \\pi$ and $\\sum \\pi_i = 1$.",
+                  "**Long-Run Proportions**: For an irreducible and aperiodic chain, $\\lim_{n \\to \\infty} p_{ij}^{(n)} = \\pi_j$ regardless of starting state $i$.",
+                  "**2-State Closed-Form Formula**: If $P = \\begin{bmatrix} 1-a & a \\\\ b & 1-b \\end{bmatrix}$, then $\\pi_1 = \\frac{b}{a+b}$ and $\\pi_2 = \\frac{a}{a+b}$.",
+                  "**2-State $n$-Step Transition**: $p_{11}^{(n)} = \\pi_1 + (1 - \\pi_1)(1 - a - b)^n$."
+                ],
+                "formula": "pi * P = pi  subject to  sum pi_i = 1\n2-State TPM: pi_1 = b / (a + b), pi_2 = a / (a + b)\np_11^(n) = pi_1 + (1 - pi_1) * (1 - a - b)^n"
               },
               {
                 "topic": "Classification of states (recurrent, transient, ergodic)",
                 "priority": "High Priority",
                 "appearances": "4 appearances",
-                "insight": "State $i$ is recurrent if return probability $f_{ii} = 1$, and transient if $f_{ii} < 1$. An irreducible, aperiodic, positive recurrent chain is ergodic."
+                "rule": "State $i$ is recurrent if return probability $f_{ii} = 1$, and transient if $f_{ii} < 1$. An irreducible, aperiodic, positive recurrent chain is ergodic.",
+                "notes": [
+                  "**Accessibility & Communication**: State $j$ is accessible from $i$ ($i \\to j$) if $p_{ij}^{(n)} > 0$ for some $n \\ge 0$. If $i \\to j$ and $j \\to i$, they communicate ($i \\leftrightarrow j$). A chain is **irreducible** if all states communicate.",
+                  "**Periodicity**: Period $d(i) = \\gcd\\{n \\ge 1 : p_{ii}^{(n)} > 0\\}$. If $d(i) = 1$, the state is **aperiodic**.",
+                  "**Recurrence vs Transience**: Let $f_{ii}$ be the probability of ever returning to state $i$. If $f_{ii} = 1$, the state is **recurrent** (visited infinitely often). If $f_{ii} < 1$, the state is **transient**.",
+                  "**Ergodic Chain**: An irreducible, positive recurrent, and aperiodic Markov chain is called **ergodic**, guaranteeing a unique limiting stationary distribution."
+                ],
+                "formula": "f_ii = 1 => Recurrent | f_ii < 1 => Transient\nPeriod d(i) = gcd{n >= 1 : p_ii^(n) > 0} (d=1 => Aperiodic)\nErgodic = Irreducible + Aperiodic + Positive Recurrent"
               },
               {
                 "topic": "Higher-order Markov chains and state transition diagrams",
                 "priority": "Medium Priority",
                 "appearances": "3 appearances",
-                "insight": "When transitions depend on the past 2 days / games, define composite states $(S_{n-1}, S_n)$ to reduce the system to a first-order chain."
+                "rule": "Dependence on the past 2 days / games means composite states $(S_{n-1}, S_n)$.",
+                "notes": [
+                  "**Higher-Order Dependencies**: When the next state depends on the outcome of the past $k$ steps ($k \\ge 2$), define composite states to reduce it to a first-order chain.",
+                  "**Composite State Modeling**: In games or weather where outcome depends on 2 previous days, define states as pairs: $(S_{n-1}, S_n)$.",
+                  "**Permitted Transitions**: From composite state $(i, j)$, the only reachable next states are $(j, k)$. Transitions to $(l, k)$ where $l \\neq j$ have probability 0.",
+                  "**Long-Run Proportions**: Set up $\\pi P = \\pi$ with $\\sum \\pi_{(i,j)} = 1$. The long-run proportion of an event $E$ is found by summing $\\pi_{(i,j)}$ over all states $(i,j)$ representing $E$."
+                ],
+                "formula": "History (n-1, n) -> Composite State (S_{n-1}, S_n)\nTransition (i, j) -> (j, k) with prob P(k | j, i)\nAll transitions (i, j) -> (l, k) where l != j have prob 0"
               }
             ],
             "practice_questions": [
