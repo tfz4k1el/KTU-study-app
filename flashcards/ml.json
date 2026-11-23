@@ -1,0 +1,751 @@
+{
+  "subject_code": "PCAMT302",
+  "subject_name": "Machine Learning - I",
+  "total_flashcards": 40,
+  "modules": [
+    {
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation",
+      "cards": [
+        {
+          "id": "ML_M1_001",
+          "topic": "Definition of Learning",
+          "front": "State Tom Mitchell's formal definition of Machine Learning and illustrate with an example.",
+          "back": "A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.\n• Example (Spam Filter): Task T = classifying email as spam/not-spam; Experience E = watching user label emails; Performance measure P = fraction of emails correctly classified.",
+          "formula_or_code": "Learning = Experience E + Task T + Performance P",
+          "tags": [
+            "Part A",
+            "Definition"
+          ]
+        },
+        {
+          "id": "ML_M1_002",
+          "topic": "Machine Learning Paradigms",
+          "front": "Differentiate between Supervised, Unsupervised, Semi-Supervised, and Reinforcement Learning.",
+          "back": "• Supervised: Trained on labeled data {(x_i, y_i)}. Tasks: Classification (discrete targets) and Regression (continuous targets).\n• Unsupervised: Given unlabeled data {x_i} to find hidden patterns. Tasks: Clustering, Dimensionality Reduction (PCA), Density Estimation.\n• Semi-Supervised: Combines a small set of labeled data with a large amount of inexpensive unlabeled data.\n• Reinforcement Learning (RL): Agent learns optimal policy through trial-and-error by taking actions in an environment to maximize cumulative reward.",
+          "formula_or_code": "Supervised (Labels) | Unsupervised (Patterns) | RL (Rewards/MDP)",
+          "tags": [
+            "Part A",
+            "Classification"
+          ]
+        },
+        {
+          "id": "ML_M1_003",
+          "topic": "Reinforcement Learning Formulation",
+          "front": "How is Reinforcement Learning modeled as a Markov Decision Process (MDP)?",
+          "back": "Modeled as 5-tuple (S, A, P, R, γ):\n• S: Set of states\n• A: Set of actions\n• P(s' | s, a): Transition probability from state s to s' under action a\n• R(s, a): Immediate reward received\n• γ ∈ [0, 1): Discount factor\n• Objective: Maximize expected cumulative discounted return: G_t = ∑_{k=0}^∞ γ^k · r_{t+k+1}",
+          "formula_or_code": "G_t = sum_{k=0}^inf gamma^k * r_{t+k+1}",
+          "tags": [
+            "Part A",
+            "Formula"
+          ]
+        },
+        {
+          "id": "ML_M1_004",
+          "topic": "Maximum Likelihood Estimation",
+          "front": "What is the principle behind Maximum Likelihood Estimation (MLE) and why is log-likelihood used?",
+          "back": "• Principle: Given i.i.d. data D = {x1..xN}, MLE selects parameter θ that maximizes probability of observing the data:\n  L(θ; D) = ∏_{i=1}^N P(x_i | θ)\n• Log-Likelihood: Natural log is strictly monotonically increasing, so maximizing L(θ) is equivalent to maximizing:\n  ℓ(θ) = ln L(θ) = ∑_{i=1}^N ln P(x_i | θ)\n• Why: Converts cumbersome products into sums, simplifies differentiation, and prevents floating-point numerical underflow.",
+          "formula_or_code": "theta_MLE = argmax_theta sum_{i=1}^N ln P(x_i | theta)",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Theory"
+          ]
+        },
+        {
+          "id": "ML_M1_005",
+          "topic": "Ordinary Least Squares",
+          "front": "State the Ordinary Least Squares (OLS) objective and write its closed-form Normal Equation.",
+          "back": "• Objective: In linear regression y = Xθ + ε, OLS minimizes the Sum of Squared Errors:\n  J(θ) = ||y - Xθ||^2 = (y - Xθ)^T (y - Xθ)\n• Normal Equation: Taking derivative ∇_θ J(θ) = 0 yields:\n  X^T X θ = X^T y  ⇒  θ_OLS = (X^T X)^(-1) X^T y\n• Equivalence: When errors ε_i ~ N(0, σ^2) are Gaussian i.i.d., OLS is mathematically identical to MLE!",
+          "formula_or_code": "Normal Equation: theta = (X^T * X)^(-1) * X^T * y",
+          "tags": [
+            "Part A",
+            "Formula"
+          ]
+        },
+        {
+          "id": "ML_M1_006",
+          "topic": "MAP & MMSE Estimation",
+          "front": "Compare Maximum A Posteriori (MAP) and Minimum Mean Square Estimation (MMSE).",
+          "back": "• MAP (Mode of Posterior):\n  θ_MAP = argmax_θ P(θ | D) = argmax_θ [ ln P(D | θ) + ln P(θ) ]\n  Selects the single most probable parameter point. (Gaussian prior ≡ L2 Ridge; Laplace prior ≡ L1 Lasso).\n• MMSE (Mean of Posterior):\n  θ_MMSE = E[θ | D] = ∫ θ · P(θ | D) dθ\n  Minimizes expected squared error E[(θ - θ_hat)^2]. Computes the center of mass of the posterior distribution.",
+          "formula_or_code": "MAP = Mode of Posterior | MMSE = Mean of Posterior E[theta | D]",
+          "tags": [
+            "Part A",
+            "Comparison"
+          ]
+        },
+        {
+          "id": "ML_M1_007",
+          "topic": "Gradient Descent Optimization",
+          "front": "Compare Batch Gradient Descent (BGD), Stochastic Gradient Descent (SGD), and Mini-Batch GD.",
+          "back": "• Batch GD: Computes gradient over ENTIRE dataset (size N) per step. Stable, smooth, slow for huge N, requires high memory.\n• Stochastic GD (SGD): Updates weights for EACH single training sample. Extremely fast, lightweight, noisy path that helps escape local minima, but oscillates and never truly settles.\n• Mini-Batch GD: Computes gradient over small batches (e.g. 32 to 256 samples). Balances smooth convergence with GPU matrix vectorization efficiency.",
+          "formula_or_code": "Update: theta := theta - eta * grad_J(theta)",
+          "tags": [
+            "Part B",
+            "Comparison"
+          ]
+        }
+      ]
+    },
+    {
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization",
+      "cards": [
+        {
+          "id": "ML_M2_001",
+          "topic": "Linear vs Logistic Regression",
+          "front": "Why is Linear Regression unsuitable for classification, and how does Logistic Regression solve this?",
+          "back": "• Linear Regression outputs unbounded values (-∞ to +∞), which cannot represent probabilities, and extreme outliers heavily distort linear decision boundaries.\n• Logistic Regression applies the Sigmoid function to map any real output into probability range (0, 1):\n  σ(z) = 1 / (1 + e^(-z))\n• Decision: If P(y=1|x) = σ(θ^T x) ≥ 0.5 (i.e. θ^T x ≥ 0), predict class 1.",
+          "formula_or_code": "Sigmoid: sigma(z) = 1 / (1 + e^-z) | Derivative: sigma(z)*(1 - sigma(z))",
+          "tags": [
+            "Part A",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M2_002",
+          "topic": "Binary Cross-Entropy Loss",
+          "front": "Why is Mean Squared Error (MSE) NOT used as the loss function in Logistic Regression?",
+          "back": "• When MSE is combined with the non-linear Sigmoid function, the resulting cost surface is NON-CONVEX with numerous local minima and flat plateau regions (vanishing gradients).\n• Binary Cross-Entropy (Log-Loss) is used instead:\n  J(θ) = - (1/N) ∑ [ y_i ln(y_hat_i) + (1 - y_i) ln(1 - y_hat_i) ]\n• Cross-Entropy is strictly CONVEX, guaranteeing that Gradient Descent converges to the global minimum.",
+          "formula_or_code": "Log-Loss: J(theta) = -(1/N) * sum [y*ln(p) + (1-y)*ln(1-p)] (Strictly Convex)",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Theory"
+          ]
+        },
+        {
+          "id": "ML_M2_003",
+          "topic": "ID3 Algorithm & Entropy",
+          "front": "State the formulas for Shannon Entropy and Information Gain used in the ID3 Decision Tree algorithm.",
+          "back": "• Shannon Entropy (Impurity of set S with c classes):\n  H(S) = - ∑_{i=1}^c p_i · log2(p_i)\n  (Pure set: H=0; Even binary split: H=1 bit).\n• Information Gain (Expected reduction in entropy by splitting on attribute A):\n  Gain(S, A) = H(S) - ∑_{v ∈ Values(A)} (|S_v| / |S|) · H(S_v)\n• ID3 Criterion: Select the attribute that yields the MAXIMUM Information Gain as the split node.",
+          "formula_or_code": "H(S) = -sum p_i * log2(p_i) | Gain = H(S) - sum (|S_v|/|S|)*H(S_v)",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Formula"
+          ]
+        },
+        {
+          "id": "ML_M2_004",
+          "topic": "CART & Gini Impurity",
+          "front": "Define Gini Impurity used in CART and compare CART with ID3.",
+          "back": "• Gini Impurity:\n  Gini(S) = 1 - ∑_{i=1}^c p_i^2\n  (Pure node: Gini = 0; Equal 2-class split: Gini = 1 - (0.5^2 + 0.5^2) = 0.5).\n• ID3 vs CART:\n  - ID3: Multi-way branch splits, uses Information Gain, categorical attributes only.\n  - CART: Strictly BINARY splits, uses Gini Impurity (classification) or variance reduction (regression), handles both continuous and categorical data.",
+          "formula_or_code": "Gini(S) = 1 - sum p_i^2 | CART produces binary trees",
+          "tags": [
+            "Part A",
+            "Comparison"
+          ]
+        },
+        {
+          "id": "ML_M2_005",
+          "topic": "Decision Tree Pruning",
+          "front": "Differentiate between Pre-Pruning and Post-Pruning in Decision Trees.",
+          "back": "• Pre-Pruning (Early Stopping): Halts tree expansion during construction if conditions are met (e.g. max depth reached, node sample count < min_samples_split, info gain < threshold). Fast, but risks stopping too early (horizon effect).\n• Post-Pruning (Cost-Complexity Pruning): Grows full unconstrained tree first, then prunes subtrees upward using validation data by minimizing cost function C_α(T) = R(T) + α|T|. Produces superior generalization.",
+          "formula_or_code": "Cost-Complexity: C_alpha(T) = R(T) + alpha * |T|",
+          "tags": [
+            "Part A",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M2_006",
+          "topic": "Bias-Variance Tradeoff",
+          "front": "State the Bias-Variance Decomposition and explain Underfitting vs Overfitting.",
+          "back": "Expected Test Error = Bias^2 + Variance + Irreducible Error (σ^2)\n• Bias: Error introduced by overly simplistic model assumptions. High Bias ⇒ Underfitting (model fails to capture training patterns; high train & test error).\n• Variance: Sensitivity of model to specific training set fluctuations. High Variance ⇒ Overfitting (model captures noise/outliers; low train error but high test error).\n• Goal: Sweet spot minimizing total generalization error.",
+          "formula_or_code": "Total Error = Bias^2 + Variance + sigma^2",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M2_007",
+          "topic": "Regularization (Ridge vs Lasso)",
+          "front": "Compare Ridge (L2) and Lasso (L1) Regularization and explain geometrically why Lasso creates sparse models.",
+          "back": "• Ridge (L2): Adds penalty λ ∑ θ_j^2. Shrinks weights close to zero but NEVER exactly zero. Retains all features. Invertible even with multicollinearity: (X^T X + λI)^(-1) X^T y.\n• Lasso (L1): Adds penalty λ ∑ |θ_j|. Drives unimportant weights strictly to EXACT ZERO. Performs automatic feature selection.\n• Geometric Reason: The L1 constraint region is a diamond with sharp corners on axes (|θ1| + |θ2| ≤ t), while L2 is a smooth circle (θ1^2 + θ2^2 ≤ t). Contours of MSE loss typically intersect the L1 diamond at a corner where one coordinate is exactly 0!",
+          "formula_or_code": "Ridge: MSE + lambda * sum(theta_j^2) | Lasso: MSE + lambda * sum(|theta_j|)",
+          "tags": [
+            "Part B",
+            "Comparison"
+          ]
+        }
+      ]
+    },
+    {
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes",
+      "cards": [
+        {
+          "id": "ML_M3_001",
+          "topic": "Lazy vs Eager Learning",
+          "front": "Differentiate between Lazy Learners and Eager Learners with examples.",
+          "back": "• Lazy Learners (e.g. KNN, Case-Based Reasoning):\n  - Training Phase: Zero / O(1) - simply stores training instances in memory.\n  - Query Phase: Expensive O(N · d) - scans all points to compute distances.\n  - Memory: Retains all training data.\n• Eager Learners (e.g. Decision Trees, Logistic Regression, SVM):\n  - Training Phase: Expensive - constructs explicit model / parameters.\n  - Query Phase: Fast O(1) or O(depth) - evaluates learned function.\n  - Memory: Training data can be discarded after model is built.",
+          "formula_or_code": "Lazy: O(1) train, O(N*d) query | Eager: O(N*d*epochs) train, O(1) query",
+          "tags": [
+            "Part A",
+            "Comparison"
+          ]
+        },
+        {
+          "id": "ML_M3_002",
+          "topic": "K-Nearest Neighbors (KNN)",
+          "front": "How does KNN work, what distance metrics are used, and what is the impact of hyperparameter K?",
+          "back": "• Algorithm: Computes distance from query x_q to all stored points, picks K nearest neighbors, predicts class via majority vote (or mean for regression).\n• Distance Metrics: Euclidean (L2: sqrt(sum(x-z)^2)), Manhattan (L1: sum|x-z|), Minkowski (Lp).\n• Effect of K:\n  - Small K (e.g. K=1): Complex jagged boundary, low bias, high variance (sensitive to noise/overfitting).\n  - Large K (e.g. K=N): Overly smooth boundary, high bias, low variance (underfitting).\n  - Optimal K: Chosen via cross-validation (odd number prevents voting ties).",
+          "formula_or_code": "Small K -> High Variance | Large K -> High Bias",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Algorithm"
+          ]
+        },
+        {
+          "id": "ML_M3_003",
+          "topic": "Curse of Dimensionality",
+          "front": "What is the Curse of Dimensionality in distance-based algorithms like KNN?",
+          "back": "• As feature dimensions d increase, the volume of feature space grows exponentially (V ∝ r^d). Data points become extremely sparse.\n• Pairwise distance phenomenon: In high dimensions, the distance between any two random points converges to approximately the same value (distance to nearest neighbor ≈ distance to farthest neighbor).\n• Consequence: Distance metrics lose all discriminative power, degrading KNN accuracy unless dimensionality reduction (PCA, feature selection) is applied.",
+          "formula_or_code": "Volume grows as r^d -> Pairwise distances become equidistant",
+          "tags": [
+            "Part A",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M3_004",
+          "topic": "Naive Bayes Classifier",
+          "front": "State the Naive Bayes classification rule and explain the class-conditional independence assumption.",
+          "back": "• Bayes' Theorem: P(C_k | X) = [ P(X | C_k) · P(C_k) ] / P(X)\n• Naive Conditional Independence Assumption: Assumes all feature attributes x_1..x_d are conditionally independent given class C_k:\n  P(x_1, x_2, ..., x_d | C_k) = ∏_{j=1}^d P(x_j | C_k)\n• MAP Decision Rule:\n  y_hat = argmax_{C_k} P(C_k) · ∏_{j=1}^d P(x_j | C_k)\n  Computed in log-space: argmax [ ln P(C_k) + ∑ ln P(x_j | C_k) ].",
+          "formula_or_code": "y_hat = argmax_C P(C) * prod_{j=1}^d P(x_j | C)",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Algorithm"
+          ]
+        },
+        {
+          "id": "ML_M3_005",
+          "topic": "Zero Probability & Laplace Smoothing",
+          "front": "What is the Zero-Frequency problem in Naive Bayes and how does Laplace Smoothing fix it?",
+          "back": "• Problem: If attribute value x_j never appeared with class C_k in training data, its conditional probability is P(x_j | C_k) = 0. Because Naive Bayes multiplies all probabilities, that single 0 wipes out the entire class probability product to ZERO!\n• Solution (Laplace Add-1 Correction):\n  Adds pseudocount 1 to numerator and |V| (number of unique attribute values) to denominator:\n  P_Laplace(x_j = v | C_k) = [ count(x_j=v, C_k) + 1 ] / [ count(C_k) + |V| ]\n  Guarantees strictly non-zero probabilities.",
+          "formula_or_code": "P(x_j | C) = [count(x_j, C) + 1] / [count(C) + |V|]",
+          "tags": [
+            "Part A",
+            "Formula"
+          ]
+        },
+        {
+          "id": "ML_M3_006",
+          "topic": "Support Vector Machines (SVM)",
+          "front": "Explain the Maximum Margin principle in SVM and define Support Vectors.",
+          "back": "• Principle: Finds the optimal decision hyperplane w^T x + b = 0 that separates two classes with the MAXIMUM geometric margin.\n• Bounding Canonical Planes: w^T x + b = +1 and w^T x + b = -1.\n• Geometric Margin: Width = 2 / ||w||. Maximizing 2/||w|| is equivalent to minimizing (1/2)||w||^2.\n• Support Vectors: The critical data points lying directly on the margins (y_i(w^T x_i + b) = 1). The decision boundary is determined SOLELY by support vectors; all other training points can be removed without altering the boundary!",
+          "formula_or_code": "Margin = 2 / ||w|| | Optimization: min (1/2)||w||^2 s.t. y_i(w^T x_i + b) >= 1",
+          "tags": [
+            "Part B",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M3_007",
+          "topic": "Soft-Margin SVM & Hinge Loss",
+          "front": "How does Soft-Margin SVM handle non-separable data and outliers?",
+          "back": "• Introduces non-negative Slack Variables ξ_i ≥ 0 that allow points to violate the margin:\n  min_{w, b, ξ} (1/2)||w||^2 + C ∑_{i=1}^N ξ_i\n  subject to: y_i(w^T x_i + b) ≥ 1 - ξ_i,  ξ_i ≥ 0\n• Penalty Parameter C:\n  - Large C: Strict penalty for violations ⇒ Narrow margin, low bias, high variance (overfitting risk).\n  - Small C: Tolerant of violations ⇒ Wide margin, smoother boundary, high bias (underfitting risk).\n• Hinge Loss: Loss = max(0, 1 - y_i · f(x_i)).",
+          "formula_or_code": "Objective: min (1/2)||w||^2 + C * sum(xi_i) | Hinge Loss: max(0, 1 - y*f(x))",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Formula"
+          ]
+        },
+        {
+          "id": "ML_M3_008",
+          "topic": "Kernel Trick & RBF Gamma",
+          "front": "Define a Kernel Function and explain the significance of high vs low Gamma in an RBF Kernel.",
+          "back": "• Kernel Function: Computes inner product in high-dimensional transformed space directly in input space without explicit coordinate transformation: K(x, z) = ⟨ϕ(x), ϕ(z)⟩.\n• RBF / Gaussian Kernel: K(x, z) = exp(-γ ||x - z||^2) where γ = 1 / (2σ^2).\n• Gamma (γ) Significance:\n  - High γ: Small σ (narrow bell curve). Influence of each support vector is localized. Decision boundary is tight and complex around training points ⇒ High Variance / Severe Overfitting.\n  - Low γ: Large σ (broad bell curve). Support vectors have wide global influence. Decision boundary becomes overly smooth ⇒ High Bias / Underfitting.",
+          "formula_or_code": "RBF: K(x, z) = exp(-gamma * ||x - z||^2)\nHigh gamma -> Overfitting | Low gamma -> Underfitting",
+          "tags": [
+            "Part A",
+            "Formula"
+          ]
+        }
+      ]
+    },
+    {
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment",
+      "cards": [
+        {
+          "id": "ML_M4_001",
+          "topic": "Ensemble Learning & Voting",
+          "front": "What is Ensemble Learning and how does Hard Voting differ from Soft Voting?",
+          "back": "• Ensemble Learning combines multiple base models to produce a single meta-model with superior accuracy and generalization (grounded in Condorcet's Jury Theorem).\n• Hard Voting (Majority): Predicts the class label receiving the most votes across models: y_hat = mode{h1(x), h2(x), ..., hM(x)}.\n• Soft Voting (Probability Averaging): Averages predicted class probabilities across all models and selects the class with highest probability: y_hat = argmax_c (1/M) ∑ P_m(y=c|x). Gives higher weight to confident models.",
+          "formula_or_code": "Hard = Mode of classes | Soft = Argmax of average probabilities",
+          "tags": [
+            "Part A",
+            "Comparison"
+          ]
+        },
+        {
+          "id": "ML_M4_002",
+          "topic": "Bagging & OOB Error",
+          "front": "Explain Bootstrap Aggregation (Bagging) and Out-of-Bag (OOB) error estimation.",
+          "back": "• Bagging (Breiman): Trains homogeneous base models independently in parallel on bootstrap samples (drawn with replacement of size N) to reduce VARIANCE without increasing bias.\n• Out-of-Bag (OOB) Error:\n  - Probability an instance is NOT chosen in N draws: (1 - 1/N)^N → 1/e ≈ 36.8%.\n  - The remaining ~36.8% unpicked samples form the OOB set for that tree.\n  - Evaluating each sample using only trees where it was OOB provides an unbiased test error estimate without a separate validation set!",
+          "formula_or_code": "Bootstrap: ~63.2% unique, ~36.8% OOB (lim (1 - 1/N)^N = 1/e)",
+          "tags": [
+            "Part B",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M4_003",
+          "topic": "Random Forest",
+          "front": "How does Random Forest improve upon standard Bagging of Decision Trees?",
+          "back": "• In standard Bagging, if a few strong features exist, all trees split on them first, creating highly correlated trees with limited variance reduction.\n• Random Forest introduces Feature Bagging (Random Subspace Method):\n  At every split in each tree, it considers a random subset of m features (m = sqrt(d) for classification, d/3 for regression) rather than all d features.\n• Effect: De-correlates the individual trees, drastically reducing ensemble variance while resisting overfitting.",
+          "formula_or_code": "Feature subset size at each split: m = sqrt(d)",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M4_004",
+          "topic": "Boosting & AdaBoost",
+          "front": "Compare Bagging vs Boosting and state the AdaBoost weight update rules.",
+          "back": "• Bagging: Parallel, independent training, reduces Variance (e.g. Random Forest).\n• Boosting: Sequential training where each learner focuses on errors of previous learners, reduces Bias (e.g. AdaBoost, XGBoost).\n• AdaBoost Mechanics:\n  1. Classifier weight: α_t = (1/2) · ln((1 - ε_t) / ε_t)\n  2. Sample weights update: w_i := w_i · exp(-α_t · y_i · h_t(x_i)) / Z_t\n     (Misclassified samples have weights multiplied by e^(α_t); correctly classified samples are downweighted).\n  3. Final prediction: H(x) = sign(∑ α_t · h_t(x)).",
+          "formula_or_code": "alpha_t = (1/2)*ln((1 - eps)/eps) | w_i := w_i * exp(-alpha * y * h) / Z",
+          "tags": [
+            "Part B",
+            "Algorithm",
+            "Formula"
+          ]
+        },
+        {
+          "id": "ML_M4_005",
+          "topic": "Stacking",
+          "front": "Explain Stacked Generalization (Stacking) and how Out-of-Fold cross-validation prevents data leakage.",
+          "back": "• Stacking combines diverse HETEROGENEOUS base models (SVM, Random Forest, Logistic Regression) at Level-0, whose predictions serve as meta-features for a Level-1 Meta-Learner.\n• Preventing Leakage via K-Fold OOF:\n  Base models generate predictions on held-out validation folds (out-of-fold). The concatenated out-of-fold predictions form the training set for the Meta-Learner, ensuring it trains on realistic out-of-sample predictions.",
+          "formula_or_code": "Level 0: Heterogeneous models -> Level 1: Meta-Learner on OOF predictions",
+          "tags": [
+            "Part A",
+            "Concept"
+          ]
+        },
+        {
+          "id": "ML_M4_006",
+          "topic": "Confusion Matrix & Performance Metrics",
+          "front": "Define Confusion Matrix components and write formulas for Accuracy, Precision, Recall, Specificity, and F1-Score.",
+          "back": "• Matrix: TP (True Pos), FP (Type I error), FN (Type II error), TN (True Neg).\n• Accuracy = (TP + TN) / (TP + TN + FP + FN) [Misleading for imbalanced data!]\n• Precision = TP / (TP + FP) [Purity of positive predictions]\n• Recall (Sensitivity / TPR) = TP / (TP + FN) [Coverage of actual positives]\n• Specificity (TNR) = TN / (TN + FP)\n• F1-Score = 2 · (Precision · Recall) / (Precision + Recall) [Harmonic mean]",
+          "formula_or_code": "Precision = TP/(TP+FP) | Recall = TP/(TP+FN) | F1 = 2*P*R/(P+R)",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Formula"
+          ]
+        },
+        {
+          "id": "ML_M4_007",
+          "topic": "ROC Curve & AUC",
+          "front": "Explain the working principle of the Receiver Operating Characteristic (ROC) Curve and AUC.",
+          "back": "• ROC Curve: Plots True Positive Rate (Recall/Sensitivity) on Y-axis vs False Positive Rate (FPR = 1 - Specificity = FP/(TN+FP)) on X-axis across all decision thresholds τ ∈ [0, 1].\n• Key Points: (0,0) predicts all negative; (1,1) predicts all positive; Diagonal is random guessing; (0,1) is the perfect classifier.\n• AUC (Area Under Curve): Measures area under ROC. Statistically equals the probability that a randomly chosen positive sample is ranked higher than a randomly chosen negative sample (AUC=1.0 is perfect, 0.5 is random).",
+          "formula_or_code": "ROC = Plot of TPR vs FPR | AUC = Probability of correct ranking",
+          "tags": [
+            "Part A",
+            "Part B",
+            "Concept"
+          ]
+        }
+      ]
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "ML_M1_001",
+      "topic": "Definition of Learning",
+      "front": "State Tom Mitchell's formal definition of Machine Learning and illustrate with an example.",
+      "back": "A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.\n• Example (Spam Filter): Task T = classifying email as spam/not-spam; Experience E = watching user label emails; Performance measure P = fraction of emails correctly classified.",
+      "formula_or_code": "Learning = Experience E + Task T + Performance P",
+      "tags": [
+        "Part A",
+        "Definition"
+      ],
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation"
+    },
+    {
+      "id": "ML_M1_002",
+      "topic": "Machine Learning Paradigms",
+      "front": "Differentiate between Supervised, Unsupervised, Semi-Supervised, and Reinforcement Learning.",
+      "back": "• Supervised: Trained on labeled data {(x_i, y_i)}. Tasks: Classification (discrete targets) and Regression (continuous targets).\n• Unsupervised: Given unlabeled data {x_i} to find hidden patterns. Tasks: Clustering, Dimensionality Reduction (PCA), Density Estimation.\n• Semi-Supervised: Combines a small set of labeled data with a large amount of inexpensive unlabeled data.\n• Reinforcement Learning (RL): Agent learns optimal policy through trial-and-error by taking actions in an environment to maximize cumulative reward.",
+      "formula_or_code": "Supervised (Labels) | Unsupervised (Patterns) | RL (Rewards/MDP)",
+      "tags": [
+        "Part A",
+        "Classification"
+      ],
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation"
+    },
+    {
+      "id": "ML_M1_003",
+      "topic": "Reinforcement Learning Formulation",
+      "front": "How is Reinforcement Learning modeled as a Markov Decision Process (MDP)?",
+      "back": "Modeled as 5-tuple (S, A, P, R, γ):\n• S: Set of states\n• A: Set of actions\n• P(s' | s, a): Transition probability from state s to s' under action a\n• R(s, a): Immediate reward received\n• γ ∈ [0, 1): Discount factor\n• Objective: Maximize expected cumulative discounted return: G_t = ∑_{k=0}^∞ γ^k · r_{t+k+1}",
+      "formula_or_code": "G_t = sum_{k=0}^inf gamma^k * r_{t+k+1}",
+      "tags": [
+        "Part A",
+        "Formula"
+      ],
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation"
+    },
+    {
+      "id": "ML_M1_004",
+      "topic": "Maximum Likelihood Estimation",
+      "front": "What is the principle behind Maximum Likelihood Estimation (MLE) and why is log-likelihood used?",
+      "back": "• Principle: Given i.i.d. data D = {x1..xN}, MLE selects parameter θ that maximizes probability of observing the data:\n  L(θ; D) = ∏_{i=1}^N P(x_i | θ)\n• Log-Likelihood: Natural log is strictly monotonically increasing, so maximizing L(θ) is equivalent to maximizing:\n  ℓ(θ) = ln L(θ) = ∑_{i=1}^N ln P(x_i | θ)\n• Why: Converts cumbersome products into sums, simplifies differentiation, and prevents floating-point numerical underflow.",
+      "formula_or_code": "theta_MLE = argmax_theta sum_{i=1}^N ln P(x_i | theta)",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Theory"
+      ],
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation"
+    },
+    {
+      "id": "ML_M1_005",
+      "topic": "Ordinary Least Squares",
+      "front": "State the Ordinary Least Squares (OLS) objective and write its closed-form Normal Equation.",
+      "back": "• Objective: In linear regression y = Xθ + ε, OLS minimizes the Sum of Squared Errors:\n  J(θ) = ||y - Xθ||^2 = (y - Xθ)^T (y - Xθ)\n• Normal Equation: Taking derivative ∇_θ J(θ) = 0 yields:\n  X^T X θ = X^T y  ⇒  θ_OLS = (X^T X)^(-1) X^T y\n• Equivalence: When errors ε_i ~ N(0, σ^2) are Gaussian i.i.d., OLS is mathematically identical to MLE!",
+      "formula_or_code": "Normal Equation: theta = (X^T * X)^(-1) * X^T * y",
+      "tags": [
+        "Part A",
+        "Formula"
+      ],
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation"
+    },
+    {
+      "id": "ML_M1_006",
+      "topic": "MAP & MMSE Estimation",
+      "front": "Compare Maximum A Posteriori (MAP) and Minimum Mean Square Estimation (MMSE).",
+      "back": "• MAP (Mode of Posterior):\n  θ_MAP = argmax_θ P(θ | D) = argmax_θ [ ln P(D | θ) + ln P(θ) ]\n  Selects the single most probable parameter point. (Gaussian prior ≡ L2 Ridge; Laplace prior ≡ L1 Lasso).\n• MMSE (Mean of Posterior):\n  θ_MMSE = E[θ | D] = ∫ θ · P(θ | D) dθ\n  Minimizes expected squared error E[(θ - θ_hat)^2]. Computes the center of mass of the posterior distribution.",
+      "formula_or_code": "MAP = Mode of Posterior | MMSE = Mean of Posterior E[theta | D]",
+      "tags": [
+        "Part A",
+        "Comparison"
+      ],
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation"
+    },
+    {
+      "id": "ML_M1_007",
+      "topic": "Gradient Descent Optimization",
+      "front": "Compare Batch Gradient Descent (BGD), Stochastic Gradient Descent (SGD), and Mini-Batch GD.",
+      "back": "• Batch GD: Computes gradient over ENTIRE dataset (size N) per step. Stable, smooth, slow for huge N, requires high memory.\n• Stochastic GD (SGD): Updates weights for EACH single training sample. Extremely fast, lightweight, noisy path that helps escape local minima, but oscillates and never truly settles.\n• Mini-Batch GD: Computes gradient over small batches (e.g. 32 to 256 samples). Balances smooth convergence with GPU matrix vectorization efficiency.",
+      "formula_or_code": "Update: theta := theta - eta * grad_J(theta)",
+      "tags": [
+        "Part B",
+        "Comparison"
+      ],
+      "module_num": 1,
+      "module_title": "ML Paradigms & Parameter Estimation"
+    },
+    {
+      "id": "ML_M2_001",
+      "topic": "Linear vs Logistic Regression",
+      "front": "Why is Linear Regression unsuitable for classification, and how does Logistic Regression solve this?",
+      "back": "• Linear Regression outputs unbounded values (-∞ to +∞), which cannot represent probabilities, and extreme outliers heavily distort linear decision boundaries.\n• Logistic Regression applies the Sigmoid function to map any real output into probability range (0, 1):\n  σ(z) = 1 / (1 + e^(-z))\n• Decision: If P(y=1|x) = σ(θ^T x) ≥ 0.5 (i.e. θ^T x ≥ 0), predict class 1.",
+      "formula_or_code": "Sigmoid: sigma(z) = 1 / (1 + e^-z) | Derivative: sigma(z)*(1 - sigma(z))",
+      "tags": [
+        "Part A",
+        "Concept"
+      ],
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization"
+    },
+    {
+      "id": "ML_M2_002",
+      "topic": "Binary Cross-Entropy Loss",
+      "front": "Why is Mean Squared Error (MSE) NOT used as the loss function in Logistic Regression?",
+      "back": "• When MSE is combined with the non-linear Sigmoid function, the resulting cost surface is NON-CONVEX with numerous local minima and flat plateau regions (vanishing gradients).\n• Binary Cross-Entropy (Log-Loss) is used instead:\n  J(θ) = - (1/N) ∑ [ y_i ln(y_hat_i) + (1 - y_i) ln(1 - y_hat_i) ]\n• Cross-Entropy is strictly CONVEX, guaranteeing that Gradient Descent converges to the global minimum.",
+      "formula_or_code": "Log-Loss: J(theta) = -(1/N) * sum [y*ln(p) + (1-y)*ln(1-p)] (Strictly Convex)",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Theory"
+      ],
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization"
+    },
+    {
+      "id": "ML_M2_003",
+      "topic": "ID3 Algorithm & Entropy",
+      "front": "State the formulas for Shannon Entropy and Information Gain used in the ID3 Decision Tree algorithm.",
+      "back": "• Shannon Entropy (Impurity of set S with c classes):\n  H(S) = - ∑_{i=1}^c p_i · log2(p_i)\n  (Pure set: H=0; Even binary split: H=1 bit).\n• Information Gain (Expected reduction in entropy by splitting on attribute A):\n  Gain(S, A) = H(S) - ∑_{v ∈ Values(A)} (|S_v| / |S|) · H(S_v)\n• ID3 Criterion: Select the attribute that yields the MAXIMUM Information Gain as the split node.",
+      "formula_or_code": "H(S) = -sum p_i * log2(p_i) | Gain = H(S) - sum (|S_v|/|S|)*H(S_v)",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Formula"
+      ],
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization"
+    },
+    {
+      "id": "ML_M2_004",
+      "topic": "CART & Gini Impurity",
+      "front": "Define Gini Impurity used in CART and compare CART with ID3.",
+      "back": "• Gini Impurity:\n  Gini(S) = 1 - ∑_{i=1}^c p_i^2\n  (Pure node: Gini = 0; Equal 2-class split: Gini = 1 - (0.5^2 + 0.5^2) = 0.5).\n• ID3 vs CART:\n  - ID3: Multi-way branch splits, uses Information Gain, categorical attributes only.\n  - CART: Strictly BINARY splits, uses Gini Impurity (classification) or variance reduction (regression), handles both continuous and categorical data.",
+      "formula_or_code": "Gini(S) = 1 - sum p_i^2 | CART produces binary trees",
+      "tags": [
+        "Part A",
+        "Comparison"
+      ],
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization"
+    },
+    {
+      "id": "ML_M2_005",
+      "topic": "Decision Tree Pruning",
+      "front": "Differentiate between Pre-Pruning and Post-Pruning in Decision Trees.",
+      "back": "• Pre-Pruning (Early Stopping): Halts tree expansion during construction if conditions are met (e.g. max depth reached, node sample count < min_samples_split, info gain < threshold). Fast, but risks stopping too early (horizon effect).\n• Post-Pruning (Cost-Complexity Pruning): Grows full unconstrained tree first, then prunes subtrees upward using validation data by minimizing cost function C_α(T) = R(T) + α|T|. Produces superior generalization.",
+      "formula_or_code": "Cost-Complexity: C_alpha(T) = R(T) + alpha * |T|",
+      "tags": [
+        "Part A",
+        "Concept"
+      ],
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization"
+    },
+    {
+      "id": "ML_M2_006",
+      "topic": "Bias-Variance Tradeoff",
+      "front": "State the Bias-Variance Decomposition and explain Underfitting vs Overfitting.",
+      "back": "Expected Test Error = Bias^2 + Variance + Irreducible Error (σ^2)\n• Bias: Error introduced by overly simplistic model assumptions. High Bias ⇒ Underfitting (model fails to capture training patterns; high train & test error).\n• Variance: Sensitivity of model to specific training set fluctuations. High Variance ⇒ Overfitting (model captures noise/outliers; low train error but high test error).\n• Goal: Sweet spot minimizing total generalization error.",
+      "formula_or_code": "Total Error = Bias^2 + Variance + sigma^2",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Concept"
+      ],
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization"
+    },
+    {
+      "id": "ML_M2_007",
+      "topic": "Regularization (Ridge vs Lasso)",
+      "front": "Compare Ridge (L2) and Lasso (L1) Regularization and explain geometrically why Lasso creates sparse models.",
+      "back": "• Ridge (L2): Adds penalty λ ∑ θ_j^2. Shrinks weights close to zero but NEVER exactly zero. Retains all features. Invertible even with multicollinearity: (X^T X + λI)^(-1) X^T y.\n• Lasso (L1): Adds penalty λ ∑ |θ_j|. Drives unimportant weights strictly to EXACT ZERO. Performs automatic feature selection.\n• Geometric Reason: The L1 constraint region is a diamond with sharp corners on axes (|θ1| + |θ2| ≤ t), while L2 is a smooth circle (θ1^2 + θ2^2 ≤ t). Contours of MSE loss typically intersect the L1 diamond at a corner where one coordinate is exactly 0!",
+      "formula_or_code": "Ridge: MSE + lambda * sum(theta_j^2) | Lasso: MSE + lambda * sum(|theta_j|)",
+      "tags": [
+        "Part B",
+        "Comparison"
+      ],
+      "module_num": 2,
+      "module_title": "Regression, Decision Trees & Model Regularization"
+    },
+    {
+      "id": "ML_M3_001",
+      "topic": "Lazy vs Eager Learning",
+      "front": "Differentiate between Lazy Learners and Eager Learners with examples.",
+      "back": "• Lazy Learners (e.g. KNN, Case-Based Reasoning):\n  - Training Phase: Zero / O(1) - simply stores training instances in memory.\n  - Query Phase: Expensive O(N · d) - scans all points to compute distances.\n  - Memory: Retains all training data.\n• Eager Learners (e.g. Decision Trees, Logistic Regression, SVM):\n  - Training Phase: Expensive - constructs explicit model / parameters.\n  - Query Phase: Fast O(1) or O(depth) - evaluates learned function.\n  - Memory: Training data can be discarded after model is built.",
+      "formula_or_code": "Lazy: O(1) train, O(N*d) query | Eager: O(N*d*epochs) train, O(1) query",
+      "tags": [
+        "Part A",
+        "Comparison"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M3_002",
+      "topic": "K-Nearest Neighbors (KNN)",
+      "front": "How does KNN work, what distance metrics are used, and what is the impact of hyperparameter K?",
+      "back": "• Algorithm: Computes distance from query x_q to all stored points, picks K nearest neighbors, predicts class via majority vote (or mean for regression).\n• Distance Metrics: Euclidean (L2: sqrt(sum(x-z)^2)), Manhattan (L1: sum|x-z|), Minkowski (Lp).\n• Effect of K:\n  - Small K (e.g. K=1): Complex jagged boundary, low bias, high variance (sensitive to noise/overfitting).\n  - Large K (e.g. K=N): Overly smooth boundary, high bias, low variance (underfitting).\n  - Optimal K: Chosen via cross-validation (odd number prevents voting ties).",
+      "formula_or_code": "Small K -> High Variance | Large K -> High Bias",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Algorithm"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M3_003",
+      "topic": "Curse of Dimensionality",
+      "front": "What is the Curse of Dimensionality in distance-based algorithms like KNN?",
+      "back": "• As feature dimensions d increase, the volume of feature space grows exponentially (V ∝ r^d). Data points become extremely sparse.\n• Pairwise distance phenomenon: In high dimensions, the distance between any two random points converges to approximately the same value (distance to nearest neighbor ≈ distance to farthest neighbor).\n• Consequence: Distance metrics lose all discriminative power, degrading KNN accuracy unless dimensionality reduction (PCA, feature selection) is applied.",
+      "formula_or_code": "Volume grows as r^d -> Pairwise distances become equidistant",
+      "tags": [
+        "Part A",
+        "Concept"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M3_004",
+      "topic": "Naive Bayes Classifier",
+      "front": "State the Naive Bayes classification rule and explain the class-conditional independence assumption.",
+      "back": "• Bayes' Theorem: P(C_k | X) = [ P(X | C_k) · P(C_k) ] / P(X)\n• Naive Conditional Independence Assumption: Assumes all feature attributes x_1..x_d are conditionally independent given class C_k:\n  P(x_1, x_2, ..., x_d | C_k) = ∏_{j=1}^d P(x_j | C_k)\n• MAP Decision Rule:\n  y_hat = argmax_{C_k} P(C_k) · ∏_{j=1}^d P(x_j | C_k)\n  Computed in log-space: argmax [ ln P(C_k) + ∑ ln P(x_j | C_k) ].",
+      "formula_or_code": "y_hat = argmax_C P(C) * prod_{j=1}^d P(x_j | C)",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Algorithm"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M3_005",
+      "topic": "Zero Probability & Laplace Smoothing",
+      "front": "What is the Zero-Frequency problem in Naive Bayes and how does Laplace Smoothing fix it?",
+      "back": "• Problem: If attribute value x_j never appeared with class C_k in training data, its conditional probability is P(x_j | C_k) = 0. Because Naive Bayes multiplies all probabilities, that single 0 wipes out the entire class probability product to ZERO!\n• Solution (Laplace Add-1 Correction):\n  Adds pseudocount 1 to numerator and |V| (number of unique attribute values) to denominator:\n  P_Laplace(x_j = v | C_k) = [ count(x_j=v, C_k) + 1 ] / [ count(C_k) + |V| ]\n  Guarantees strictly non-zero probabilities.",
+      "formula_or_code": "P(x_j | C) = [count(x_j, C) + 1] / [count(C) + |V|]",
+      "tags": [
+        "Part A",
+        "Formula"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M3_006",
+      "topic": "Support Vector Machines (SVM)",
+      "front": "Explain the Maximum Margin principle in SVM and define Support Vectors.",
+      "back": "• Principle: Finds the optimal decision hyperplane w^T x + b = 0 that separates two classes with the MAXIMUM geometric margin.\n• Bounding Canonical Planes: w^T x + b = +1 and w^T x + b = -1.\n• Geometric Margin: Width = 2 / ||w||. Maximizing 2/||w|| is equivalent to minimizing (1/2)||w||^2.\n• Support Vectors: The critical data points lying directly on the margins (y_i(w^T x_i + b) = 1). The decision boundary is determined SOLELY by support vectors; all other training points can be removed without altering the boundary!",
+      "formula_or_code": "Margin = 2 / ||w|| | Optimization: min (1/2)||w||^2 s.t. y_i(w^T x_i + b) >= 1",
+      "tags": [
+        "Part B",
+        "Concept"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M3_007",
+      "topic": "Soft-Margin SVM & Hinge Loss",
+      "front": "How does Soft-Margin SVM handle non-separable data and outliers?",
+      "back": "• Introduces non-negative Slack Variables ξ_i ≥ 0 that allow points to violate the margin:\n  min_{w, b, ξ} (1/2)||w||^2 + C ∑_{i=1}^N ξ_i\n  subject to: y_i(w^T x_i + b) ≥ 1 - ξ_i,  ξ_i ≥ 0\n• Penalty Parameter C:\n  - Large C: Strict penalty for violations ⇒ Narrow margin, low bias, high variance (overfitting risk).\n  - Small C: Tolerant of violations ⇒ Wide margin, smoother boundary, high bias (underfitting risk).\n• Hinge Loss: Loss = max(0, 1 - y_i · f(x_i)).",
+      "formula_or_code": "Objective: min (1/2)||w||^2 + C * sum(xi_i) | Hinge Loss: max(0, 1 - y*f(x))",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Formula"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M3_008",
+      "topic": "Kernel Trick & RBF Gamma",
+      "front": "Define a Kernel Function and explain the significance of high vs low Gamma in an RBF Kernel.",
+      "back": "• Kernel Function: Computes inner product in high-dimensional transformed space directly in input space without explicit coordinate transformation: K(x, z) = ⟨ϕ(x), ϕ(z)⟩.\n• RBF / Gaussian Kernel: K(x, z) = exp(-γ ||x - z||^2) where γ = 1 / (2σ^2).\n• Gamma (γ) Significance:\n  - High γ: Small σ (narrow bell curve). Influence of each support vector is localized. Decision boundary is tight and complex around training points ⇒ High Variance / Severe Overfitting.\n  - Low γ: Large σ (broad bell curve). Support vectors have wide global influence. Decision boundary becomes overly smooth ⇒ High Bias / Underfitting.",
+      "formula_or_code": "RBF: K(x, z) = exp(-gamma * ||x - z||^2)\nHigh gamma -> Overfitting | Low gamma -> Underfitting",
+      "tags": [
+        "Part A",
+        "Formula"
+      ],
+      "module_num": 3,
+      "module_title": "Instance-Based Learning & Naive Bayes"
+    },
+    {
+      "id": "ML_M4_001",
+      "topic": "Ensemble Learning & Voting",
+      "front": "What is Ensemble Learning and how does Hard Voting differ from Soft Voting?",
+      "back": "• Ensemble Learning combines multiple base models to produce a single meta-model with superior accuracy and generalization (grounded in Condorcet's Jury Theorem).\n• Hard Voting (Majority): Predicts the class label receiving the most votes across models: y_hat = mode{h1(x), h2(x), ..., hM(x)}.\n• Soft Voting (Probability Averaging): Averages predicted class probabilities across all models and selects the class with highest probability: y_hat = argmax_c (1/M) ∑ P_m(y=c|x). Gives higher weight to confident models.",
+      "formula_or_code": "Hard = Mode of classes | Soft = Argmax of average probabilities",
+      "tags": [
+        "Part A",
+        "Comparison"
+      ],
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment"
+    },
+    {
+      "id": "ML_M4_002",
+      "topic": "Bagging & OOB Error",
+      "front": "Explain Bootstrap Aggregation (Bagging) and Out-of-Bag (OOB) error estimation.",
+      "back": "• Bagging (Breiman): Trains homogeneous base models independently in parallel on bootstrap samples (drawn with replacement of size N) to reduce VARIANCE without increasing bias.\n• Out-of-Bag (OOB) Error:\n  - Probability an instance is NOT chosen in N draws: (1 - 1/N)^N → 1/e ≈ 36.8%.\n  - The remaining ~36.8% unpicked samples form the OOB set for that tree.\n  - Evaluating each sample using only trees where it was OOB provides an unbiased test error estimate without a separate validation set!",
+      "formula_or_code": "Bootstrap: ~63.2% unique, ~36.8% OOB (lim (1 - 1/N)^N = 1/e)",
+      "tags": [
+        "Part B",
+        "Concept"
+      ],
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment"
+    },
+    {
+      "id": "ML_M4_003",
+      "topic": "Random Forest",
+      "front": "How does Random Forest improve upon standard Bagging of Decision Trees?",
+      "back": "• In standard Bagging, if a few strong features exist, all trees split on them first, creating highly correlated trees with limited variance reduction.\n• Random Forest introduces Feature Bagging (Random Subspace Method):\n  At every split in each tree, it considers a random subset of m features (m = sqrt(d) for classification, d/3 for regression) rather than all d features.\n• Effect: De-correlates the individual trees, drastically reducing ensemble variance while resisting overfitting.",
+      "formula_or_code": "Feature subset size at each split: m = sqrt(d)",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Concept"
+      ],
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment"
+    },
+    {
+      "id": "ML_M4_004",
+      "topic": "Boosting & AdaBoost",
+      "front": "Compare Bagging vs Boosting and state the AdaBoost weight update rules.",
+      "back": "• Bagging: Parallel, independent training, reduces Variance (e.g. Random Forest).\n• Boosting: Sequential training where each learner focuses on errors of previous learners, reduces Bias (e.g. AdaBoost, XGBoost).\n• AdaBoost Mechanics:\n  1. Classifier weight: α_t = (1/2) · ln((1 - ε_t) / ε_t)\n  2. Sample weights update: w_i := w_i · exp(-α_t · y_i · h_t(x_i)) / Z_t\n     (Misclassified samples have weights multiplied by e^(α_t); correctly classified samples are downweighted).\n  3. Final prediction: H(x) = sign(∑ α_t · h_t(x)).",
+      "formula_or_code": "alpha_t = (1/2)*ln((1 - eps)/eps) | w_i := w_i * exp(-alpha * y * h) / Z",
+      "tags": [
+        "Part B",
+        "Algorithm",
+        "Formula"
+      ],
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment"
+    },
+    {
+      "id": "ML_M4_005",
+      "topic": "Stacking",
+      "front": "Explain Stacked Generalization (Stacking) and how Out-of-Fold cross-validation prevents data leakage.",
+      "back": "• Stacking combines diverse HETEROGENEOUS base models (SVM, Random Forest, Logistic Regression) at Level-0, whose predictions serve as meta-features for a Level-1 Meta-Learner.\n• Preventing Leakage via K-Fold OOF:\n  Base models generate predictions on held-out validation folds (out-of-fold). The concatenated out-of-fold predictions form the training set for the Meta-Learner, ensuring it trains on realistic out-of-sample predictions.",
+      "formula_or_code": "Level 0: Heterogeneous models -> Level 1: Meta-Learner on OOF predictions",
+      "tags": [
+        "Part A",
+        "Concept"
+      ],
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment"
+    },
+    {
+      "id": "ML_M4_006",
+      "topic": "Confusion Matrix & Performance Metrics",
+      "front": "Define Confusion Matrix components and write formulas for Accuracy, Precision, Recall, Specificity, and F1-Score.",
+      "back": "• Matrix: TP (True Pos), FP (Type I error), FN (Type II error), TN (True Neg).\n• Accuracy = (TP + TN) / (TP + TN + FP + FN) [Misleading for imbalanced data!]\n• Precision = TP / (TP + FP) [Purity of positive predictions]\n• Recall (Sensitivity / TPR) = TP / (TP + FN) [Coverage of actual positives]\n• Specificity (TNR) = TN / (TN + FP)\n• F1-Score = 2 · (Precision · Recall) / (Precision + Recall) [Harmonic mean]",
+      "formula_or_code": "Precision = TP/(TP+FP) | Recall = TP/(TP+FN) | F1 = 2*P*R/(P+R)",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Formula"
+      ],
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment"
+    },
+    {
+      "id": "ML_M4_007",
+      "topic": "ROC Curve & AUC",
+      "front": "Explain the working principle of the Receiver Operating Characteristic (ROC) Curve and AUC.",
+      "back": "• ROC Curve: Plots True Positive Rate (Recall/Sensitivity) on Y-axis vs False Positive Rate (FPR = 1 - Specificity = FP/(TN+FP)) on X-axis across all decision thresholds τ ∈ [0, 1].\n• Key Points: (0,0) predicts all negative; (1,1) predicts all positive; Diagonal is random guessing; (0,1) is the perfect classifier.\n• AUC (Area Under Curve): Measures area under ROC. Statistically equals the probability that a randomly chosen positive sample is ranked higher than a randomly chosen negative sample (AUC=1.0 is perfect, 0.5 is random).",
+      "formula_or_code": "ROC = Plot of TPR vs FPR | AUC = Probability of correct ranking",
+      "tags": [
+        "Part A",
+        "Part B",
+        "Concept"
+      ],
+      "module_num": 4,
+      "module_title": "Ensemble Learning & Model Assessment"
+    }
+  ]
+}

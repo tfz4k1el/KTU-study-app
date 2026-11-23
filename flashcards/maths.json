@@ -1,0 +1,400 @@
+{
+  "subject_code": "GAMAT301",
+  "subject_name": "Mathematics for Information Science - 3",
+  "total_flashcards": 27,
+  "modules": [
+    "Module 1: Discrete Random Variables & Distributions",
+    "Module 2: Continuous Random Variables & Distributions",
+    "Module 3: Limit Theorems & Stochastic Processes",
+    "Module 4: Markov Chains & Random Walk"
+  ],
+  "flashcards": [
+    {
+      "id": "MATHS-M1-01",
+      "module_num": 1,
+      "module_title": "Discrete Random Variables & Distributions",
+      "topic": "Probability Mass Function (PMF) & Properties",
+      "front": "Define a Discrete Random Variable and state the necessary and sufficient conditions for a function p(x) to be a valid PMF.",
+      "back": "A Discrete Random Variable X is a function mapping the sample space Omega to a countable subset of real numbers.\n\nA function p(x) = P(X = x) is a valid PMF if and only if:\n1. Non-negativity: p(x_i) >= 0 for all possible values x_i.\n2. Total Probability Axiom: \\sum_{i} p(x_i) = 1.\n\nProbability of any event A is given by: P(X \\in A) = \\sum_{x_i \\in A} p(x_i).",
+      "formula_or_code": "p(x) \\ge 0,\\quad \\sum_{x} p(x) = 1",
+      "tags": [
+        "pmf",
+        "discrete-rv",
+        "probability-axioms"
+      ]
+    },
+    {
+      "id": "MATHS-M1-02",
+      "module_num": 1,
+      "module_title": "Discrete Random Variables & Distributions",
+      "topic": "Expectation and Variance of Discrete RV",
+      "front": "Define Expected Value E[X] and Variance Var(X) for a discrete random variable, and state their linear transformation properties.",
+      "back": "Definitions:\n- Expected Value (Mean): E[X] = \\mu = \\sum_x x \\cdot p(x) (provided \\sum |x| p(x) < \\infty)\n- Expected Value of function: E[g(X)] = \\sum_x g(x) \\cdot p(x)\n- Variance: Var(X) = \\sigma^2 = E[(X - \\mu)^2] = E[X^2] - (E[X])^2\n\nLinearity Properties:\n1. E[aX + b] = a E[X] + b\n2. Var(aX + b) = a^2 Var(X) (adding constant b does not change dispersion)\n3. Standard Deviation: SD(aX + b) = |a| \\sigma_X.",
+      "formula_or_code": "E[aX + b] = aE[X] + b,\\quad \\text{Var}(aX + b) = a^2 \\text{Var}(X)",
+      "tags": [
+        "expectation",
+        "variance",
+        "linearity",
+        "moments"
+      ]
+    },
+    {
+      "id": "MATHS-M1-03",
+      "module_num": 1,
+      "module_title": "Discrete Random Variables & Distributions",
+      "topic": "Binomial Probability Distribution",
+      "front": "State the PMF, Mean, and Variance of a Binomial Distribution X ~ B(n, p), and the assumptions of Bernoulli trials.",
+      "back": "Assumptions of Bernoulli Trials:\n1. Exactly n independent and identical trials.\n2. Each trial has only two mutually exclusive outcomes: Success (probability p) or Failure (probability q = 1 - p).\n3. Probability p remains constant across all trials.\n\nFormulas for X ~ B(n, p):\n- PMF: P(X = k) = \\binom{n}{k} p^k (1 - p)^{n-k}, for k = 0, 1, 2, ..., n\n- Mean: E[X] = n * p\n- Variance: Var(X) = n * p * (1 - p) = n * p * q\n- Note: In Binomial distribution, Variance is ALWAYS strictly less than Mean (Var(X) < E[X]).",
+      "formula_or_code": "P(X = k) = \\binom{n}{k} p^k q^{n-k},\\quad E[X] = np,\\quad \\text{Var}(X) = npq",
+      "tags": [
+        "binomial",
+        "bernoulli",
+        "discrete-distributions"
+      ]
+    },
+    {
+      "id": "MATHS-M1-04",
+      "module_num": 1,
+      "module_title": "Discrete Random Variables & Distributions",
+      "topic": "Poisson Distribution & Binomial Approximation",
+      "front": "State the PMF, Mean, and Variance of a Poisson Distribution X ~ Poisson(\\lambda). Under what conditions does Binomial approximate Poisson?",
+      "back": "Poisson Distribution X ~ Poisson(\\lambda):\n- PMF: P(X = k) = (e^(-\\lambda) * \\lambda^k) / k!, for k = 0, 1, 2, ...\n- Mean: E[X] = \\lambda\n- Variance: Var(X) = \\lambda\n- Key Property: Mean equals Variance (E[X] = Var(X) = \\lambda).\n\nPoisson Approximation to Binomial (Law of Rare Events):\nA Binomial B(n, p) approaches Poisson(\\lambda) when:\n1. Number of trials n -> \\infty (very large, typically n >= 30 or 50)\n2. Probability of success p -> 0 (very small, typically p <= 0.05)\n3. Product n * p = \\lambda remains a finite constant.",
+      "formula_or_code": "P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!},\\quad E[X] = \\text{Var}(X) = \\lambda",
+      "tags": [
+        "poisson",
+        "limit-theorem",
+        "approximation"
+      ]
+    },
+    {
+      "id": "MATHS-M1-05",
+      "module_num": 1,
+      "module_title": "Discrete Random Variables & Distributions",
+      "topic": "Joint PMF, Marginals & Independence",
+      "front": "Define Joint PMF, Marginal PMFs, and the criterion for Independence of two discrete random variables X and Y.",
+      "back": "1. Joint PMF: p_(X,Y)(x, y) = P(X = x, Y = y), with \\sum_x \\sum_y p_(X,Y)(x, y) = 1.\n\n2. Marginal PMFs:\n- Marginal PMF of X: p_X(x) = \\sum_y p_(X,Y)(x, y)\n- Marginal PMF of Y: p_Y(y) = \\sum_x p_(X,Y)(x, y)\n\n3. Independence:\nX and Y are statistically independent if and only if for ALL pairs (x, y):\np_(X,Y)(x, y) = p_X(x) * p_Y(y).\n\nIf X and Y are independent:\n- E[X * Y] = E[X] * E[Y]\n- Cov(X, Y) = 0\n- Var(X + Y) = Var(X) + Var(Y).",
+      "formula_or_code": "p_{X,Y}(x,y) = p_X(x) p_Y(y) \\iff X \\perp Y",
+      "tags": [
+        "joint-pmf",
+        "marginals",
+        "independence",
+        "covariance"
+      ]
+    },
+    {
+      "id": "MATHS-M1-06",
+      "module_num": 1,
+      "module_title": "Discrete Random Variables & Distributions",
+      "topic": "Covariance and Correlation Coefficient",
+      "front": "Define Covariance Cov(X, Y) and Pearson Correlation Coefficient \\rho(X, Y), and interpret their values.",
+      "back": "1. Covariance: Measures joint linear variability:\n   Cov(X, Y) = E[(X - \\mu_X)(Y - \\mu_Y)] = E[XY] - \\mu_X \\mu_Y.\n   - Cov(X, X) = Var(X)\n   - Cov(aX + b, cY + d) = a * c * Cov(X, Y)\n\n2. Pearson Correlation Coefficient:\n   \\rho(X, Y) = Cov(X, Y) / (\\sigma_X * \\sigma_Y)\n   - Range: -1 <= \\rho <= 1 (by Cauchy-Schwarz inequality)\n   - \\rho = +1: Perfect positive linear correlation\n   - \\rho = -1: Perfect negative linear correlation\n   - \\rho = 0: Uncorrelated (Note: Independence implies uncorrelated, but uncorrelated does NOT necessarily imply independence unless jointly Gaussian).",
+      "formula_or_code": "\\rho(X,Y) = \\frac{\\text{Cov}(X,Y)}{\\sigma_X \\sigma_Y},\\quad -1 \\le \\rho \\le 1",
+      "tags": [
+        "covariance",
+        "correlation",
+        "bivariate"
+      ]
+    },
+    {
+      "id": "MATHS-M2-01",
+      "module_num": 2,
+      "module_title": "Continuous Random Variables & Distributions",
+      "topic": "Probability Density Function (PDF) & CDF",
+      "front": "State the defining properties of a Continuous PDF f(x) and explain how to solve for an unknown boundary limit b or constant k.",
+      "back": "Defining Axioms of a PDF f(x):\n1. Non-negativity: f(x) >= 0 for all x in R.\n2. Total Area: int_{-inf}^{inf} f(x) dx = 1.\n3. Single Point Nullity: P(X = c) = 0 for any single point c.\n\nHow to solve for an unknown boundary or constant (e.g., f(x) = 2x on [0, b]):\n1. Set integral over non-zero support to 1: int_0^b 2x dx = 1.\n2. Integrate: [x^2]_0^b = b^2 = 1 => b = +/- 1.\n3. Check condition: The domain is [0, b], so b >= 0. Also f(x) = 2x >= 0 requires x >= 0. Reject b = -1. Therefore, b = 1.",
+      "formula_or_code": "int_0^b 2x dx = b^2 = 1 \\implies b = 1 \\quad (\\text{reject } -1 \\text{ by } f(x) \\ge 0, b \\ge 0)",
+      "tags": [
+        "pdf",
+        "cdf",
+        "continuous-rv",
+        "calculus"
+      ]
+    },
+    {
+      "id": "MATHS-M2-02",
+      "module_num": 2,
+      "module_title": "Continuous Random Variables & Distributions",
+      "topic": "Uniform Continuous Distribution",
+      "front": "State the PDF, CDF, Mean, and Variance of a continuous Uniform Random Variable X ~ U(a, b).",
+      "back": "For X ~ U(a, b) where a < b:\n- PDF: f(x) = 1 / (b - a) for a <= x <= b, and 0 elsewhere.\n- CDF: F(x) = 0 for x < a; (x - a) / (b - a) for a <= x <= b; 1 for x > b.\n- Mean: E[X] = \\int_a^b x / (b - a) dx = (a + b) / 2 (midpoint of interval).\n- Variance: Var(X) = E[X^2] - (E[X])^2 = (b - a)^2 / 12.\n- Standard Deviation: \\sigma = (b - a) / \\sqrt{12}.",
+      "formula_or_code": "f(x) = \\frac{1}{b-a},\\quad E[X] = \\frac{a+b}{2},\\quad \\text{Var}(X) = \\frac{(b-a)^2}{12}",
+      "tags": [
+        "uniform-distribution",
+        "continuous-distributions"
+      ]
+    },
+    {
+      "id": "MATHS-M2-03",
+      "module_num": 2,
+      "module_title": "Continuous Random Variables & Distributions",
+      "topic": "Exponential Distribution & Memoryless Property",
+      "front": "State the PDF, CDF, Mean, and Variance of X ~ Exp(\\lambda), and prove the Memoryless Property.",
+      "back": "For Exponential Distribution X ~ Exp(\\lambda) with rate parameter \\lambda > 0:\n- PDF: f(x) = \\lambda * e^(-\\lambda x) for x >= 0, and 0 for x < 0.\n- CDF: F(x) = 1 - e^(-\\lambda x) for x >= 0.\n- Tail probability: P(X > t) = 1 - F(t) = e^(-\\lambda t).\n- Mean: E[X] = 1 / \\lambda\n- Variance: Var(X) = 1 / \\lambda^2\n\nProof of Memoryless Property: P(X > s + t | X > s) = P(X > t) for s, t >= 0:\nP(X > s + t | X > s) = P(X > s + t \\cap X > s) / P(X > s)\n= P(X > s + t) / P(X > s) = e^(-\\lambda(s + t)) / e^(-\\lambda s)\n= e^(-\\lambda s) * e^(-\\lambda t) / e^(-\\lambda s) = e^(-\\lambda t) = P(X > t). [Q.E.D.]",
+      "formula_or_code": "P(X > s+t \\mid X > s) = P(X > t) = e^{-\\lambda t}",
+      "tags": [
+        "exponential-distribution",
+        "memoryless-property",
+        "proof"
+      ]
+    },
+    {
+      "id": "MATHS-M2-04",
+      "module_num": 2,
+      "module_title": "Continuous Random Variables & Distributions",
+      "topic": "Normal (Gaussian) Distribution & Standard Normal Z-Score",
+      "front": "State the PDF and key geometric properties of the Normal distribution X ~ N(\\mu, \\sigma^2). How is it transformed to Standard Normal Z?",
+      "back": "PDF of X ~ N(\\mu, \\sigma^2):\nf(x) = (1 / (\\sigma \\sqrt{2\\pi})) * exp( - (x - \\mu)^2 / (2\\sigma^2) ), for -\\infty < x < \\infty.\n\nKey Properties:\n1. Symmetrical bell-shaped curve centered at mean x = \\mu (Mean = Median = Mode = \\mu).\n2. Maximum value of PDF is 1 / (\\sigma \\sqrt{2\\pi}) at x = \\mu.\n3. Inflection points occur at x = \\mu - \\sigma and x = \\mu + \\sigma.\n4. Empirical 68-95-99.7 Rule: P(\\mu - \\sigma <= X <= \\mu + \\sigma) \\approx 68.27%, P(\\mu - 2\\sigma <= X <= \\mu + 2\\sigma) \\approx 95.45%, P(\\mu - 3\\sigma <= X <= \\mu + 3\\sigma) \\approx 99.73%.\n\nStandard Normal Transformation (Z-score):\nZ = (X - \\mu) / \\sigma ~ N(0, 1), with mean 0 and variance 1.",
+      "formula_or_code": "Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1),\\quad f_Z(z) = \\frac{1}{\\sqrt{2\\pi}} e^{-z^2/2}",
+      "tags": [
+        "normal-distribution",
+        "gaussian",
+        "z-score",
+        "bell-curve"
+      ]
+    },
+    {
+      "id": "MATHS-M2-05",
+      "module_num": 2,
+      "module_title": "Continuous Random Variables & Distributions",
+      "topic": "Joint Continuous PDF, Marginals & Independence",
+      "front": "State the conditions for a joint continuous PDF f_(X,Y)(x, y), how marginal PDFs are obtained, and the continuous independence criterion.",
+      "back": "1. Joint Continuous PDF Requirements:\n- Non-negativity: f_(X,Y)(x, y) >= 0 for all (x, y).\n- Total Volume: \\int_{-\\infty}^{\\infty} \\int_{-\\infty}^{\\infty} f_(X,Y)(x, y) dx dy = 1.\n- Probability over region R: P((X, Y) \\in R) = \\iint_R f_(X,Y)(x, y) dx dy.\n\n2. Marginal PDFs (integrate out the other variable):\n- f_X(x) = \\int_{-\\infty}^{\\infty} f_(X,Y)(x, y) dy\n- f_Y(y) = \\int_{-\\infty}^{\\infty} f_(X,Y)(x, y) dx\n\n3. Independence:\nX and Y are statistically independent continuous random variables if and only if:\nf_(X,Y)(x, y) = f_X(x) * f_Y(y) for almost all (x, y).",
+      "formula_or_code": "f_X(x) = \\int_{-\\infty}^\\infty f(x,y) dy,\\quad f_{X,Y}(x,y) = f_X(x) f_Y(y)",
+      "tags": [
+        "joint-pdf",
+        "marginals",
+        "continuous-independence"
+      ]
+    },
+    {
+      "id": "MATHS-M3-01",
+      "module_num": 3,
+      "module_title": "Limit Theorems & Stochastic Processes",
+      "topic": "Markov's Inequality: Statement & Proof",
+      "front": "State Markov's Inequality for a non-negative random variable and provide its mathematical proof.",
+      "back": "Statement:\nIf X is a non-negative random variable (X >= 0) with finite expectation E[X], then for any constant a > 0:\nP(X >= a) <= E[X] / a.\n\nProof (Continuous case):\nE[X] = \\int_0^{\\infty} x f(x) dx = \\int_0^a x f(x) dx + \\int_a^{\\infty} x f(x) dx.\nSince x >= 0 and f(x) >= 0, the first integral \\int_0^a x f(x) dx >= 0.\nTherefore:\nE[X] >= \\int_a^{\\infty} x f(x) dx.\nInside [a, \\infty), x >= a. Replacing x with lower bound a:\nE[X] >= \\int_a^{\\infty} a f(x) dx = a \\int_a^{\\infty} f(x) dx = a * P(X >= a).\nDividing both sides by a > 0:\nP(X >= a) <= E[X] / a. [Q.E.D.]",
+      "formula_or_code": "P(X \\ge a) \\le \\frac{E[X]}{a},\\quad (X \\ge 0, a > 0)",
+      "tags": [
+        "markovs-inequality",
+        "probability-bounds",
+        "proof"
+      ]
+    },
+    {
+      "id": "MATHS-M3-02",
+      "module_num": 3,
+      "module_title": "Limit Theorems & Stochastic Processes",
+      "topic": "Chebyshev's Inequality: Statement & Proof",
+      "front": "State Chebyshev's Inequality and derive it using Markov's Inequality.",
+      "back": "Statement:\nLet X be any random variable with finite mean \\mu and variance \\sigma^2. For any constant \\epsilon > 0 (or k > 0 where \\epsilon = k\\sigma):\nP(|X - \\mu| >= \\epsilon) <= \\sigma^2 / \\epsilon^2,\nEquivalently: P(|X - \\mu| >= k\\sigma) <= 1 / k^2.\nComplementary form: P(|X - \\mu| < k\\sigma) >= 1 - 1 / k^2.\n\nDerivation using Markov's Inequality:\nDefine the non-negative random variable Y = (X - \\mu)^2 >= 0.\nNote that |X - \\mu| >= \\epsilon is equivalent to (X - \\mu)^2 >= \\epsilon^2.\nApplying Markov's Inequality to Y with threshold a = \\epsilon^2 > 0:\nP(Y >= \\epsilon^2) <= E[Y] / \\epsilon^2.\nSince E[Y] = E[(X - \\mu)^2] = Var(X) = \\sigma^2, we get:\nP(|X - \\mu| >= \\epsilon) <= \\sigma^2 / \\epsilon^2. [Q.E.D.]",
+      "formula_or_code": "P(|X - \\mu| \\ge k\\sigma) \\le \\frac{1}{k^2},\\quad P(|X - \\mu| < k\\sigma) \\ge 1 - \\frac{1}{k^2}",
+      "tags": [
+        "chebyshevs-inequality",
+        "variance-bound",
+        "proof"
+      ]
+    },
+    {
+      "id": "MATHS-M3-03",
+      "module_num": 3,
+      "module_title": "Limit Theorems & Stochastic Processes",
+      "topic": "Strong Law of Large Numbers (SLLN)",
+      "front": "State the Strong Law of Large Numbers (SLLN) and explain what 'almost sure convergence' means in KTU exams.",
+      "back": "Statement:\nLet X_1, X_2, ..., X_n be a sequence of independent and identically distributed (i.i.d.) random variables, each having finite mean E[X_i] = \\mu.\nThen the sample average \\bar{X}_n = (1/n) \\sum_{i=1}^n X_i converges almost surely (with probability 1) to the theoretical mean \\mu as n -> \\infty:\nP( \\lim_{n \\to \\infty} \\bar{X}_n = \\mu ) = 1.\n\nSignificance & Comparison with WLLN:\n- Weak Law (WLLN): Convergence in probability: \\lim_{n \\to \\infty} P(|\\bar{X}_n - \\mu| >= \\epsilon) = 0.\n- Strong Law (SLLN): Almost sure convergence guarantees that the entire sample path trajectory converges to \\mu for every sample realization except on a set of measure zero.",
+      "formula_or_code": "P\\left( \\lim_{n \\to \\infty} \\frac{1}{n} \\sum_{i=1}^n X_i = \\mu \\right) = 1",
+      "tags": [
+        "slln",
+        "law-of-large-numbers",
+        "asymptotics"
+      ]
+    },
+    {
+      "id": "MATHS-M3-04",
+      "module_num": 3,
+      "module_title": "Limit Theorems & Stochastic Processes",
+      "topic": "Central Limit Theorem (CLT)",
+      "front": "State the Central Limit Theorem (CLT) for i.i.d. random variables and write the standardized formula for sample sum S_n and sample mean \\bar{X}_n.",
+      "back": "Statement:\nLet X_1, X_2, ..., X_n be i.i.d. random variables with mean \\mu and finite variance \\sigma^2 > 0 (regardless of the underlying distribution of X_i).\nAs sample size n -> \\infty, the distribution of the standardized sample sum S_n = \\sum X_i and sample mean \\bar{X}_n converges in distribution to the Standard Normal Distribution N(0, 1).\n\nStandardized Variables:\n1. For Sample Sum S_n: Mean = n*\\mu, Variance = n*\\sigma^2:\n   Z_n = (S_n - n\\mu) / (\\sigma \\sqrt{n}) \\xrightarrow{d} N(0, 1)\n\n2. For Sample Mean \\bar{X}_n: Mean = \\mu, Variance = \\sigma^2 / n:\n   Z_n = (\\bar{X}_n - \\mu) / (\\sigma / \\sqrt{n}) \\xrightarrow{d} N(0, 1).\n\nPractical rule of thumb: n >= 30 is generally sufficient for normal approximation.",
+      "formula_or_code": "Z_n = \\frac{\\bar{X}_n - \\mu}{\\sigma / \\sqrt{n}} \\xrightarrow{d} N(0, 1)",
+      "tags": [
+        "clt",
+        "central-limit-theorem",
+        "normal-approximation"
+      ]
+    },
+    {
+      "id": "MATHS-M3-05",
+      "module_num": 3,
+      "module_title": "Limit Theorems & Stochastic Processes",
+      "topic": "Stochastic Processes & Classification",
+      "front": "Define a Stochastic Process {X(t), t \\in T} and classify the four types based on state space S and parameter set T.",
+      "back": "Definition:\nA Stochastic Process {X(t), t \\in T} is a collection / family of random variables indexed by a parameter t belonging to an index set T (often representing time), defined on a common probability space.\n- T = Parameter (Time) Index Set\n- S = State Space (set of all possible values of X(t))\n\nFour Classifications:\n1. Discrete Time, Discrete State: T = {0, 1, 2, ...}, S = {0, 1, 2, ...} (e.g. Discrete-Time Markov Chain, Random Walk).\n2. Continuous Time, Discrete State: T = [0, \\infty), S = {0, 1, 2, ...} (e.g. Poisson Counting Process, Birth-Death Process).\n3. Discrete Time, Continuous State: T = {0, 1, 2, ...}, S = \\mathbb{R} (e.g. Daily closing stock prices).\n4. Continuous Time, Continuous State: T = [0, \\infty), S = \\mathbb{R} (e.g. Brownian Motion / Wiener Process).",
+      "formula_or_code": "\\{X(t) : t \\in T\\},\\quad X(t) \\in S",
+      "tags": [
+        "stochastic-processes",
+        "state-space",
+        "classification"
+      ]
+    },
+    {
+      "id": "MATHS-M3-06",
+      "module_num": 3,
+      "module_title": "Limit Theorems & Stochastic Processes",
+      "topic": "Poisson Counting Process Postulates",
+      "front": "State the defining postulates of a Poisson Counting Process {N(t), t >= 0} with rate \\lambda.",
+      "back": "Postulates of Poisson Process with rate \\lambda > 0:\n1. N(0) = 0 (Starts at count zero at t = 0).\n2. Independent Increments: For disjoint intervals (t_1, t_2] and (t_3, t_4], the counts N(t_2) - N(t_1) and N(t_4) - N(t_3) are completely independent.\n3. Stationary Increments: The distribution of N(t + s) - N(s) depends only on interval length t, not on start time s.\n4. Single Arrival in infinitesimal dt: P(N(t + dt) - N(t) = 1) = \\lambda * dt + o(dt)\n5. Multiple Arrivals in infinitesimal dt: P(N(t + dt) - N(t) >= 2) = o(dt) (simultaneous arrivals are impossible).\n\nConsequence: The number of events in any interval of length t follows Poisson(\\lambda t):\nP(N(t) = k) = (e^(-\\lambda t) * (\\lambda t)^k) / k!, for k = 0, 1, 2, ...",
+      "formula_or_code": "P(N(t) = k) = \\frac{e^{-\\lambda t} (\\lambda t)^k}{k!},\\quad E[N(t)] = \\text{Var}(N(t)) = \\lambda t",
+      "tags": [
+        "poisson-process",
+        "counting-process",
+        "postulates"
+      ]
+    },
+    {
+      "id": "MATHS-M3-07",
+      "module_num": 3,
+      "module_title": "Limit Theorems & Stochastic Processes",
+      "topic": "Interarrival Times & Waiting Times in Poisson Process",
+      "front": "How do you find a lower bound for P(a < X < b) using Chebyshev's inequality?",
+      "back": "1. Confirm mean is at midpoint: mu = (a + b) / 2.\n2. Find deviation: epsilon = b - mu.\n3. Set k * sigma = epsilon => k = epsilon / sigma.\n4. Apply Chebyshev lower bound: P(|X - mu| < k*sigma) >= 1 - 1/k^2.",
+      "formula_or_code": "T_n \\sim \\text{Exp}(\\lambda),\\quad S_n = \\sum_{i=1}^n T_i \\sim \\text{Gamma}(n, \\lambda)",
+      "tags": [
+        "interarrival-times",
+        "waiting-times",
+        "gamma-distribution",
+        "poisson-process"
+      ]
+    },
+    {
+      "id": "MATHS-M4-01",
+      "module_num": 4,
+      "module_title": "Markov Chains & Random Walk",
+      "topic": "Markov Property & Transition Probability Matrix (TPM)",
+      "front": "Define the Markov Property and state the properties of a 1-Step Transition Probability Matrix (TPM) P.",
+      "back": "1. Markov Property (Memoryless in State Space):\nA discrete-time stochastic process {X_n, n = 0, 1, 2, ...} satisfies the Markov property if for all states i, j, i_0, ..., i_(n-1):\nP(X_(n+1) = j | X_n = i, X_(n-1) = i_(n-1), ..., X_0 = i_0) = P(X_(n+1) = j | X_n = i) = P_ij.\n(The probability of transitioning to future state j depends ONLY on the current state i, independent of past history).\n\n2. Properties of TPM P = [P_ij]:\n- Non-negativity: P_ij >= 0 for all i, j.\n- Row-Stochastic: The sum of probabilities in every row must equal 1:\n  \\sum_{j} P_ij = 1 for every row i (since moving somewhere in the state space is a certain event).",
+      "formula_or_code": "P_{ij} \\ge 0,\\quad \\sum_j P_{ij} = 1",
+      "tags": [
+        "markov-property",
+        "tpm",
+        "transition-matrix",
+        "dtmc"
+      ]
+    },
+    {
+      "id": "MATHS-M4-02",
+      "module_num": 4,
+      "module_title": "Markov Chains & Random Walk",
+      "topic": "Chapman-Kolmogorov Equations",
+      "front": "State and prove the Chapman-Kolmogorov Equations for multi-step transition probabilities in a DTMC.",
+      "back": "Statement:\nFor any states i, j and integers m, n >= 0:\nP_ij^(m + n) = \\sum_{k} P_ik^(m) * P_kj^(n).\nIn matrix notation: P^(m + n) = P^m * P^n, and specifically: P^(n) = P^n (the n-step transition probability matrix is the n-th power of the 1-step TPM P).\n\nProof by Total Probability:\nP_ij^(m + n) = P(X_(m+n) = j | X_0 = i)\n= \\sum_{k} P(X_(m+n) = j, X_m = k | X_0 = i)\n= \\sum_{k} P(X_(m+n) = j | X_m = k, X_0 = i) * P(X_m = k | X_0 = i)\nBy the Markov property, P(X_(m+n) = j | X_m = k, X_0 = i) = P(X_(m+n) = j | X_m = k) = P_kj^(n).\nAnd P(X_m = k | X_0 = i) = P_ik^(m).\nTherefore: P_ij^(m+n) = \\sum_{k} P_ik^(m) * P_kj^(n). [Q.E.D.]",
+      "formula_or_code": "P_{ij}^{(m+n)} = \\sum_k P_{ik}^{(m)} P_{kj}^{(n)},\\quad P^{(n)} = P^n",
+      "tags": [
+        "chapman-kolmogorov",
+        "multi-step",
+        "matrix-power",
+        "proof"
+      ]
+    },
+    {
+      "id": "MATHS-M4-03",
+      "module_num": 4,
+      "module_title": "Markov Chains & Random Walk",
+      "topic": "1D Random Walk Model",
+      "front": "Formulate the 1-Dimensional Random Walk model on states {0, 1, ..., N} and contrast Absorbing vs Reflecting barriers.",
+      "back": "Formulation:\nA particle at state i transitions to:\n- i + 1 with probability p (step right)\n- i - 1 with probability q = 1 - p (step left)\nfor interior states 0 < i < N.\n\nBoundary Conditions at 0 and N:\n1. Absorbing Barriers (Gambler's Ruin):\nOnce the state reaches 0 or N, the process terminates and remains there forever:\nP_00 = 1, P_0j = 0 (for j \\ne 0); P_NN = 1, P_Nj = 0 (for j \\ne N).\nStates 0 and N are absorbing states.\n\n2. Reflecting Barriers:\nWhen the particle hits the boundary, it is bounced back into the interior:\nP_01 = 1 (or 1-p), P_00 = 0 (or p); P_(N, N-1) = 1 (or 1-p), P_NN = 0 (or p).\nThe state space remains completely communicating.",
+      "formula_or_code": "P_{i, i+1} = p,\\quad P_{i, i-1} = 1-p,\\quad P_{00}=1, P_{NN}=1 \\text{ (Absorbing)}",
+      "tags": [
+        "random-walk",
+        "absorbing-barriers",
+        "reflecting-barriers"
+      ]
+    },
+    {
+      "id": "MATHS-M4-04",
+      "module_num": 4,
+      "module_title": "Markov Chains & Random Walk",
+      "topic": "State Classification: Accessible, Communicating & Irreducible",
+      "front": "Define Accessibility (i -> j), Communication (i <-> j), and an Irreducible Markov Chain.",
+      "back": "1. Accessibility (i -> j):\nState j is accessible from state i (denoted i -> j) if there exists some finite n >= 0 such that P_ij^(n) > 0 (it is possible to reach state j starting from state i in n steps).\n\n2. Communication (i <-> j):\nTwo states i and j communicate (denoted i <-> j) if i -> j and j -> i.\n- Communication is an equivalence relation (Reflexive, Symmetric, Transitive).\n- Partitions the state space into disjoint communicating classes.\n\n3. Irreducible Markov Chain:\nA Markov Chain is Irreducible if all states belong to a single communicating class (i.e. Every state communicates with every other state: i <-> j for all i, j).\nIn an irreducible chain, all states share the same classification (all recurrent or all transient, and all have the same period).",
+      "formula_or_code": "i \\leftrightarrow j \\iff (\\exists n \\ge 0: P_{ij}^{(n)} > 0) \\land (\\exists m \\ge 0: P_{ji}^{(m)} > 0)",
+      "tags": [
+        "state-classification",
+        "communicating-classes",
+        "irreducible"
+      ]
+    },
+    {
+      "id": "MATHS-M4-05",
+      "module_num": 4,
+      "module_title": "Markov Chains & Random Walk",
+      "topic": "Periodicity: Periodic vs Aperiodic States",
+      "front": "Define the period d(i) of a state in a Markov Chain. When is a state called Aperiodic?",
+      "back": "Definition of Period:\nThe period d(i) of a state i is the greatest common divisor (gcd) of all positive integers n for which returning to state i has positive probability:\nd(i) = gcd { n >= 1 : P_ii^(n) > 0 }.\n\nAperiodic State:\n- If d(i) = 1, state i is called Aperiodic.\n- A simple sufficient condition: If P_ii > 0 (self-loop with positive probability), then d(i) = 1 (always aperiodic).\n\nPeriodic State:\n- If d(i) = d > 1, state i is called Periodic with period d (returns are only possible at multiples of d: d, 2d, 3d, ...).\nExample: In a simple symmetric Random Walk without self-loops, every state has period d = 2 (can only return in an even number of steps).",
+      "formula_or_code": "d(i) = \\gcd \\{n \\ge 1 : P_{ii}^{(n)} > 0\\},\\quad d(i)=1 \\implies \\text{Aperiodic}",
+      "tags": [
+        "periodicity",
+        "aperiodic",
+        "gcd"
+      ]
+    },
+    {
+      "id": "MATHS-M4-06",
+      "module_num": 4,
+      "module_title": "Markov Chains & Random Walk",
+      "topic": "Recurrent vs Transient States",
+      "front": "Define Recurrent and Transient states using return probabilities f_ii and expected returns \\sum P_ii^(n).",
+      "back": "Let f_ii be the probability that starting in state i, the process ever returns to state i:\nf_ii = \\sum_{n=1}^{\\infty} f_ii^(n).\n\n1. Recurrent State:\n- State i is Recurrent if return is certain: f_ii = 1.\n- In infinite time, the process returns to state i infinitely many times.\n- Equivalent criterion: \\sum_{n=1}^{\\infty} P_ii^(n) = \\infty.\n- Positive Recurrent: Mean recurrence time \\mu_i < \\infty.\n- Null Recurrent: Mean recurrence time \\mu_i = \\infty.\n\n2. Transient State:\n- State i is Transient if there is a non-zero probability of never returning: f_ii < 1.\n- Equivalent criterion: \\sum_{n=1}^{\\infty} P_ii^(n) < \\infty (expected number of returns is finite: 1 / (1 - f_ii)).\n- Once the process leaves a transient state, it will eventually never visit it again.",
+      "formula_or_code": "f_{ii} = 1 \\iff \\sum_{n=1}^\\infty P_{ii}^{(n)} = \\infty \\text{ (Recurrent)}",
+      "tags": [
+        "recurrent",
+        "transient",
+        "return-probability"
+      ]
+    },
+    {
+      "id": "MATHS-M4-07",
+      "module_num": 4,
+      "module_title": "Markov Chains & Random Walk",
+      "topic": "Stationary Distribution & Long-Run Proportions",
+      "front": "What is the closed-form formula for the stationary distribution pi of a 2-state TPM P = [[1-a, a], [b, 1-b]]?",
+      "back": "For transition matrix P = [[1-a, a], [b, 1-b]] (0 < a, b < 1):\npi_1 = b / (a + b)\npi_2 = a / (a + b)\n(Each state's long-run probability is proportional to the incoming transition rate).",
+      "formula_or_code": "\\pi P = \\pi,\\quad \\sum_i \\pi_i = 1,\\quad \\mu_j = \\frac{1}{\\pi_j}",
+      "tags": [
+        "stationary-distribution",
+        "pi-matrix",
+        "ergodic",
+        "limiting-probabilities"
+      ]
+    },
+    {
+      "id": "MATHS-M1-07",
+      "module_num": 1,
+      "module_title": "Discrete Random Variables & Distributions",
+      "topic": "Operational PMF Parameter Finding",
+      "front": "How do you solve for an unknown constant k in a PMF p(x), and what condition must be checked?",
+      "back": "1. Set the sum of probabilities equal to 1: sum_{x} p(x) = 1 and solve for k.\n2. Check non-negativity: Verify that p(x) >= 0 for all values of x with your solved k. If solving gives multiple roots, reject any root that makes p(x) < 0.",
+      "formula_or_code": "\\sum_x p(x) = 1 \\quad \\text{AND verify } p(x) \\ge 0 \\; \\forall x",
+      "tags": [
+        "pmf",
+        "problem-solving",
+        "parameter-k",
+        "non-negativity"
+      ]
+    },
+    {
+      "id": "MATHS-M2-06",
+      "module_num": 2,
+      "module_title": "Continuous Random Variables & Distributions",
+      "topic": "Operational PDF Parameter Finding (April/May 2026 Q3)",
+      "front": "Find the value of b so that f(x) = 2x for 0 <= x <= b (and 0 otherwise) is a valid PDF.",
+      "back": "1. Total Area Condition: int_0^b 2x dx = 1.\n2. Integrate: [x^2]_0^b = b^2 = 1 => b = +/- 1.\n3. Reject -1: The domain 0 <= x <= b requires b >= 0, and f(x) = 2x >= 0 requires x >= 0. Thus b = 1.",
+      "formula_or_code": "\\int_0^b 2x \\, dx = b^2 = 1 \\implies b = 1 \\quad (b > 0)",
+      "tags": [
+        "pdf",
+        "continuous-rv",
+        "exam-pyq",
+        "boundary-finding"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,386 @@
+{
+  "subject_code": "GAEST305",
+  "subject_name": "Digital Electronics & Logic Design",
+  "total_flashcards": 26,
+  "modules": [
+    "Module 1: Number Systems, Logic Gates & Verilog Basics",
+    "Module 2: Combinational Logic Design & K-Maps",
+    "Module 3: MSI Logic & Digital Building Blocks",
+    "Module 4: Sequential Logic Design & Flip-Flops"
+  ],
+  "flashcards": [
+    {
+      "id": "DELD-M1-01",
+      "module_num": 1,
+      "module_title": "Number Systems, Logic Gates & Verilog Basics",
+      "topic": "Digital Abstraction & Number Bases",
+      "front": "What is the Digital Abstraction, and what are the positional weight values for Binary, Octal, Decimal, and Hexadecimal?",
+      "back": "The digital abstraction maps continuous physical voltages into discrete binary logic levels (0 and 1) separated by an illegal threshold region to provide noise immunity.\n\nPositional weights (radix r):\n- Binary (r=2): ..., 2^3, 2^2, 2^1, 2^0 . 2^-1, 2^-2, ...\n- Octal (r=8): ..., 8^2, 8^1, 8^0 . 8^-1, ...\n- Decimal (r=10): ..., 10^2, 10^1, 10^0 . 10^-1, ...\n- Hexadecimal (r=16): ..., 16^2, 16^1, 16^0 . 16^-1, ... (Digits: 0-9, A=10, B=11, C=12, D=13, E=14, F=15).",
+      "formula_or_code": "Value = \\sum_{i=-m}^{n-1} d_i \\cdot r^i",
+      "tags": [
+        "number-systems",
+        "radix",
+        "digital-abstraction"
+      ]
+    },
+    {
+      "id": "DELD-M1-02",
+      "module_num": 1,
+      "module_title": "Number Systems, Logic Gates & Verilog Basics",
+      "topic": "1's and 2's Complement Arithmetic",
+      "front": "How do you compute the 1's and 2's complement of an n-bit binary number, and what are their respective representable ranges?",
+      "back": "1. 1's Complement: Invert every bit (bitwise NOT). Range for n bits: -(2^(n-1) - 1) to +(2^(n-1) - 1). Has dual representation for zero (+0 and -0).\n2. 2's Complement: 1's Complement + 1 (or leave least significant zeros and first '1' unchanged, then invert all remaining bits to the left). Range for n bits: -2^(n-1) to +(2^(n-1) - 1). Has a unique zero and represents one extra negative number.",
+      "formula_or_code": "2's\\ Complement(A) = 2^n - A = \\text{NOT}(A) + 1",
+      "tags": [
+        "arithmetic",
+        "complements",
+        "binary"
+      ]
+    },
+    {
+      "id": "DELD-M1-03",
+      "module_num": 1,
+      "module_title": "Number Systems, Logic Gates & Verilog Basics",
+      "topic": "Signed Arithmetic Overflow Rule",
+      "front": "What condition causes arithmetic overflow when adding two signed 2's complement binary numbers?",
+      "back": "Overflow occurs when the result of adding two numbers of the same sign exceeds the representable range [-2^(n-1), 2^(n-1)-1], producing an incorrect sign:\n1. Positive + Positive = Negative result -> Overflow!\n2. Negative + Negative = Positive result -> Overflow!\n(Adding numbers with opposite signs can NEVER produce an overflow).\n\nHardware detection rule:\nOverflow occurs if and only if the carry into the sign bit (C_in) does not match the carry out of the sign bit (C_out): V = C_(n-1) XOR C_n.",
+      "formula_or_code": "V = C_{in} \\oplus C_{out}",
+      "tags": [
+        "signed-addition",
+        "overflow",
+        "flags"
+      ]
+    },
+    {
+      "id": "DELD-M1-04",
+      "module_num": 1,
+      "module_title": "Number Systems, Logic Gates & Verilog Basics",
+      "topic": "Fixed-Point Representation (Q-Format)",
+      "front": "What is Qm.n fixed-point notation, and what is the resolution and range of an unsigned Q3.4 number?",
+      "back": "Qm.n denotes a fixed-point binary representation with m integer bits and n fractional bits (total length = m + n bits).\nFor Q3.4:\n- Integer bits m = 3 (weights: 2^2=4, 2^1=2, 2^0=1)\n- Fractional bits n = 4 (weights: 2^-1=0.5, 2^-2=0.25, 2^-3=0.125, 2^-4=0.0625)\n- Resolution (step size / LSB value): 2^-n = 2^-4 = 0.0625\n- Minimum value: 000.0000_2 = 0.0\n- Maximum value: 111.1111_2 = 7 + (15/16) = 7.9375.",
+      "formula_or_code": "\\text{Resolution} = 2^{-n},\\quad \\text{Range} = [0, 2^m - 2^{-n}]",
+      "tags": [
+        "fixed-point",
+        "q-format",
+        "data-representation"
+      ]
+    },
+    {
+      "id": "DELD-M1-05",
+      "module_num": 1,
+      "module_title": "Number Systems, Logic Gates & Verilog Basics",
+      "topic": "Noise Margins & Logic Levels",
+      "front": "Define V_OH, V_OL, V_IH, V_IL and write the formulas for High-State and Low-State Noise Margins (NM_H, NM_L).",
+      "back": "- V_OH: Minimum guaranteed output HIGH voltage from a gate.\n- V_OL: Maximum guaranteed output LOW voltage from a gate.\n- V_IH: Minimum input voltage recognized as valid HIGH by a receiving gate.\n- V_IL: Maximum input voltage recognized as valid LOW by a receiving gate.\n\nNoise Margins measure tolerance to stray voltage noise:\n- High-state Noise Margin: NM_H = V_OH - V_IH\n- Low-state Noise Margin: NM_L = V_IL - V_OL\nFor a valid digital design, both NM_H > 0 and NM_L > 0.",
+      "formula_or_code": "NM_H = V_{OH} - V_{IH},\\quad NM_L = V_{IL} - V_{OL}",
+      "tags": [
+        "dc-characteristics",
+        "noise-margin",
+        "voltage-levels"
+      ]
+    },
+    {
+      "id": "DELD-M1-06",
+      "module_num": 1,
+      "module_title": "Number Systems, Logic Gates & Verilog Basics",
+      "topic": "Universal Gates & Realizations",
+      "front": "Why are NAND and NOR called Universal Gates? Show how NOT, AND, and OR gates are realized using only 2-input NAND gates.",
+      "back": "NAND and NOR are universal gates because any combinational Boolean function (NOT, AND, OR, XOR, etc.) can be implemented using exclusively that single gate type.\n\nUsing 2-input NAND gates:\n1. NOT(A): Connect both inputs together: A NAND A = (A * A)' = A'\n2. AND(A, B): NAND followed by NOT: ((A * B)')' = A * B (Requires 2 NAND gates)\n3. OR(A, B): Invert inputs with NAND, then NAND the results: (A' * B')' = A'' + B'' = A + B (By De Morgan's; requires 3 NAND gates).",
+      "formula_or_code": "A+B = \\overline{\\overline{A} \\cdot \\overline{B}} = (A\\ \\text{NAND}\\ A)\\ \\text{NAND}\\ (B\\ \\text{NAND}\\ B)",
+      "tags": [
+        "universal-gates",
+        "nand-logic",
+        "de-morgans"
+      ]
+    },
+    {
+      "id": "DELD-M1-07",
+      "module_num": 1,
+      "module_title": "Number Systems, Logic Gates & Verilog Basics",
+      "topic": "Verilog HDL Basics: Wire vs Reg",
+      "front": "In Verilog HDL, what is the fundamental difference between 'wire' and 'reg' data types?",
+      "back": "1. wire:\n- Represents a physical connection (wire) between hardware elements.\n- Cannot store data; continuously driven by a structural driver or continuous assignment (`assign`).\n- Default type in Verilog if undeclared.\n\n2. reg:\n- Represents a data storage element in Verilog behavioral code.\n- Retains its value across simulation time until updated.\n- MUST be used on the left-hand side (LHS) of procedural assignments inside `always` or `initial` blocks.\n- Note: A `reg` does not always synthesize to a physical flip-flop or register; if all input conditions are specified in combinational `always @(*)`, it synthesizes to combinational logic.",
+      "formula_or_code": "wire out; assign out = a & b;\nreg q; always @(posedge clk) q <= d;",
+      "tags": [
+        "verilog",
+        "wire",
+        "reg",
+        "hdl"
+      ]
+    },
+    {
+      "id": "DELD-M2-01",
+      "module_num": 2,
+      "module_title": "Combinational Logic Design & K-Maps",
+      "topic": "Boolean Algebra Axioms & De Morgan's Laws",
+      "front": "State De Morgan's Laws and the Consensus Theorem in Boolean Algebra.",
+      "back": "De Morgan's Laws:\n1. (A + B)' = A' * B' (Complement of sum equals product of complements)\n2. (A * B)' = A' + B' (Complement of product equals sum of complements)\nGeneralized: (x_1 + x_2 + ... + x_n)' = x_1' * x_2' * ... * x_n'\n\nConsensus Theorem:\n1. In SOP form: A*B + A'*C + B*C = A*B + A'*C (B*C is the redundant consensus term).\n2. In POS form (Dual): (A + B)(A' + C)(B + C) = (A + B)(A' + C).",
+      "formula_or_code": "AB + \\bar{A}C + BC = AB + \\bar{A}C",
+      "tags": [
+        "boolean-algebra",
+        "de-morgan",
+        "consensus-theorem"
+      ]
+    },
+    {
+      "id": "DELD-M2-02",
+      "module_num": 2,
+      "module_title": "Combinational Logic Design & K-Maps",
+      "topic": "Canonical SOP vs POS",
+      "front": "What is the difference between Canonical SOP (minterms) and Canonical POS (maxterms)? How are they related?",
+      "back": "1. Minterm (m_i): A product term containing all input variables in either true or complemented form that equals 1 for exactly one input combination.\nCanonical SOP: F = \\sum m(i_1, i_2, ...)\n\n2. Maxterm (M_i): A sum term containing all input variables in either true or complemented form that equals 0 for exactly one input combination.\nCanonical POS: F = \\prod M(j_1, j_2, ...)\n\nRelationship:\n- M_i = (m_i)' (A maxterm is the Boolean complement of the corresponding minterm).\n- If F = \\sum m(1, 3, 5, 7) for a 3-variable function, then F = \\prod M(0, 2, 4, 6) and F' = \\sum m(0, 2, 4, 6).",
+      "formula_or_code": "m_i = \\overline{M_i},\\quad F = \\sum m(S) = \\prod M(S^c)",
+      "tags": [
+        "canonical-forms",
+        "minterms",
+        "maxterms"
+      ]
+    },
+    {
+      "id": "DELD-M2-03",
+      "module_num": 2,
+      "module_title": "Combinational Logic Design & K-Maps",
+      "topic": "K-Map Gray Code Ordering & Grouping Rules",
+      "front": "Why does a Karnaugh Map (K-Map) use Gray code labeling for row and column headers, and what are the valid grouping rules?",
+      "back": "Gray code ordering (00 -> 01 -> 11 -> 10):\nEnsures that between any two adjacent cells (horizontally or vertically, including end-around wrap), exactly ONE binary variable changes state. This enables the Boolean reduction law (x + x' = 1) to eliminate that variable.\n\nGrouping rules:\n1. Group size must be a power of 2 (1, 2, 4, 8, 16 cells).\n2. Groups can wrap around edges and corners (toroidal topology).\n3. Essential Prime Implicant (EPI): A prime implicant group that covers at least one '1' that is not covered by any other prime implicant. All EPIs MUST be included in the minimal expression.",
+      "formula_or_code": "\\text{Cell Adjacency: } AB\\bar{C} + ABC = AB(\\bar{C}+C) = AB",
+      "tags": [
+        "k-map",
+        "gray-code",
+        "minimization",
+        "epi"
+      ]
+    },
+    {
+      "id": "DELD-M2-04",
+      "module_num": 2,
+      "module_title": "Combinational Logic Design & K-Maps",
+      "topic": "Don't Care Conditions (d) in K-Maps",
+      "front": "What are 'Don't Care' conditions in logic design, and how should they be treated during K-Map minimization?",
+      "back": "'Don't Care' conditions (denoted as d or X) represent input combinations that:\n1. Will never occur in normal operation (e.g., binary values 1010 to 1111 in BCD arithmetic), OR\n2. The circuit output has no practical effect for that input.\n\nK-Map treatment:\n- You may treat 'X' as 1 IF it helps form a larger group of 2^k cells (which eliminates more variables, yielding simpler hardware).\n- You leave 'X' as 0 if it does not help expand a group.\n- NEVER create a group containing only 'X's; only groups covering at least one '1' are valid.",
+      "formula_or_code": "F = \\sum m(...) + d(...)",
+      "tags": [
+        "dont-care",
+        "k-map",
+        "optimization"
+      ]
+    },
+    {
+      "id": "DELD-M2-05",
+      "module_num": 2,
+      "module_title": "Combinational Logic Design & K-Maps",
+      "topic": "Binary to Gray and Gray to Binary Converters",
+      "front": "State the conversion formulas and logic equations for 4-bit Binary to Gray code and Gray to Binary code converters.",
+      "back": "1. 4-bit Binary (B3 B2 B1 B0) to Gray (G3 G2 G1 G0):\n- G3 = B3 (MSB remains identical)\n- G2 = B3 XOR B2\n- G1 = B2 XOR B1\n- G0 = B1 XOR B0\n\n2. 4-bit Gray (G3 G2 G1 G0) to Binary (B3 B2 B1 B0):\n- B3 = G3 (MSB remains identical)\n- B2 = B3 XOR G2\n- B1 = B2 XOR G1\n- B0 = B1 XOR G0\n(Each binary bit is the cumulative XOR sum of the current Gray bit with previous binary result).",
+      "formula_or_code": "G_i = B_{i+1} \\oplus B_i,\\quad B_i = B_{i+1} \\oplus G_i",
+      "tags": [
+        "gray-code",
+        "code-converters",
+        "xor-logic"
+      ]
+    },
+    {
+      "id": "DELD-M2-06",
+      "module_num": 2,
+      "module_title": "Combinational Logic Design & K-Maps",
+      "topic": "Verilog Continuous Assignment",
+      "front": "How is combinational logic described using continuous assignment in Verilog? Provide an example of a 2:1 multiplexer.",
+      "back": "Continuous assignment uses the `assign` keyword to drive values onto `wire` nets whenever any signal on the right-hand side changes value (dataflow abstraction).\n\n2:1 Multiplexer example:\n```verilog\nmodule mux2to1 (\n    input wire a, b, sel,\n    output wire out\n);\n    assign out = sel ? b : a; // Conditional ternary operator\nendmodule\n```\nBitwise operators in continuous assignments:\n`&` (AND), `|` (OR), `~` (NOT), `^` (XOR), `~^` (XNOR).",
+      "formula_or_code": "assign out = (sel) ? b : a;",
+      "tags": [
+        "verilog",
+        "dataflow",
+        "continuous-assignment",
+        "mux"
+      ]
+    },
+    {
+      "id": "DELD-M3-01",
+      "module_num": 3,
+      "module_title": "MSI Logic & Digital Building Blocks",
+      "topic": "Half Adder vs Full Adder",
+      "front": "Write the truth table equations and gate-level logic for a Half Adder and a Full Adder.",
+      "back": "1. Half Adder (adds two 1-bit inputs A, B):\n- Sum (S) = A XOR B\n- Carry (C) = A * B\n\n2. Full Adder (adds three 1-bit inputs A, B, C_in):\n- Sum (S) = A XOR B XOR C_in\n- Carry (C_out) = A*B + C_in*(A XOR B) = A*B + B*C_in + A*C_in\n\nA Full Adder can be constructed using TWO Half Adders and ONE OR gate:\n- HA1: S1 = A XOR B, C1 = A*B\n- HA2: S = S1 XOR C_in, C2 = S1 * C_in\n- Final Carry: C_out = C1 + C2.",
+      "formula_or_code": "S = A \\oplus B \\oplus C_{in},\\quad C_{out} = AB + C_{in}(A \\oplus B)",
+      "tags": [
+        "adders",
+        "full-adder",
+        "half-adder",
+        "arithmetic-circuits"
+      ]
+    },
+    {
+      "id": "DELD-M3-02",
+      "module_num": 3,
+      "module_title": "MSI Logic & Digital Building Blocks",
+      "topic": "4-bit Adder/Subtractor Circuit",
+      "front": "Explain the working of a 4-bit binary parallel Adder/Subtractor circuit using 2's complement and XOR gates.",
+      "back": "A 4-bit Ripple Carry Adder (4 Full Adders) is converted to an Adder/Subtractor using a mode control line M:\n- Each bit B_i is passed through an XOR gate: B_i' = B_i XOR M\n- The mode control M is connected directly to the carry-in of the first Full Adder (C_0 = M).\n\nOperation:\n1. Addition (M = 0): B_i XOR 0 = B_i, and C_0 = 0. Circuit performs A + B + 0 = A + B.\n2. Subtraction (M = 1): B_i XOR 1 = NOT(B_i), and C_0 = 1. Circuit performs A + NOT(B) + 1 = A + 2's Complement of B = A - B.",
+      "formula_or_code": "\\text{Mode } M: B_i^* = B_i \\oplus M,\\quad C_0 = M",
+      "tags": [
+        "adder-subtractor",
+        "2s-complement",
+        "ripple-carry"
+      ]
+    },
+    {
+      "id": "DELD-M3-03",
+      "module_num": 3,
+      "module_title": "MSI Logic & Digital Building Blocks",
+      "topic": "MSI Decoders & Decoder Expansion",
+      "front": "What is an n-to-2^n Decoder with Enable? How can two 3-to-8 decoders be connected to construct a 4-to-16 decoder?",
+      "back": "An n-to-2^n decoder converts an n-bit binary code into one of 2^n unique output lines (active HIGH or LOW), controlled by an Enable (E) pin. When E=0, all outputs are inactive.\n\nConstructing a 4-to-16 decoder from two 3-to-8 decoders:\n- Inputs: A3 (MSB), A2, A1, A0 (LSBs).\n- Connect A2, A1, A0 in parallel to the select inputs of both 3-to-8 decoders.\n- Connect A3 (MSB) to Decoder 2's Enable (E2 = A3).\n- Connect NOT(A3) to Decoder 1's Enable (E1 = A3').\nWhen A3 = 0, Decoder 1 is active (outputs Y0 to Y7). When A3 = 1, Decoder 2 is active (outputs Y8 to Y15).",
+      "formula_or_code": "E_1 = \\overline{A_3},\\quad E_2 = A_3",
+      "tags": [
+        "decoders",
+        "expansion",
+        "msi-logic"
+      ]
+    },
+    {
+      "id": "DELD-M3-04",
+      "module_num": 3,
+      "module_title": "MSI Logic & Digital Building Blocks",
+      "topic": "Multiplexers (MUX) & Boolean Function Implementation",
+      "front": "How do you implement any n-variable Boolean function using a 2^(n-1)-to-1 Multiplexer?",
+      "back": "Method (using 1 variable as input and n-1 variables as select lines):\n1. Choose n-1 variables as select inputs (S_(n-2) ... S_0).\n2. Write the truth table grouped into pairs of rows where the select inputs are identical.\n3. For each pair, express output F in terms of the remaining variable (X):\n   - If F is 0 in both rows: connect 0 (GND) to that data input D_i.\n   - If F is 1 in both rows: connect 1 (VCC) to D_i.\n   - If F matches X: connect X to D_i.\n   - If F matches X': connect X' to D_i.\nThis allows any 3-variable function to be implemented using a single 4:1 MUX (or 4-variable using an 8:1 MUX) without external logic gates.",
+      "formula_or_code": "D_i \\in \\{0, 1, X, \\overline{X}\\}",
+      "tags": [
+        "multiplexer",
+        "mux-implementation",
+        "boolean-functions"
+      ]
+    },
+    {
+      "id": "DELD-M3-05",
+      "module_num": 3,
+      "module_title": "MSI Logic & Digital Building Blocks",
+      "topic": "Encoders & Priority Encoders",
+      "front": "What is the limitation of a standard binary encoder, and how does a Priority Encoder resolve it?",
+      "back": "Limitations of standard 2^n-to-n encoder:\n1. If more than one input is active simultaneously, an erroneous or undefined output is generated.\n2. Cannot distinguish between all inputs being 0 vs only input D0 being active (both produce output 000).\n\nPriority Encoder solution (e.g. 74148 8-to-3):\n- Assigns strict priority to input pins (highest subscript wins, e.g. D7 > D6 > ... > D0).\n- If multiple inputs are HIGH, the output reflects only the active input with the highest priority.\n- Includes a Valid Output bit (V): V = 1 if at least one input is active, V = 0 if no inputs are active.",
+      "formula_or_code": "V = D_0 + D_1 + \\dots + D_{n-1}",
+      "tags": [
+        "encoders",
+        "priority-encoders",
+        "msi"
+      ]
+    },
+    {
+      "id": "DELD-M3-06",
+      "module_num": 3,
+      "module_title": "MSI Logic & Digital Building Blocks",
+      "topic": "Structural Verilog & Module Instantiation",
+      "front": "What is structural modeling in Verilog? Provide code instantiating a Full Adder using two Half Adder modules.",
+      "back": "Structural modeling connects pre-defined component modules using interconnecting nets (`wire`), reflecting the physical schematic hierarchy.\n\nCode Example:\n```verilog\nmodule full_adder_struct (\n    input wire a, b, cin,\n    output wire sum, cout\n);\n    wire s1, c1, c2;\n    \n    // Instantiate HA1 and HA2\n    half_adder ha1 (.a(a), .b(b), .sum(s1), .cout(c1));\n    half_adder ha2 (.a(s1), .b(cin), .sum(sum), .cout(c2));\n    \n    // OR gate primitive for final carry\n    or (cout, c1, c2);\nendmodule\n```",
+      "formula_or_code": "module_name instance_name (.port(signal), ...);",
+      "tags": [
+        "verilog",
+        "structural",
+        "instantiation"
+      ]
+    },
+    {
+      "id": "DELD-M4-01",
+      "module_num": 4,
+      "module_title": "Sequential Logic Design & Flip-Flops",
+      "topic": "Combinational vs Sequential Logic & Latches vs Flip-Flops",
+      "front": "Distinguish between Combinational vs Sequential circuits, and Latch vs Flip-Flop.",
+      "back": "1. Combinational vs Sequential:\n- Combinational: Outputs depend purely on current inputs; has no memory or clock feedback.\n- Sequential: Outputs depend on current inputs AND past history (state); contains memory feedback elements and is typically synchronized by a clock.\n\n2. Latch vs Flip-Flop:\n- Latch: Level-sensitive (transparent to input data whenever the enable/clock level is active: HIGH or LOW). Prone to false state changes during noise pulses.\n- Flip-Flop: Edge-triggered (samples input and changes state ONLY at a sharp clock transition: positive rising edge 0->1 or negative falling edge 1->0). Immune to input changes outside the edge.",
+      "formula_or_code": "\\text{Sequential} = \\text{Combinational Logic} + \\text{Memory Feedback}",
+      "tags": [
+        "sequential-circuits",
+        "latches",
+        "flip-flops"
+      ]
+    },
+    {
+      "id": "DELD-M4-02",
+      "module_num": 4,
+      "module_title": "Sequential Logic Design & Flip-Flops",
+      "topic": "SR, JK, D, and T Flip-Flops: Characteristic Equations",
+      "front": "Write the Characteristic Equations (next state Q_next in terms of current inputs and state Q) for SR, JK, D, and T Flip-Flops.",
+      "back": "1. SR Flip-Flop:\n   Q_next = S + R'*Q (with constraint S * R = 0; S=1, R=1 is forbidden).\n\n2. JK Flip-Flop:\n   Q_next = J*Q' + K'*Q (solves the forbidden condition: J=1, K=1 causes toggle).\n\n3. D Flip-Flop (Data / Delay):\n   Q_next = D (output tracks input at clock edge).\n\n4. T Flip-Flop (Toggle):\n   Q_next = T XOR Q = T*Q' + T'*Q (T=0: No change; T=1: Toggle).",
+      "formula_or_code": "Q_{next} = \\begin{cases} S + \\bar{R}Q & \\text{(SR)} \\\\ J\\bar{Q} + \\bar{K}Q & \\text{(JK)} \\\\ D & \\text{(D)} \\\\ T \\oplus Q & \\text{(T)} \\end{cases}",
+      "tags": [
+        "characteristic-equations",
+        "flip-flops",
+        "jk",
+        "sr",
+        "d",
+        "t"
+      ]
+    },
+    {
+      "id": "DELD-M4-03",
+      "module_num": 4,
+      "module_title": "Sequential Logic Design & Flip-Flops",
+      "topic": "Flip-Flop Excitation Tables",
+      "front": "What are the Excitation Tables for SR, JK, D, and T Flip-Flops (required inputs for transition Q -> Q_next)?",
+      "back": "Transition (Q -> Q_next) | SR (S, R) | JK (J, K) | D | T\n- 0 -> 0 : S=0, R=X | J=0, K=X | D=0 | T=0\n- 0 -> 1 : S=1, R=0 | J=1, K=X | D=1 | T=1\n- 1 -> 0 : S=0, R=1 | J=X, K=1 | D=0 | T=1\n- 1 -> 1 : S=X, R=0 | J=X, K=0 | D=1 | T=0\n\n(Key memory trick for JK: J matches target state for 0->X transitions; K matches complement for 1->X transitions).",
+      "formula_or_code": "Q \\to Q^+ \\implies \\text{Required } (J,K), (S,R), D, T",
+      "tags": [
+        "excitation-tables",
+        "flip-flop-conversion",
+        "counters"
+      ]
+    },
+    {
+      "id": "DELD-M4-04",
+      "module_num": 4,
+      "module_title": "Sequential Logic Design & Flip-Flops",
+      "topic": "Race-Around Condition & Master-Slave JK Flip-Flop",
+      "front": "What is the Race-Around condition in a JK Flip-Flop? When does it occur and how does a Master-Slave JK Flip-Flop prevent it?",
+      "back": "Occurrence:\nIn a level-triggered JK flip-flop with J=K=1, if clock pulse duration t_p is greater than the propagation delay Delta_t of the gates (t_p > Delta_t), the output toggles repeatedly back and forth between 0 and 1 during the single clock pulse. The final state at the end of the pulse is unpredictable.\n\nMaster-Slave Solution:\n- Consists of two flip-flops: Master and Slave, driven by complementary clocks (Clk and Clk').\n- When Clk = 1: Master is active and accepts J, K inputs; Slave is disabled (Clk' = 0), keeping its output stable.\n- When Clk = 0: Master is disabled; Slave is enabled (Clk' = 1) and copies the Master's state to final output Q.\nBecause the inputs and final outputs are never connected simultaneously, race-around is completely eliminated.",
+      "formula_or_code": "\\text{Condition: } J=K=1 \\text{ and } t_p > \\Delta t",
+      "tags": [
+        "race-around",
+        "master-slave",
+        "jk-flip-flop"
+      ]
+    },
+    {
+      "id": "DELD-M4-05",
+      "module_num": 4,
+      "module_title": "Sequential Logic Design & Flip-Flops",
+      "topic": "Shift Register Configurations & Universal Shift Register",
+      "front": "List the 4 types of shift registers and describe the operation of a 4-bit Universal Shift Register.",
+      "back": "4 Basic Configurations:\n1. SISO (Serial-In Serial-Out): n clock cycles to load, n to read.\n2. SIPO (Serial-In Parallel-Out): n clock cycles to load, 1 to read in parallel.\n3. PISO (Parallel-In Serial-Out): 1 clock cycle to load, n to shift out.\n4. PIPO (Parallel-In Parallel-Out): 1 clock cycle to load, 1 to read (fastest, acts as storage buffer).\n\nUniversal Shift Register (4-bit, controlled by 4:1 MUX per stage with mode select S1, S0):\n- S1 S0 = 00: No change / Inactive (retains previous state)\n- S1 S0 = 01: Shift Right (MSB serial in, moves towards LSB)\n- S1 S0 = 10: Shift Left (LSB serial in, moves towards MSB)\n- S1 S0 = 11: Parallel Load (loads 4 bits simultaneously from parallel inputs).",
+      "formula_or_code": "S_1 S_0 \\in \\{00:\\text{Hold}, 01:\\text{SR}, 10:\\text{SL}, 11:\\text{Load}\\}",
+      "tags": [
+        "shift-registers",
+        "universal-shift-register",
+        "sipo",
+        "piso"
+      ]
+    },
+    {
+      "id": "DELD-M4-06",
+      "module_num": 4,
+      "module_title": "Sequential Logic Design & Flip-Flops",
+      "topic": "Asynchronous (Ripple) vs Synchronous Counters",
+      "front": "Compare Asynchronous (Ripple) and Synchronous counters in terms of clocking, speed, and hardware complexity.",
+      "back": "1. Asynchronous (Ripple) Counter:\n- Clocking: Only the first flip-flop receives the external clock. Each subsequent flip-flop is clocked by the output (Q or Q') of the preceding flip-flop.\n- Propagation Delay: Accumulative: total delay = n * t_pd (for n flip-flops). This cumulative delay limits maximum operating frequency and can cause false transient decoded glitches.\n- Complexity: Simple design; minimal gating.\n\n2. Synchronous Counter:\n- Clocking: All flip-flops receive the external master clock simultaneously.\n- Propagation Delay: Independent of number of stages: total delay = t_pd + logic gate delay. Can operate at much higher frequencies without ripple glitches.\n- Complexity: Requires combinational gating network to drive J/K or T inputs based on current count state.",
+      "formula_or_code": "f_{max, async} = \\frac{1}{n \\cdot t_{pd}},\\quad f_{max, sync} = \\frac{1}{t_{pd} + t_{gate}}",
+      "tags": [
+        "counters",
+        "ripple-counter",
+        "synchronous-counter"
+      ]
+    },
+    {
+      "id": "DELD-M4-07",
+      "module_num": 4,
+      "module_title": "Sequential Logic Design & Flip-Flops",
+      "topic": "FSM Models: Mealy vs Moore State Machines",
+      "front": "What is the difference between Mealy and Moore Finite State Machines (FSMs)?",
+      "back": "1. Moore Machine:\n- Outputs depend ONLY on the current state: Output = \\lambda(Present State).\n- Outputs change synchronously with the clock when the state transitions.\n- Generally requires more states to implement a given sequence detector.\n- Less susceptible to input glitches appearing on outputs.\n\n2. Mealy Machine:\n- Outputs depend on BOTH current state AND current primary inputs: Output = \\lambda(Present State, Inputs).\n- Outputs can change asynchronously if an input changes within a clock period.\n- Generally requires fewer states than a Moore machine.\n- Outputs can produce glitches due to input line transients.",
+      "formula_or_code": "\\text{Moore: } Z(t) = g(S(t)),\\quad \\text{Mealy: } Z(t) = g(S(t), X(t))",
+      "tags": [
+        "fsm",
+        "mealy",
+        "moore",
+        "state-machine"
+      ]
+    }
+  ]
+}
