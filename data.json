@@ -1751,7 +1751,323 @@
             }
           ]
         }
-      ]
+      ],
+      "important_section": {
+        "title": "Important Topics & 60-Mark Practice Paper Vault",
+        "subtitle": "KTU B.Tech Semester 3 Machine Learning (PCAMT302) • High-Priority Exam Guide & Solved Practice Questions",
+        "badge": "High-Priority Exam Topics & Focused Notes",
+        "paper_format": {
+          "title": "KTU 60-Mark Exam Pattern & Blueprint",
+          "total_marks": 60,
+          "part_a": "8 questions of 3 marks each (24 marks). Q1–Q2 from Mod 1, Q3–Q4 from Mod 2, Q5–Q6 from Mod 3, Q7–Q8 from Mod 4.",
+          "part_b": "4 questions of 9 marks each with an Either/Or choice (36 marks). Q9/Q10 from Mod 1, Q11/Q12 from Mod 2, Q13/Q14 from Mod 3, Q15/Q16 from Mod 4."
+        },
+        "modules": [
+          {
+            "module_num": 1,
+            "title": "ML Paradigms & Parameter Estimation",
+            "marks": 15,
+            "important_topics": [
+              {
+                "topic": "MLE, MAP, LS, MMSE",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "MLE maximizes data likelihood $P(D \\mid \\theta)$; MAP incorporates prior belief $\\arg\\max P(D \\mid \\theta)P(\\theta)$; OLS minimizes geometric squared error; MMSE computes the posterior expectation $E[\\theta \\mid D]$.",
+                "notes": [
+                  "**Maximum Likelihood Estimation (MLE)**: Frequentist paradigm seeking parameter $\\hat{\\theta}$ that maximizes the likelihood of observing the training data: $$\\hat{\\theta}_{\\text{MLE}} = \\arg\\max_{\\theta} L(\\theta) = \\arg\\max_{\\theta} \\sum_{i=1}^N \\ln P(x_i \\mid \\theta)$$ Solved by setting the score function (gradient of log-likelihood) to zero: $\\nabla_\\theta \\ln L(\\theta) = 0$. Assumes no prior knowledge.",
+                  "**Maximum A Posteriori (MAP)**: Bayesian point estimator maximizing the posterior probability density: $$\\hat{\\theta}_{\\text{MAP}} = \\arg\\max_{\\theta} P(\\theta \\mid D) = \\arg\\max_{\\theta} [\\ln P(D \\mid \\theta) + \\ln P(\\theta)]$$ With a zero-mean Gaussian prior $\\theta \\sim N(0, \\sigma_0^2 I)$, MAP is mathematically identical to **L2 Regularization (Ridge)**.",
+                  "**Least Squares (LS / OLS)**: Non-probabilistic geometric optimization minimizing sum of squared errors: $J(\\theta) = \\frac{1}{2}\\|y - X\\theta\\|^2$. Closed-form normal equation: $$\\hat{\\theta} = (X^T X)^{-1} X^T y$$ *Key Equivalence*: If observation noise is i.i.d. Gaussian $\\epsilon \\sim N(0, \\sigma^2)$, OLS and Gaussian MLE yield identical parameter estimates.",
+                  "**Minimum Mean Square Error (MMSE)**: Bayesian estimator minimizing expected squared loss $E[(\\theta - \\hat{\\theta})^2]$. The optimal estimator is the conditional expectation (mean of the posterior distribution): $$\\hat{\\theta}_{\\text{MMSE}} = E[\\theta \\mid D] = \\int \\theta P(\\theta \\mid D) \\, d\\theta$$ If the posterior is symmetric and unimodal (e.g. Gaussian), $\\hat{\\theta}_{\\text{MAP}} = \\hat{\\theta}_{\\text{MMSE}}$."
+                ],
+                "formula": "MLE:  theta_MLE = argmax log P(D | theta)\nMAP:  theta_MAP = argmax [log P(D | theta) + log P(theta)]\nOLS:  theta = (X^T X)^(-1) X^T y  [min ||y - X*theta||^2]\nMMSE: theta_MMSE = E[theta | D] = int theta * P(theta | D) d_theta"
+              },
+              {
+                "topic": "Parameter estimation numericals",
+                "priority": "High Priority",
+                "appearances": "4 appearances",
+                "rule": "Set partial derivatives of log-likelihood to zero: $\\frac{\\partial \\ln L}{\\partial \\mu} = 0 \\implies \\hat{\\mu} = \\frac{1}{N}\\sum x_i$ and $\\frac{\\partial \\ln L}{\\partial \\sigma^2} = 0 \\implies \\hat{\\sigma}^2 = \\frac{1}{N}\\sum(x_i - \\hat{\\mu})^2$.",
+                "notes": [
+                  "**Gaussian Likelihood Function**: For i.i.d. observations $D = \\{x_1, \\dots, x_N\\}$ from $N(\\mu, \\sigma^2)$: $$L(\\mu, \\sigma^2) = \\prod_{i=1}^N \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(x_i - \\mu)^2}{2\\sigma^2}\\right)$$",
+                  "**Log-Likelihood Equation**: $$\\ln L(\\mu, \\sigma^2) = -\\frac{N}{2}\\ln(2\\pi) - \\frac{N}{2}\\ln(\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^N (x_i - \\mu)^2$$",
+                  "**MLE Derivations**: $$\\frac{\\partial \\ln L}{\\partial \\mu} = \\frac{1}{\\sigma^2}\\sum_{i=1}^N (x_i - \\mu) = 0 \\implies \\hat{\\mu}_{\\text{MLE}} = \\frac{1}{N}\\sum_{i=1}^N x_i$$ $$\\frac{\\partial \\ln L}{\\partial \\sigma^2} = -\\frac{N}{2\\sigma^2} + \\frac{1}{2(\\sigma^2)^2}\\sum_{i=1}^N (x_i - \\hat{\\mu})^2 = 0 \\implies \\hat{\\sigma}^2_{\\text{MLE}} = \\frac{1}{N}\\sum_{i=1}^N (x_i - \\hat{\\mu})^2$$",
+                  "**Numerical Example**: Given samples $\\{3, 5, 7, 9, 11\\}$ ($N=5$): Sample mean $\\hat{\\mu} = \\frac{3+5+7+9+11}{5} = \\frac{35}{5} = 7.0$. Deviations $(x_i - 7)^2$: $16, 4, 0, 4, 16$. Variance $\\hat{\\sigma}^2 = \\frac{16+4+0+4+16}{5} = \\frac{40}{5} = 8.0$."
+                ],
+                "formula": "ln L = -N/2*ln(2*pi) - N/2*ln(sigma^2) - 1/(2*sigma^2) * sum (x_i - mu)^2\nd/d_mu = 0     => mu_hat = (1/N) * sum x_i\nd/d_sigma^2 = 0 => sigma^2_hat = (1/N) * sum (x_i - mu_hat)^2"
+              },
+              {
+                "topic": "Simple & stochastic gradient descent",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "Batch Gradient Descent processes all $N$ samples per step (stable, slow $O(N)$); Stochastic (SGD) updates per single sample (fast $O(1)$, noisy, escapes local minima); Mini-batch balances both.",
+                "notes": [
+                  "**Gradient Descent Principle**: Iterative first-order optimization updating parameter vector $\\theta$ in the direction of steepest descent: $\\theta := \\theta - \\alpha \\nabla_\\theta J(\\theta)$, where $\\alpha > 0$ is the learning rate.",
+                  "**Batch Gradient Descent (BGD)**: Evaluates loss over the entire training set of $N$ points before every update: $$\\theta := \\theta - \\alpha \\frac{1}{N}\\sum_{i=1}^N \\nabla_\\theta L(f(x_i; \\theta), y_i)$$ Guaranteed smooth convergence on convex surfaces, but computationally prohibitive for large datasets ($O(N)$ per iteration).",
+                  "**Stochastic Gradient Descent (SGD)**: Updates weights using only **one randomly picked sample** at each step: $$\\theta := \\theta - \\alpha \\nabla_\\theta L(f(x_i; \\theta), y_i)$$ Extremely fast ($O(1)$ per step). The high gradient noise helps the optimizer jump out of shallow local minima and saddle points, but oscillates around the minimum.",
+                  "**Mini-Batch Gradient Descent**: Evaluates batches of size $B$ (e.g. 32 to 256): $$\\theta := \\theta - \\alpha \\frac{1}{B}\\sum_{i \\in \\text{Batch}} \\nabla_\\theta L(f(x_i; \\theta), y_i)$$ Combines the stability of BGD with vectorized GPU matrix processing."
+                ],
+                "formula": "BGD:        theta := theta - alpha * (1/N) * sum_{i=1}^N grad J_i(theta)\nSGD:        theta := theta - alpha * grad J_i(theta)  [single random i]\nMini-Batch: theta := theta - alpha * (1/B) * sum_{i in Batch} grad J_i(theta)"
+              }
+            ],
+            "practice_questions": [
+              {
+                "q_num": "Q1",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Distinguish between Supervised Learning and Reinforcement Learning with suitable examples.",
+                "sol": "1. Supervised Learning:\n- The model is trained on labeled input-output pairs $(x_i, y_i)$ where the correct ground-truth target is provided for every sample.\n- Objective: Learn a mapping function $f: X \\to Y$ that accurately predicts target values on unseen data.\n- Example: Email spam classification (predicting Spam / Not Spam based on labeled past emails).\n\n2. Reinforcement Learning (RL):\n- There is no labeled dataset or external supervisor. An autonomous agent interacts with an environment in discrete time steps.\n- At state $s_t$, the agent takes action $a_t$, transitions to state $s_{t+1}$, and receives a scalar numerical reward or penalty $r_{t+1}$.\n- Objective: Learn an optimal policy $\\pi(a \\mid s)$ that maximizes the expected cumulative discounted reward $\\sum_{t=0}^\\infty \\gamma^t r_{t+1}$.\n- Example: AlphaGo or self-driving car path planning."
+              },
+              {
+                "q_num": "Q2",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Define Maximum A Posteriori (MAP) estimation and explain how it differs from Maximum Likelihood Estimation (MLE).",
+                "sol": "1. Maximum Likelihood Estimation (MLE):\n- Frequentist point estimator that assumes parameter $\\theta$ is an unknown fixed constant with no prior probability distribution.\n- Maximizes the probability of observing the training data $D$:\n$$\\hat{\\theta}_{\\text{MLE}} = \\arg\\max_\\theta P(D \\mid \\theta) = \\arg\\max_\\theta \\ln L(\\theta)$$\n\n2. Maximum A Posteriori (MAP):\n- Bayesian point estimator that treats parameter $\\theta$ as a random variable having an assumed prior probability distribution $P(\\theta)$.\n- Maximizes the posterior distribution $P(\\theta \\mid D)$:\n$$\\hat{\\theta}_{\\text{MAP}} = \\arg\\max_\\theta P(\\theta \\mid D) = \\arg\\max_\\theta [\\ln P(D \\mid \\theta) + \\ln P(\\theta)]$$\n\n3. Core Difference:\n- MAP regularizes the estimation through the prior $\\ln P(\\theta)$, preventing overfitting on small datasets.\n- When the prior $P(\\theta)$ is uniform (uninformative), MAP reduces exactly to MLE: $\\hat{\\theta}_{\\text{MAP}} = \\hat{\\theta}_{\\text{MLE}}$."
+              },
+              {
+                "q_num": "Q9",
+                "part": "Part B",
+                "marks": 9,
+                "q": "(a) Describe the principle of Maximum Likelihood Estimation (MLE) and derive the closed-form estimators for the mean $\\mu$ and variance $\\sigma^2$ of a 1D Gaussian distribution $N(\\mu, \\sigma^2)$. (5 marks)\n\n(b) Define Minimum Mean Square Error (MMSE) parameter estimation. Contrast its objective with MAP estimation. (4 marks)",
+                "sol": "PART (a) - Gaussian MLE Derivation (5 Marks):\n1. Likelihood Function:\nFor $N$ i.i.d. observations $x_1, \\dots, x_N \\sim N(\\mu, \\sigma^2)$:\n$$L(\\mu, \\sigma^2) = \\prod_{i=1}^N \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(x_i - \\mu)^2}{2\\sigma^2}\\right)$$\n\n2. Log-Likelihood:\n$$\\ln L = -\\frac{N}{2}\\ln(2\\pi) - \\frac{N}{2}\\ln(\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^N (x_i - \\mu)^2$$\n\n3. Derive $\\hat{\\mu}$:\n$$\\frac{\\partial \\ln L}{\\partial \\mu} = \\frac{1}{\\sigma^2}\\sum_{i=1}^N (x_i - \\mu) = 0 \\implies \\sum_{i=1}^N x_i - N\\mu = 0 \\implies \\hat{\\mu}_{\\text{MLE}} = \\frac{1}{N}\\sum_{i=1}^N x_i$$\n\n4. Derive $\\hat{\\sigma}^2$:\nLet $v = \\sigma^2$:\n$$\\frac{\\partial \\ln L}{\\partial v} = -\\frac{N}{2v} + \\frac{1}{2v^2}\\sum_{i=1}^N (x_i - \\hat{\\mu})^2 = 0 \\implies \\hat{\\sigma}^2_{\\text{MLE}} = \\frac{1}{N}\\sum_{i=1}^N (x_i - \\hat{\\mu})^2$$\n\nPART (b) - MMSE vs MAP (4 Marks):\n1. MMSE Definition:\n- Minimum Mean Square Error finds an estimator $\\hat{\\theta}$ that minimizes the expected quadratic error $E[(\\theta - \\hat{\\theta})^2 \\mid D]$.\n- Setting $\\frac{d}{d\\hat{\\theta}} E[(\\theta - \\hat{\\theta})^2 \\mid D] = 0$ yields:\n$$\\hat{\\theta}_{\\text{MMSE}} = E[\\theta \\mid D] = \\int \\theta P(\\theta \\mid D) \\, d\\theta$$\n- Thus, MMSE is the conditional mean of the posterior distribution.\n\n2. Contrast with MAP:\n- MAP computes the **mode** of the posterior distribution (the single point of maximum density): $\\hat{\\theta}_{\\text{MAP}} = \\arg\\max_\\theta P(\\theta \\mid D)$.\n- MMSE computes the **mean** of the posterior distribution, taking the entire probability density into account.\n- If posterior $P(\\theta \\mid D)$ is asymmetric or bimodal, MMSE balances the distribution while MAP picks the highest peak."
+              },
+              {
+                "q_num": "Q10",
+                "part": "Part B (OR Option)",
+                "marks": 9,
+                "q": "(a) Differentiate between Batch Gradient Descent (BGD) and Stochastic Gradient Descent (SGD) in terms of update rule, computational complexity, memory requirements, and convergence behavior. (5 marks)\n\n(b) Explain why Ordinary Least Squares (OLS) is equivalent to Maximum Likelihood Estimation (MLE) under the assumption of Gaussian noise. (4 marks)",
+                "sol": "PART (a) - BGD vs SGD Comparison (5 Marks):\n1. Update Formulation:\n- BGD: $\\theta := \\theta - \\alpha \\frac{1}{N}\\sum_{i=1}^N \\nabla_\\theta L(x_i, y_i)$ (Sums gradients over all $N$ instances).\n- SGD: $\\theta := \\theta - \\alpha \\nabla_\\theta L(x_i, y_i)$ (Updates immediately using single random instance $i$).\n\n2. Complexity & Scalability:\n- BGD: $O(N \\cdot d)$ per step. Computationally intractable for massive datasets.\n- SGD: $O(d)$ per step. Drastically faster updates; readily supports continuous data streaming.\n\n3. Convergence & Path:\n- BGD: Trajectory on cost surface is direct and smooth. Guaranteed to reach global minimum for convex loss.\n- SGD: High gradient variance causes noisy, erratic zig-zag path. Allows SGD to jump out of shallow local minima, but oscillates around the optimum.\n\nPART (b) - OLS and Gaussian MLE Equivalence (4 Marks):\n1. Regression Model with Gaussian Noise:\n$$y_i = \\theta^T x_i + \\epsilon_i, \\quad \\text{where } \\epsilon_i \\sim N(0, \\sigma^2) \\text{ i.i.d.}$$\nThus, $y_i \\mid x_i; \\theta \\sim N(\\theta^T x_i, \\sigma^2)$.\n\n2. Likelihood Formulation:\n$$L(\\theta) = \\prod_{i=1}^N \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left(-\\frac{(y_i - \\theta^T x_i)^2}{2\\sigma^2}\\right)$$\n\n3. Log-Likelihood:\n$$\\ln L(\\theta) = -\\frac{N}{2}\\ln(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^N (y_i - \\theta^T x_i)^2$$\n\n4. Maximization Equivalence:\nSince $N, \\pi, \\sigma^2$ are positive constants, maximizing $\\ln L(\\theta)$ is mathematically identical to minimizing:\n$$\\min_\\theta \\frac{1}{2}\\sum_{i=1}^N (y_i - \\theta^T x_i)^2 = \\min_\\theta \\frac{1}{2}\\|y - X\\theta\\|^2$$\nwhich is the exact objective of Ordinary Least Squares (OLS). Hence, OLS = Gaussian MLE."
+              }
+            ]
+          },
+          {
+            "module_num": 2,
+            "title": "Regression, Decision Trees & Model Regularization",
+            "marks": 15,
+            "important_topics": [
+              {
+                "topic": "Regression models and equations",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "Linear Regression uses $h_\\theta(x) = \\theta^T x$ with MSE loss and normal equations $\\theta = (X^T X)^{-1} X^T y$; Logistic Regression uses sigmoid $\\sigma(\\theta^T x) = \\frac{1}{1 + e^{-\\theta^T x}}$ with Binary Cross-Entropy loss.",
+                "notes": [
+                  "**Linear Regression**: Models linear relationship between input $x \\in \\mathbb{R}^d$ and continuous target $y \\in \\mathbb{R}$. Hypothesis: $h_\\theta(x) = \\theta_0 + \\sum_{j=1}^d \\theta_j x_j = \\theta^T x$. Cost function (MSE): $J(\\theta) = \\frac{1}{2N} \\sum_{i=1}^N (h_\\theta(x_i) - y_i)^2$. Closed-form normal equation: $\\hat{\\theta} = (X^T X)^{-1} X^T y$.",
+                  "**Polynomial Regression**: Expands input into higher degree power terms $[x, x^2, \\dots, x^p]$ to capture non-linear curvatures while retaining linearity in parameters $\\theta$.",
+                  "**Logistic Regression (Classification)**: Maps continuous real values to probability range $(0, 1)$ using the **Sigmoid / Logistic function**: $$h_\\theta(x) = \\sigma(\\theta^T x) = \\frac{1}{1 + e^{-\\theta^T x}} = P(y = 1 \\mid x)$$ Log-Odds (Logit): $\\ln\\left(\\frac{P(y=1|x)}{1 - P(y=1|x)}\right) = \\theta^T x$. Decision boundary: classify $\\hat{y} = 1$ if $h_\\theta(x) \\ge 0.5 \\iff \\theta^T x \\ge 0$.",
+                  "**Binary Cross-Entropy Loss (Log-Loss)**: $$J(\\theta) = -\\frac{1}{N}\\sum_{i=1}^N [y_i \\ln(h_\\theta(x_i)) + (1 - y_i) \\ln(1 - h_\\theta(x_i))]$$ Convex surface ensuring global convergence via gradient descent."
+                ],
+                "formula": "Linear Hypothesis:   h_theta(x) = theta^T x | MSE = (1/2N) * sum (h - y)^2\nNormal Equation:     theta = (X^T X)^(-1) X^T y\nLogistic Hypothesis: h_theta(x) = 1 / (1 + e^(-theta^T x))\nLog-Loss:            J = -(1/N) * sum [y*log(h) + (1-y)*log(1-h)]"
+              },
+              {
+                "topic": "Overfitting, underfitting, bias-variance",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "High Bias = Underfitting (model too simplistic; high training & test error); High Variance = Overfitting (model memorizes noise; low train error but high test error). Regularization (L1/L2) penalizes large coefficients.",
+                "notes": [
+                  "**Bias-Variance Decomposition**: Expected test generalization error breaks down into: $$\\text{Expected Error} = \\text{Bias}^2 + \\text{Variance} + \\sigma_\\epsilon^2$$ - **Bias**: Error introduced by approximating a complicated real-world problem by a simpler model. - **Variance**: Amount by which $\\hat{f}(x)$ fluctuates if estimated using a different training set. - **$\\sigma_\\epsilon^2$**: Irreducible noise inherent in the data.",
+                  "**Diagnostics**: Underfitting $\\implies$ High Train Error & High Test Error. Overfitting $\\implies$ Low Train Error & High Test Error.",
+                  "**Ridge Regularization (L2)**: Adds squared Euclidean norm penalty to loss: $$J_{\\text{Ridge}}(\\theta) = \\text{MSE} + \\lambda \\sum_{j=1}^d \\theta_j^2$$ Shrinks parameter values continuously towards zero; solves multicollinearity. Closed form: $\\hat{\\theta} = (X^T X + \\lambda I)^{-1} X^T y$.",
+                  "**Lasso Regularization (L1)**: Adds absolute penalty: $$J_{\\text{Lasso}}(\\theta) = \\text{MSE} + \\lambda \\sum_{j=1}^d |\\theta_j|$$ The diamond-shaped L1 constraint drives non-informative feature weights strictly to zero, performing **automatic feature selection**."
+                ],
+                "formula": "Error = Bias^2 + Variance + Irreducible Noise (sigma^2)\nRidge (L2): min MSE + lambda * sum theta_j^2  [Weight shrinkage]\nLasso (L1): min MSE + lambda * sum |theta_j|  [Feature selection / Sparsity]"
+              },
+              {
+                "topic": "ID3 decision tree numerical",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "Compute dataset entropy $H(S) = -\\sum p_i \\log_2 p_i$. For candidate attribute $A$, compute conditional entropy $H(S \\mid A) = \\sum \\frac{|S_v|}{|S|} H(S_v)$. Select attribute with maximum Information Gain: $\\text{Gain}(S, A) = H(S) - H(S \\mid A)$.",
+                "notes": [
+                  "**Entropy $H(S)$**: Quantifies uncertainty in dataset $S$ with class proportions $p_i$: $$H(S) = -\\sum_{i=1}^c p_i \\log_2(p_i)$$ For binary classification: $H(S) = -p_+ \\log_2(p_+) - p_- \\log_2(p_-)$. If all instances belong to one class $\\implies H(S) = 0$ (pure). If split 50/50 $\\implies H(S) = 1.0$ (max impurity).",
+                  "**Conditional Entropy $H(S \\mid A)$**: Weighted average entropy of subsets $S_v$ resulting from splitting on attribute $A$: $$H(S \\mid A) = \\sum_{v \\in \\text{Values}(A)} \\frac{|S_v|}{|S|} H(S_v)$$",
+                  "**Information Gain $\\text{Gain}(S, A)$**: Expected reduction in entropy: $$\\text{Gain}(S, A) = H(S) - H(S \\mid A)$$ The attribute maximizing Information Gain is chosen as the splitting root node.",
+                  "**Numerical Step-by-Step**: Given 14 samples (9 Yes, 5 No): $H(S) = -\\frac{9}{14}\\log_2(9/14) - \\frac{5}{14}\\log_2(5/14) = 0.940\\text{ bits}$. If attribute *Wind* splits into Weak (6 Yes, 2 No, $H=0.811$) and Strong (3 Yes, 3 No, $H=1.000$): $$H(S \\mid \\text{Wind}) = \\frac{8}{14}(0.811) + \\frac{6}{14}(1.000) = 0.892\\text{ bits}$$ $$\\text{Gain}(S, \\text{Wind}) = 0.940 - 0.892 = 0.048\\text{ bits}$$"
+                ],
+                "formula": "H(S) = -sum p_i * log2(p_i)\nH(S | A) = sum (|S_v| / |S|) * H(S_v)\nGain(S, A) = H(S) - H(S | A)  [Choose max Gain]"
+              }
+            ],
+            "practice_questions": [
+              {
+                "q_num": "Q3",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Distinguish between Ridge Regression (L2) and Lasso Regression (L1). Why does Lasso produce sparse models?",
+                "sol": "1. Ridge Regression (L2 Regularization):\n- Adds penalty $\\lambda \\sum_{j=1}^d \\theta_j^2$ to the MSE loss function.\n- Shrinks weights proportionally toward zero, but never forces coefficients strictly to zero.\n- Retains all features; effective at resolving multicollinearity.\n\n2. Lasso Regression (L1 Regularization):\n- Adds penalty $\\lambda \\sum_{j=1}^d |\\theta_j|$ to the MSE loss function.\n- Performs automatic **feature selection** by forcing non-essential weights to exactly zero.\n\n3. Why Lasso Produces Sparsity:\n- In geometric parameter space, the L1 constraint region is an acute diamond/rhombus with sharp corners on the coordinate axes.\n- The elliptical contour lines of the MSE loss function first touch the L1 diamond constraint region at one of its corners where one or more coordinates $\\theta_j = 0$, producing exact sparsity."
+              },
+              {
+                "q_num": "Q4",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Why is Mean Squared Error (MSE) not used as the loss function in Logistic Regression?",
+                "sol": "1. Non-Convex Cost Surface:\n- In Logistic Regression, the hypothesis is the non-linear sigmoid function: $h_\\theta(x) = \\frac{1}{1 + e^{-\\theta^T x}}$.\n- If MSE $J(\\theta) = \\frac{1}{2N}\\sum (h_\\theta(x_i) - y_i)^2$ is used, inserting the non-linear sigmoid results in a **non-convex cost function** with many local minima and flat saddle regions.\n- Gradient descent would get trapped in poor sub-optimal local minima.\n\n2. Binary Cross-Entropy Convexity:\n- By using Log-Loss $J(\\theta) = -\\frac{1}{N}\\sum [y\\ln(h) + (1-y)\\ln(1-h)]$, the loss surface is strictly **convex** with a unique global minimum, guaranteeing convergence."
+              },
+              {
+                "q_num": "Q11",
+                "part": "Part B",
+                "marks": 9,
+                "q": "A dataset contains 14 instances classified into Play Tennis (9 Yes, 5 No). An attribute 'Outlook' has three values: Sunny (2 Yes, 3 No), Overcast (4 Yes, 0 No), and Rain (3 Yes, 2 No).\n(a) Compute the total entropy of the dataset $H(S)$. (3 marks)\n(b) Compute the conditional entropy $H(S \\mid \\text{Outlook})$. (4 marks)\n(c) Calculate the Information Gain $\\text{Gain}(S, \\text{Outlook})$. (2 marks)",
+                "sol": "PART (a) - Total Dataset Entropy (3 Marks):\n1. Total samples $N = 14$, Positive $p_+ = 9/14 \\approx 0.643$, Negative $p_- = 5/14 \\approx 0.357$.\n$$H(S) = -p_+ \\log_2(p_+) - p_- \\log_2(p_-)$$\n$$H(S) = -\\left(\\frac{9}{14}\\right)\\log_2\\left(\\frac{9}{14}\\right) - \\left(\\frac{5}{14}\\right)\\log_2\\left(\\frac{5}{14}\\right)$$\n$$= -(0.643)(-0.637) - (0.357)(-1.485) = 0.410 + 0.530 = 0.940\\text{ bits}$$\n\nPART (b) - Conditional Entropy H(S | Outlook) (4 Marks):\n1. For Sunny (5 instances: 2 Yes, 3 No):\n$$H(S_{\\text{Sunny}}) = -\\frac{2}{5}\\log_2(2/5) - \\frac{3}{5}\\log_2(3/5) = -(0.4)(-1.322) - (0.6)(-0.737) = 0.529 + 0.442 = 0.971\\text{ bits}$$\n\n2. For Overcast (4 instances: 4 Yes, 0 No):\nSince all 4 instances are Yes (pure subset):\n$$H(S_{\\text{Overcast}}) = 0.000\\text{ bits}$$\n\n3. For Rain (5 instances: 3 Yes, 2 No):\n$$H(S_{\\text{Rain}}) = -\\frac{3}{5}\\log_2(3/5) - \\frac{2}{5}\\log_2(2/5) = 0.971\\text{ bits}$$\n\n4. Weighted Conditional Entropy:\n$$H(S \\mid \\text{Outlook}) = \\frac{5}{14} H(S_{\\text{Sunny}}) + \\frac{4}{14} H(S_{\\text{Overcast}}) + \\frac{5}{14} H(S_{\\text{Rain}})$$\n$$= \\frac{5}{14}(0.971) + \\frac{4}{14}(0.000) + \\frac{5}{14}(0.971) = 0.347 + 0.000 + 0.347 = 0.694\\text{ bits}$$\n\nPART (c) - Information Gain (2 Marks):\n$$\\text{Gain}(S, \\text{Outlook}) = H(S) - H(S \\mid \\text{Outlook})$$\n$$\\text{Gain}(S, \\text{Outlook}) = 0.940 - 0.694 = 0.246\\text{ bits}$$\nSince Information Gain is substantially positive (0.246), Outlook is an excellent candidate for the splitting node."
+              },
+              {
+                "q_num": "Q12",
+                "part": "Part B (OR Option)",
+                "marks": 9,
+                "q": "(a) Explain the Bias-Variance tradeoff with mathematical decomposition and plot the typical curves of Training Error, Test Error, Bias, and Variance against Model Complexity. (5 marks)\n\n(b) Explain Pre-pruning and Post-pruning in Decision Trees to prevent overfitting. (4 marks)",
+                "sol": "PART (a) - Bias-Variance Tradeoff (5 Marks):\n1. Mathematical Decomposition:\nFor true function $y = f(x) + \\epsilon$ with $E[\\epsilon] = 0$ and $\\text{Var}(\\epsilon) = \\sigma^2$, the expected generalization error of estimator $\\hat{f}(x)$ decomposes into:\n$$\\text{Expected Error} = \\text{Bias}[\\hat{f}(x)]^2 + \\text{Var}(\\hat{f}(x)) + \\sigma^2$$\n- **Bias$^2$**: $(E[\\hat{f}(x)] - f(x))^2$. Error from erroneous model assumptions.\n- **Variance**: $E[(\\hat{f}(x) - E[\\hat{f}(x)])^2]$. Fluctuation of predictions across training sets.\n- **$\\sigma^2$**: Irreducible noise in measurement.\n\n2. Error Curve Behavior:\n- *Low Model Complexity (e.g. Linear)*: High Bias, Low Variance $\\implies$ High Training & Test Error (Underfitting).\n- *High Model Complexity (e.g. High-degree Polynomial)*: Low Bias, High Variance $\\implies$ Training Error drops toward 0, but Test Error rises sharply into U-shape (Overfitting).\n- *Optimal Complexity*: Located at the trough of the U-shaped Test Error curve.\n\nPART (b) - Decision Tree Pruning (4 Marks):\n1. Pre-Pruning (Early Stopping):\n- Halts tree construction before it fully splits training data.\n- Conditions: Stop splitting if node sample count $< N_{\\min}$, if tree depth reaches $\\text{max\\_depth}$, or if Information Gain $< \\tau_{\\min}$.\n- *Advantage*: Very fast, avoids growing full tree.\n- *Disadvantage*: Suffers from horizon effect (may stop before discovering valuable combined interactions).\n\n2. Post-Pruning (Cost-Complexity / Reduced Error):\n- Grows full saturated tree until all leaves are pure, then prunes upward.\n- Cost-Complexity metric: $R_\\alpha(T) = R(T) + \\alpha |T|$, where $|T|$ is number of leaves and $\\alpha$ is complexity penalty.\n- Collapses subtrees that do not meaningfully hurt cross-validation accuracy."
+              }
+            ]
+          },
+          {
+            "module_num": 3,
+            "title": "Instance-Based Learning & Naive Bayes",
+            "marks": 15,
+            "important_topics": [
+              {
+                "topic": "Naive Bayes numerical",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "Assume conditional independence among features: $P(X \\mid C_k) = \\prod_{i=1}^d P(x_i \\mid C_k)$. Classify into $\\arg\\max_k P(C_k) \\prod P(x_i \\mid C_k)$. Apply Laplace smoothing $\\frac{\\text{count}+1}{N_k + K}$ if any count is zero.",
+                "notes": [
+                  "**Bayes Theorem Principle**: Computes posterior class probability given feature vector $X = (x_1, \\dots, x_d)$: $$P(C_k \\mid X) = \\frac{P(C_k) P(X \\mid C_k)}{P(X)}$$",
+                  "**Conditional Independence Assumption**: Assumes all features are mutually independent given class label $C_k$: $$P(X \\mid C_k) = P(x_1 \\mid C_k) \\times P(x_2 \\mid C_k) \\times \\dots \\times P(x_d \\mid C_k) = \\prod_{i=1}^d P(x_i \\mid C_k)$$ Classification decision rule: $\\hat{y} = \\arg\\max_k P(C_k) \\prod_{i=1}^d P(x_i \\mid C_k)$.",
+                  "**Laplace Smoothing (Add-1)**: Prevents zero-probability multiplication when an attribute value never appears with a class in the training set: $$P(x_i = v \\mid C_k) = \\frac{\\text{Count}(x_i = v, C_k) + 1}{\\text{Count}(C_k) + K}$$ where $K$ is the number of distinct possible values of attribute $x_i$.",
+                  "**Step-by-Step Calculation**: Given 10 samples (6 Yes, 4 No). Query $X = (\\text{Sunny}, \\text{Cool})$: 1. Prior: $P(\\text{Yes}) = 0.6, P(\\text{No}) = 0.4$. 2. Conditional: $P(\\text{Sunny}|\\text{Yes}) = 2/6, P(\\text{Cool}|\\text{Yes}) = 3/6$. $P(\\text{Sunny}|\\text{No}) = 3/4, P(\\text{Cool}|\\text{No}) = 1/4$. 3. Scores: $\\text{Yes} = 0.6 \\times (2/6) \\times (3/6) = 0.100$. $\\text{No} = 0.4 \\times (3/4) \\times (1/4) = 0.075$. 4. Normalized prob: $P(\\text{Yes}|X) = \\frac{0.100}{0.100 + 0.075} = 57.1\\%$ $\\implies$ Classify **Yes**."
+                ],
+                "formula": "P(C_k | X) proportional to P(C_k) * prod_{i=1}^d P(x_i | C_k)\nLaplace: P(x_i = v | C_k) = (count + 1) / (N_k + K)\nPrediction: y_hat = argmax_k P(C_k) * prod P(x_i | C_k)"
+              },
+              {
+                "topic": "Soft-margin SVM and kernels",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "Soft-margin SVM introduces slack variables $\\xi_i \\ge 0$ to tolerate margin violations: $\\min \\frac{1}{2}\\|w\\|^2 + C \\sum \\xi_i$. The kernel trick evaluates inner products in high-dimensional space without computing $\\phi(x)$ ($K(x, x') = \\phi(x)^T \\phi(x')$).",
+                "notes": [
+                  "**Hard-Margin vs Soft-Margin SVM**: Hard-margin requires absolute linear separability ($y_i(w^T x_i + b) \\ge 1$). Soft-margin introduces slack variables $\\xi_i \\ge 0$ to allow points inside margin or misclassified: $$\\min_{w, b, \\xi} \\frac{1}{2}\\|w\\|^2 + C\\sum_{i=1}^N \\xi_i \\quad \\text{subject to } y_i(w^T x_i + b) \\ge 1 - \\xi_i, \\quad \\xi_i \\ge 0$$",
+                  "**Slack Variable Interpretation**: - $\\xi_i = 0$: Point is correctly classified and outside/on the margin boundary. - $0 < \\xi_i \\le 1$: Point is correctly classified but falls within the margin buffer. - $\\xi_i > 1$: Point is misclassified.",
+                  "**Role of Hyperparameter $C$**: - *Large $C$*: Heavily penalizes slack $\\implies$ narrow margin, strictly separates training data $\\implies$ risk of **overfitting** (high variance). - *Small $C$*: Tolerates more violations $\\implies$ wider margin $\\implies$ risk of **underfitting** (high bias).",
+                  "**The Kernel Trick**: Projects non-linear data into higher-dimensional feature space $\\phi(x)$ where it becomes linearly separable: $$K(x, x') = \\phi(x)^T \\phi(x')$$ Common Kernels: 1. Polynomial: $K(x, x') = (x^T x' + c)^d$. 2. RBF (Gaussian): $K(x, x') = \\exp(-\\gamma \\|x - x'\\|^2)$, with parameter $\\gamma = \\frac{1}{2\\sigma^2}$. (High $\\gamma \\implies$ complex boundary/overfitting; low $\\gamma \\implies$ smooth/underfitting)."
+                ],
+                "formula": "Soft-Margin: min (1/2)||w||^2 + C * sum xi_i  s.t. y_i(w^T x_i + b) >= 1 - xi_i\nMargin width = 2 / ||w||\nRBF Kernel:  K(x, x') = exp(-gamma * ||x - x'||^2) with gamma = 1 / (2*sigma^2)"
+              },
+              {
+                "topic": "KNN working principle",
+                "priority": "High Priority",
+                "appearances": "4 appearances",
+                "rule": "Instance-based lazy learner ($O(1)$ training time; $O(Nd)$ inference). Classifies query point by finding the $k$ nearest neighbors under distance metric and assigning the majority class. Features must be normalized.",
+                "notes": [
+                  "**Working Principle**: 1. Store entire labeled training dataset (no explicit training phase). 2. For unseen query $x_q$, compute distances to all $N$ stored training instances. 3. Select the $k$ closest neighbors $N_k(x_q)$. 4. Aggregate: assign majority class label (classification) or mean value (regression).",
+                  "**Distance Metrics**: - **Euclidean ($L_2$)**: $d(x, z) = \\sqrt{\\sum_{j=1}^d (x_j - z_j)^2}$. - **Manhattan ($L_1$)**: $d(x, z) = \\sum_{j=1}^d |x_j - z_j|$. - **Minkowski ($L_p$)**: $d(x, z) = (\\sum |x_j - z_j|^p)^{1/p}$.",
+                  "**Hyperparameter $k$ & Bias-Variance Tradeoff**: - $k = 1$: Decision boundary conforms tightly to training points $\\implies$ zero training error, highly sensitive to noise $\\implies$ **Overfitting (High Variance)**. - Large $k$: Smooth decision boundary averaging over large neighborhoods $\\implies$ **Underfitting (High Bias)**. Best practice: Choose odd $k$ for binary classification to avoid ties.",
+                  "**Necessity of Feature Scaling**: Features with larger ranges (e.g. Salary $[20000, 150000]$ vs Age $[18, 65]$) dominate Euclidean distance calculations. Always normalize features using Min-Max scaling $x_{\\text{norm}} = \\frac{x - x_{\\min}}{x_{\\max} - x_{\\min}}$ or Standardization $z = \\frac{x - \\mu}{\\sigma}$."
+                ],
+                "formula": "Euclidean: d(x, z) = sqrt(sum (x_i - z_i)^2)\nManhattan: d(x, z) = sum |x_i - z_i|\nk=1 => High Variance (Overfitting) | Large k => High Bias (Underfitting)\nMin-Max:   x_norm = (x - x_min) / (x_max - x_min)"
+              }
+            ],
+            "practice_questions": [
+              {
+                "q_num": "Q5",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Why is feature scaling mandatory before running K-Nearest Neighbors (KNN)? Illustrate with an example.",
+                "sol": "1. Distance Sensitivity:\n- KNN determines neighbor proximity using geometric distance metrics (e.g., Euclidean distance $d(x, z) = \\sqrt{\\sum (x_j - z_j)^2}$).\n- If features have vastly different numerical ranges, the feature with the largest scale will completely dominate the distance calculation, rendering smaller-scale features irrelevant.\n\n2. Example:\n- Feature 1: Income in \\$ ($[20,000, 150,000]$), difference between two points $= 20,000$.\n- Feature 2: Age in years ($[18, 70]$), difference $= 5$.\n- $(20000)^2 + 5^2 \\approx 400,000,025$. The distance is $99.99999\\%$ driven by Income, completely ignoring Age.\n- Solution: Rescale all features to $[0, 1]$ via Min-Max Normalization: $x' = \\frac{x - x_{\\min}}{x_{\\max} - x_{\\min}}$."
+              },
+              {
+                "q_num": "Q6",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Define the Kernel Trick in Support Vector Machines (SVM). Name two commonly used kernel functions.",
+                "sol": "1. Kernel Trick Concept:\n- When training data is not linearly separable in original input space $\\mathbb{R}^d$, it can be mapped into a higher-dimensional feature space $\\mathcal{H}$ via non-linear mapping $\\phi(x)$ where a linear hyperplane can separate the classes.\n- Explicitly computing high-dimensional coordinates $\\phi(x)$ is computationally prohibitive or infinite.\n- The **Kernel Trick** calculates the dot product directly in input space using a kernel function $K(x, z) = \\phi(x)^T \\phi(z)$ without ever explicitly computing $\\phi(x)$.\n\n2. Two Common Kernels:\n- **Polynomial Kernel**: $K(x, z) = (x^T z + c)^d$.\n- **Radial Basis Function (RBF / Gaussian)**: $K(x, z) = \\exp(-\\gamma \\|x - z\\|^2)$, where $\\gamma > 0$."
+              },
+              {
+                "q_num": "Q13",
+                "part": "Part B",
+                "marks": 9,
+                "q": "A Naive Bayes classifier is trained on 10 instances (6 Positive, 4 Negative) with attributes 'Color' (Red, Blue) and 'Shape' (Circle, Square).\nPositive counts: Color=Red (4), Blue (2); Shape=Circle (3), Square (3).\nNegative counts: Color=Red (1), Blue (3); Shape=Circle (3), Square (1).\n(a) Predict the class of test instance $X = (\\text{Color}=\\text{Red}, \\text{Shape}=\\text{Square})$. (5 marks)\n(b) Suppose a new attribute 'Size' has zero occurrences for a class value. Explain the Zero-Frequency problem and apply Laplace smoothing to resolve it. (4 marks)",
+                "sol": "PART (a) - Naive Bayes Test Instance Prediction (5 Marks):\n1. Calculate Class Priors:\n$$P(\\text{Pos}) = \\frac{6}{10} = 0.6, \\quad P(\\text{Neg}) = \\frac{4}{10} = 0.4$$\n\n2. Calculate Conditional Likelihoods for $X = (\\text{Red}, \\text{Square})$:\n- In Positive Class ($N_{\\text{Pos}} = 6$):\n  $$P(\\text{Red} \\mid \\text{Pos}) = \\frac{4}{6} = \\frac{2}{3} \\approx 0.667$$\n  $$P(\\text{Square} \\mid \\text{Pos}) = \\frac{3}{6} = 0.500$$\n- In Negative Class ($N_{\\text{Neg}} = 4$):\n  $$P(\\text{Red} \\mid \\text{Neg}) = \\frac{1}{4} = 0.250$$\n  $$P(\\text{Square} \\mid \\text{Neg}) = \\frac{1}{4} = 0.250$$\n\n3. Compute Unnormalized Posterior Scores:\n$$\\text{Score}(\\text{Pos}) = P(\\text{Pos}) \\times P(\\text{Red}|\\text{Pos}) \\times P(\\text{Square}|\\text{Pos}) = 0.6 \\times 0.667 \\times 0.500 = 0.200$$\n$$\\text{Score}(\\text{Neg}) = P(\\text{Neg}) \\times P(\\text{Red}|\\text{Neg}) \\times P(\\text{Square}|\\text{Neg}) = 0.4 \\times 0.250 \\times 0.250 = 0.025$$\n\n4. Normalize and Classify:\n$$P(\\text{Pos} \\mid X) = \\frac{0.200}{0.200 + 0.025} = \\frac{0.200}{0.225} = 0.889\\text{ (88.9\\%)}$$\n$$P(\\text{Neg} \\mid X) = \\frac{0.025}{0.225} = 0.111\\text{ (11.1\\%)}$$\nSince $\\text{Score}(\\text{Pos}) > \\text{Score}(\\text{Neg})$, classify instance $X$ as **Positive**.\n\nPART (b) - Zero-Frequency Problem & Laplace Smoothing (4 Marks):\n1. The Problem:\nIf a feature value never appears with a class in training data ($P(x_i \\mid C_k) = 0$), multiplying likelihoods sets the entire posterior probability product to zero: $P(C_k) \\prod P(x_j \\mid C_k) = 0$, completely nullifying all other strong feature evidence.\n\n2. Laplace Add-One Smoothing Solution:\nAdd 1 to numerator and $K$ (number of distinct values attribute $x_i$ can take) to denominator:\n$$P(x_i = v \\mid C_k) = \\frac{\\text{Count}(x_i = v, C_k) + 1}{\\text{Count}(C_k) + K}$$\nFor example, if Size has 3 values (Small, Medium, Large) and Small appears 0 times in Negative ($N_{\\text{Neg}} = 4$):\n$$P(\\text{Small} \\mid \\text{Neg}) = \\frac{0 + 1}{4 + 3} = \\frac{1}{7} \\approx 0.143 > 0$$"
+              },
+              {
+                "q_num": "Q14",
+                "part": "Part B (OR Option)",
+                "marks": 9,
+                "q": "(a) Formulate the Soft-Margin Support Vector Machine optimization problem. Define slack variables $\\xi_i$ and explain the physical role of the penalty parameter $C$. (5 marks)\n\n(b) Describe the K-Nearest Neighbors (KNN) algorithm and contrast the effects of choosing $k=1$ versus $k=N$. (4 marks)",
+                "sol": "PART (a) - Soft-Margin SVM Formulation (5 Marks):\n1. Mathematical Formulation:\n$$\\min_{w, b, \\xi} \\frac{1}{2}\\|w\\|^2 + C\\sum_{i=1}^N \\xi_i$$\n$$\\text{subject to } y_i(w^T x_i + b) \\ge 1 - \\xi_i, \\quad \\xi_i \\ge 0 \\quad \\forall i = 1, \\dots, N$$\n\n2. Slack Variables $\\xi_i$:\n- Measure distance of margin violation for instance $x_i$:\n  - $\\xi_i = 0$: Instance satisfies hard margin condition $y_i(w^T x_i + b) \\ge 1$.\n  - $0 < \\xi_i \\le 1$: Instance is correctly classified but lies inside the margin corridor.\n  - $\\xi_i > 1$: Instance is misclassified on the wrong side of the separating hyperplane.\n\n3. Penalty Parameter $C$:\n- Controls trade-off between maximizing margin width ($1/\\|w\\|$) and minimizing classification error ($\\sum \\xi_i$):\n  - *Large $C$*: High penalty on errors $\\implies$ narrow margin, strictly separates outliers $\\implies$ **Overfitting**.\n  - *Small $C$*: Low penalty on errors $\\implies$ wider margin, allows more margin violations $\\implies$ **Underfitting**.\n\nPART (b) - KNN Algorithm & Choice of K (4 Marks):\n1. KNN Steps:\n- Store training examples $\\{(x_i, y_i)\\}$. Given query $x_q$, calculate Euclidean distances to all $N$ instances.\n- Pick $k$ closest samples. Assign majority vote class label (classification) or mean value (regression).\n\n2. Extreme Choices of $k$:\n- **$k = 1$**: Training error is 0. Decision boundaries are highly complex, jagged Voronoi tessellations responding to individual noise points $\\implies$ **High Variance / Overfitting**.\n- **$k = N$**: For all queries, KNN predicts the global majority class of the entire dataset $\\implies$ Completely ignores local structure $\\implies$ **High Bias / Underfitting**."
+              }
+            ]
+          },
+          {
+            "module_num": 4,
+            "title": "Ensemble Learning & Model Assessment",
+            "marks": 15,
+            "important_topics": [
+              {
+                "topic": "Bagging and majority voting",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "Bagging builds independent models in parallel using bootstrap samples (with replacement) and aggregates predictions via majority voting or averaging to drastically reduce model variance.",
+                "notes": [
+                  "**Bootstrap Sampling**: Given dataset of size $N$, construct $B$ training sets $D_1, \\dots, D_B$, each containing $N$ samples drawn uniformly **with replacement**. The probability a specific data point is never chosen in $N$ draws is $\\lim_{N \\to \\infty}(1 - 1/N)^N = e^{-1} \\approx 36.8\\%$. These unselected instances form the **Out-of-Bag (OOB)** set used for model validation without a separate holdout set.",
+                  "**Aggregation**: Train base model $f_b(x)$ on each bootstrap set in parallel. Final prediction is: - *Classification*: Hard majority vote: $\\hat{y} = \\text{mode}\\{f_1(x), \\dots, f_B(x)\\}$ or Soft probability averaging. - *Regression*: Arithmetic average: $\\hat{f}(x) = \\frac{1}{B}\\sum_{b=1}^B f_b(x)$.",
+                  "**Variance Reduction Mathematics**: For $B$ models each with individual variance $\\sigma^2$ and pairwise correlation $\\rho$: $$\\text{Var}(\\text{Ensemble}) = \\rho \\sigma^2 + \\frac{1 - \\rho}{B}\\sigma^2$$ As $B \\to \\infty$, ensemble variance decreases to $\\rho \\sigma^2$. To minimize $\\rho$, individual trees must be de-correlated.",
+                  "**Random Forest**: Enhances Bagging by introducing **feature subspace sampling**: At every tree split, only a random subset of $m \\approx \\sqrt{d}$ features is evaluated, minimizing correlation $\\rho$ among trees."
+                ],
+                "formula": "OOB validation set size ~= (1 - 1/e) * 100% = 36.8%\nEnsemble Variance = rho * sigma^2 + (1 - rho)/B * sigma^2\nRandom Forest feature split size: m = sqrt(d) (Classification)"
+              },
+              {
+                "topic": "Confusion matrix metrics",
+                "priority": "High Priority",
+                "appearances": "5 appearances",
+                "rule": "Accuracy $=\\frac{TP+TN}{N}$; Precision $=\\frac{TP}{TP+FP}$; Recall $=\\frac{TP}{TP+FN}$; Specificity $=\\frac{TN}{TN+FP}$; $F_1 = 2\\frac{\\text{Precision}\\cdot\\text{Recall}}{\\text{Precision}+\\text{Recall}}$.",
+                "notes": [
+                  "**Confusion Matrix Terms**: - **TP**: Correctly predicted positive instances. - **TN**: Correctly predicted negative instances. - **FP (Type I error)**: Actual negative erroneously predicted positive. - **FN (Type II error)**: Actual positive erroneously predicted negative.",
+                  "**Evaluation Formulas**: - **Accuracy**: $\\frac{TP + TN}{TP + TN + FP + FN}$. Flawed under class imbalance. - **Precision**: $\\frac{TP}{TP + FP}$. Purity of positive predictions. Crucial when false alarms are costly (e.g. spam filtering). - **Recall (Sensitivity / TPR)**: $\\frac{TP}{TP + FN}$. Completeness of positive identification. Crucial when misses are catastrophic (e.g. cancer detection). - **Specificity (TNR)**: $\\frac{TN}{TN + FP}$. Proportion of actual negatives correctly recognized.",
+                  "**$F_1$-Score Formulation**: Harmonic mean of Precision and Recall: $$F_1 = 2 \\times \\frac{\\text{Precision} \\times \\text{Recall}}{\\text{Precision} + \\text{Recall}} = \\frac{2TP}{2TP + FP + FN}$$ The harmonic mean punishes models that sacrifice one metric to inflate the other.",
+                  "**Numerical Example**: Given $TP=40, FP=10, FN=15, TN=15$ ($N=80$): - Accuracy $= \\frac{40+15}{80} = \\frac{55}{80} = 68.75\\%$. - Precision $= \\frac{40}{40+10} = \\frac{40}{50} = 80.0\\%$. - Recall $= \\frac{40}{40+15} = \\frac{40}{55} = 72.73\\%$. - $F_1 = \\frac{2(0.80)(0.7273)}{0.80 + 0.7273} = \\frac{1.1636}{1.5273} = 76.19\\%$."
+                ],
+                "formula": "Accuracy    = (TP + TN) / (TP + TN + FP + FN)\nPrecision   = TP / (TP + FP)\nRecall      = TP / (TP + FN)\nSpecificity = TN / (TN + FP)\nF1-Score    = 2 * (Precision * Recall) / (Precision + Recall) = 2*TP / (2*TP + FP + FN)"
+              },
+              {
+                "topic": "ROC curve numerical",
+                "priority": "High Priority",
+                "appearances": "4 appearances",
+                "rule": "Plot True Positive Rate (TPR / Sensitivity) on Y-axis vs False Positive Rate (FPR / $1-\\text{Specificity}$) on X-axis across all probability thresholds $\\tau \\in [0, 1]$. Diagonal line represents random guessing (AUC = 0.5); perfect classifier reaches (0, 1) with AUC = 1.0.",
+                "notes": [
+                  "**ROC Coordinate Definitions**: - $Y$-axis: $\\text{TPR} = \\frac{TP}{P} = \\frac{TP}{TP + FN}$ (Sensitivity). - $X$-axis: $\\text{FPR} = \\frac{FP}{N} = \\frac{FP}{FP + TN} = 1 - \\text{Specificity}$.",
+                  "**Numerical Calculation from Scored Probabilities**: Given 5 instances ($P=3$ Positives, $N=2$ Negatives): 1. Sort instances in descending order of predicted probabilities. 2. Sweep classification threshold $\\tau$ from $\\infty$ down to $0$: - At $\\tau > 0.9$: No positive predictions $\\implies TP=0, FP=0 \\implies (0.0, 0.0)$. - At $\\tau = 0.9$: 1 Positive instance predicted $\\implies TP=1, FP=0 \\implies (0.0, 1/3) = (0.0, 0.33)$. - At $\\tau = 0.8$: 2 Positive instances predicted $\\implies TP=2, FP=0 \\implies (0.0, 2/3) = (0.0, 0.67)$. - At $\\tau = 0.7$: 1 Negative instance predicted $\\implies TP=2, FP=1 \\implies (1/2, 2/3) = (0.5, 0.67)$. - At $\\tau = 0.5$: 1 Positive instance predicted $\\implies TP=3, FP=1 \\implies (0.5, 3/3) = (0.5, 1.0)$. - At $\\tau = 0.2$: 1 Negative instance predicted $\\implies TP=3, FP=2 \\implies (1.0, 1.0)$.",
+                  "**Area Under Curve (AUC)**: Integrates area under the step curve using trapezoidal rule: $$\\text{AUC} = (0.5 - 0)(0.67) + (1.0 - 0.5)(1.0) = 0.335 + 0.500 = 0.835$$ Interpretation: Probability that a randomly chosen positive sample is ranked higher than a randomly chosen negative sample is 83.5%."
+                ],
+                "formula": "Y-axis: TPR = TP / (TP + FN)\nX-axis: FPR = FP / (TN + FP) = 1 - Specificity\nRandom Guess: AUC = 0.5 (Diagonal Line)\nPerfect Model: AUC = 1.0 (Passes through coordinate (0, 1))"
+              }
+            ],
+            "practice_questions": [
+              {
+                "q_num": "Q7",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Distinguish between Bagging and Boosting in Ensemble Learning.",
+                "sol": "1. Bagging (Bootstrap Aggregating):\n- Base learners are trained **in parallel** on independent bootstrap samples drawn with replacement.\n- Every model has equal voting weight.\n- Primary objective: **Reduce variance** of high-variance, low-bias models (e.g. unpruned Decision Trees $\\to$ Random Forest).\n\n2. Boosting:\n- Base learners are trained **sequentially** in an adaptive pipeline.\n- Each subsequent model focuses specifically on instances misclassified by earlier models by adjusting sample weights.\n- Predictions are aggregated using weighted voting based on individual model accuracy.\n- Primary objective: **Reduce bias** of high-bias, weak learners (e.g. Decision Stumps $\\to$ AdaBoost, Gradient Boosting)."
+              },
+              {
+                "q_num": "Q8",
+                "part": "Part A",
+                "marks": 3,
+                "q": "Define Precision and Recall. In medical cancer diagnosis, which metric is prioritized and why?",
+                "sol": "1. Definitions:\n- **Precision**: $\\frac{TP}{TP + FP}$. Purity of positive predictions. Measures the fraction of diagnosed positive cases that are genuinely cancerous.\n- **Recall (Sensitivity)**: $\\frac{TP}{TP + FN}$. Coverage of actual positive cases. Measures the fraction of actual cancer patients successfully detected.\n\n2. Medical Diagnosis Priority:\n- **Recall is heavily prioritized** over Precision.\n- Reason: A False Negative (FN) means a malignant cancer patient is sent home undiagnosed, resulting in disease progression or death.\n- A False Positive (FP) merely requires a harmless follow-up confirmatory biopsy. Therefore, cancer screening models tolerate lower precision to ensure near 100% recall."
+              },
+              {
+                "q_num": "Q15",
+                "part": "Part B",
+                "marks": 9,
+                "q": "A classification model is evaluated on a test set of 100 patients. The confusion matrix is:\nActual Cancer (Positive): Predicted Cancer = 45, Predicted Healthy = 5.\nActual Healthy (Negative): Predicted Cancer = 10, Predicted Healthy = 40.\n(a) Identify TP, TN, FP, FN. (2 marks)\n(b) Compute Accuracy, Precision, Recall, and Specificity. (4 marks)\n(c) Calculate the F1-Score. (3 marks)",
+                "sol": "PART (a) - Identify Confusion Matrix Values (2 Marks):\n- **TP (True Positive)** = 45 (Actual Cancer correctly predicted Cancer)\n- **FN (False Negative)** = 5 (Actual Cancer incorrectly predicted Healthy)\n- **FP (False Positive)** = 10 (Actual Healthy incorrectly predicted Cancer)\n- **TN (True Negative)** = 40 (Actual Healthy correctly predicted Healthy)\nTotal instances $N = 45 + 5 + 10 + 40 = 100$.\n\nPART (b) - Metric Calculations (4 Marks):\n1. Accuracy:\n$$\\text{Accuracy} = \\frac{TP + TN}{N} = \\frac{45 + 40}{100} = \\frac{85}{100} = 0.85\\text{ (85.0\\%)}$$\n\n2. Precision:\n$$\\text{Precision} = \\frac{TP}{TP + FP} = \\frac{45}{45 + 10} = \\frac{45}{55} = \\frac{9}{11} \\approx 0.8182\\text{ (81.82\\%)}$$\n\n3. Recall (Sensitivity / TPR):\n$$\\text{Recall} = \\frac{TP}{TP + FN} = \\frac{45}{45 + 5} = \\frac{45}{50} = 0.9000\\text{ (90.00\\%)}$$\n\n4. Specificity (TNR):\n$$\\text{Specificity} = \\frac{TN}{TN + FP} = \\frac{40}{40 + 10} = \\frac{40}{50} = 0.8000\\text{ (80.00\\%)}$$\n\nPART (c) - F1-Score Calculation (3 Marks):\n$$F_1 = 2 \\times \\frac{\\text{Precision} \\times \\text{Recall}}{\\text{Precision} + \\text{Recall}}$$\n$$F_1 = 2 \\times \\frac{0.8182 \\times 0.9000}{0.8182 + 0.9000} = 2 \\times \\frac{0.73638}{1.7182} = \\frac{1.47276}{1.7182} \\approx 0.8571\\text{ (85.71\\%)}$$\nAlternatively:\n$$F_1 = \\frac{2TP}{2TP + FP + FN} = \\frac{2(45)}{2(45) + 10 + 5} = \\frac{90}{90 + 15} = \\frac{90}{105} = \\frac{6}{7} \\approx 0.8571$$"
+              },
+              {
+                "q_num": "Q16",
+                "part": "Part B (OR Option)",
+                "marks": 9,
+                "q": "A binary classifier generates predicted probabilities on 6 test instances: (ID1: 0.95, +), (ID2: 0.85, +), (ID3: 0.70, -), (ID4: 0.60, +), (ID5: 0.40, -), (ID6: 0.15, -).\n(a) Define True Positive Rate (TPR) and False Positive Rate (FPR). (2 marks)\n(b) By sweeping threshold $\\tau$ through the scores, construct the table of (FPR, TPR) coordinates for plotting the ROC curve. (4 marks)\n(c) Calculate the Area Under the ROC Curve (AUC) using trapezoidal integration. (3 marks)",
+                "sol": "PART (a) - Definitions (2 Marks):\n- **TPR (Sensitivity / Y-axis)**: $\\text{TPR} = \\frac{TP}{P} = \\frac{TP}{TP + FN}$. Fraction of actual positives correctly identified.\n- **FPR ($1 - \\text{Specificity}$ / X-axis)**: $\\text{FPR} = \\frac{FP}{N} = \\frac{FP}{FP + TN}$. Fraction of actual negatives mistakenly called positive.\nTotal Positives $P = 3$ (ID1, ID2, ID4), Total Negatives $N = 3$ (ID3, ID5, ID6).\n\nPART (b) - ROC Coordinate Sweep (4 Marks):\nInstances sorted descending by probability:\n1. $\\tau > 0.95$: Predict all - $\\implies TP=0, FP=0 \\implies \\text{FPR} = 0/3 = 0, \\text{TPR} = 0/3 = 0 \\implies (0.0, 0.0)$.\n2. $\\tau = 0.95$: ID1 predicted + $\\implies TP=1, FP=0 \\implies \\text{FPR} = 0/3 = 0, \\text{TPR} = 1/3 \\approx 0.333 \\implies (0.0, 0.333)$.\n3. $\\tau = 0.85$: ID1, ID2 predicted + $\\implies TP=2, FP=0 \\implies \\text{FPR} = 0/3 = 0, \\text{TPR} = 2/3 \\approx 0.667 \\implies (0.0, 0.667)$.\n4. $\\tau = 0.70$: ID1, ID2, ID3 predicted + $\\implies TP=2, FP=1 \\implies \\text{FPR} = 1/3 \\approx 0.333, \\text{TPR} = 2/3 \\approx 0.667 \\implies (0.333, 0.667)$.\n5. $\\tau = 0.60$: ID1, ID2, ID3, ID4 predicted + $\\implies TP=3, FP=1 \\implies \\text{FPR} = 1/3 \\approx 0.333, \\text{TPR} = 3/3 = 1.000 \\implies (0.333, 1.000)$.\n6. $\\tau = 0.40$: ID1..ID5 predicted + $\\implies TP=3, FP=2 \\implies \\text{FPR} = 2/3 \\approx 0.667, \\text{TPR} = 3/3 = 1.000 \\implies (0.667, 1.000)$.\n7. $\\tau = 0.15$: All predicted + $\\implies TP=3, FP=3 \\implies \\text{FPR} = 3/3 = 1.000, \\text{TPR} = 3/3 = 1.000 \\implies (1.000, 1.000)$.\n\nPART (c) - AUC Calculation (3 Marks):\nIntegrate trapezoidal regions under curve from $X = 0$ to $1$:\n- Region 1 ($X: 0 \\to 0.333$): Vertical rise to $Y = 0.667$. Area of rectangle $= (0.333 - 0) \\times 0.667 = \\frac{1}{3} \\times \\frac{2}{3} = \\frac{2}{9} \\approx 0.2222$.\n- Region 2 ($X: 0.333 \\to 0.667$): $Y = 1.000$. Area of rectangle $= (0.667 - 0.333) \\times 1.000 = \\frac{1}{3} \\times 1 = \\frac{1}{3} \\approx 0.3333$.\n- Region 3 ($X: 0.667 \\to 1.000$): $Y = 1.000$. Area of rectangle $= (1.000 - 0.667) \\times 1.000 = \\frac{1}{3} \\times 1 = \\frac{1}{3} \\approx 0.3333$.\n$$\\text{Total AUC} = \\frac{2}{9} + \\frac{1}{3} + \\frac{1}{3} = \\frac{2}{9} + \\frac{3}{9} + \\frac{3}{9} = \\frac{8}{9} \\approx 0.8889\\text{ (88.89\\%)}$$\nInterpretation: There is an 88.89% probability that the model ranks a randomly chosen positive sample higher than a randomly chosen negative sample."
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "OOPs",
